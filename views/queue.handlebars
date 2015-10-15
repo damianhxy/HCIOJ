@@ -1,0 +1,26 @@
+<div class="box detail table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Problem</th>
+                <th>Language</th>
+                <th>Grader</th>
+                <th>Progress</th>
+                <th>Estimated</th>
+            </tr>
+        </thead>
+        {{#each submissions}}
+        <tr>
+            <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+            <td><a href="/users/{{this.user}}">{{this.user}}</a></td>
+            <td><a href="/problems/{{this.title}}">{{this.title}}</a></td>
+            <td>{{this.language}}</td>
+            <td>{{this.grader}}</td>
+            <td>{{this.progress}}</td>
+            <td>{{this.estimate}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>

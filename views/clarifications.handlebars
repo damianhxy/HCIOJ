@@ -1,0 +1,105 @@
+{{#if user}}<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-plus"></i>
+				<h2>Add Clarification</h2>
+			</div>
+			<form id="clarification-form" action="/clarifications" method="POST">
+			<div id="clarification" class="collapse">
+				<select name="problem">
+					<option value="">General</option>
+					{{#if problems}}
+					{{#each problems}}
+					<option value="{{this.title}}">{{this.title}}</option>
+					{{/each}}
+					{{/if}}
+				</select>
+				<textarea name="query" placeholder="Enter your question here"></textarea>
+				<input type="submit" value="Submit Clarification">
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{/if}}
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-question-circle"></i>
+				<h2>Clarifications</h2>
+			</div>
+			<div class="nopad">
+				<table class="table table-striped clars">
+					<thead>
+						<tr>
+							<th>Problem</th>
+							<th>Question</th>
+							<th>Answer</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<a href="/problems/helloworld">helloworld</a>
+								<p>asked by</p>
+								<p class="author"><a href="/users/mingjiang">mingjiang</a></p>
+							</td>
+							<td>
+								<p>Is this question supposed to be so easy?</p>
+							</td>
+							<td class="answer Yes">
+								<h3>Yes</h3>
+								<p>It would be a lie to say no</p>
+								<p class="author">answered by <a href="/users/mingjiang">mingjiang</a></p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/problems/helloworld">helloworld</a>
+								<p>asked by</p>
+								<p class="author"><a href="/users/mingjiang">mingjiang</a></p>
+							</td>
+							<td>
+								<p>Is this question supposed to be so hard?</p>
+							</td>
+							<td class="answer No">
+								<h3>No</h3>
+								<p>Bleugh</p>
+								<p class="author">answered by <a href="/users/mingjiang">mingjiang</a></p>
+							</td>
+						</tr>
+						{{#if clarifications}}
+						{{#each clarifications}}
+						<tr>
+							<td>
+								{{#if this.problem}}<a href="/problems/{{this.problem}}">{{this.problem}}
+								{{else}}General{{/if}}
+								</a>
+								<p>asked by</p>
+								<p class="author"><a href="/users/{{this.author}}">{{this.author}}</a></p>
+							</td>
+							<td>
+								<p>{{this.query}}</p>
+							</td>
+							{{#if this.answer}}
+							<td class="answer {{this.answer}}">
+								<h3>{{this.answer}}</h3>
+								<p>{{this.elaboration}}</p>
+								<p class="author">answered by <a href="users/{{this.answerer}}">{{this.answerer}}</a></p>
+							</td>
+							{{else}}
+							<td>
+								<h3>Unanswered</h3>
+							</td>
+							{{/if}}
+						</tr>
+						{{/each}}
+						{{/if}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

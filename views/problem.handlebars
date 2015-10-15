@@ -1,0 +1,460 @@
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-cube"></i>
+				<h2>{{problem.title}} <small>{{problem.subtitle}}</small></h2>
+			</div>
+		</div>
+	</div>
+</div>
+{{#if problem.tags}}
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-tags"></i>
+				<h2>Tags <small>
+					{{#each problem.tags}}
+						{ {{this}} }
+					{{/each}}
+				</small></h2>
+			</div>
+		</div>
+	</div>
+</div>
+{{/if}}
+<div class="frame">
+	<div class="bit-2 left">
+		{{#if problem.desc-html}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-file-text"></i>
+				<h2>Description</h2>
+			</div>
+			<div>
+				<div class="desc">
+					{{{get problem.desc-html}}}
+				</div>
+			</div>
+		</div>
+		{{/if}}
+		{{#if problem.desc-txt}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-file-text"></i>
+				<h2>Description</h2>
+			</div>
+			<div>
+				<div>
+					<pre>
+						{{get problem.desc-txt}}
+					</pre>
+				</div>
+			</div>
+		</div>
+		{{/if}}
+		{{#if problem.desc-doc}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-file-text"></i>
+				<h2>Description</h2>
+			</div>
+			<div>
+				<iframe src="https://docs.google.com/viewer?url={{problem.desc-doc}}&embedded=true" frameborder="0"></iframe>
+			</div>
+		</div>
+		{{/if}}
+		{{#if problem.desc-others}}
+		{{#each problem.desc-others}}
+		<div class="container">
+			<a href="{{this}}">
+				<div class="header">
+					<i class="fa fa-download"></i>
+					<h2>Download Attachment ({{this}})</h2>
+				</div>
+			</a>
+		</div>
+		{{/each}}
+		{{/if}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-tasks"></i>
+				<h2>Subtasks</h2>
+			</div>
+			<div>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Score</th>
+							<th>#TCs</th>
+							<th>Max Time</th>
+							<th>Max Memory</th>
+						</tr>
+					</thead>
+					<tbody>
+					{{#each problem.subtasks}}
+						<tr>
+							<td>{{this.no}}</td>
+							<td>{{this.score}}</td>
+							<td>{{this.tcs}}</td>
+							<td>{{this.time}}s</td>
+							<td>{{this.mem}} MB</td>
+						</tr>
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="bit-2 right">
+		{{#unless noCompileOptions}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-cog"></i>
+				<h2>Compile Options</h2>
+			</div>
+			<div>
+				<div class="compiler">
+					<label>Language</label>
+					<select name="language" class="alt-select" id="language">
+						<option value="cpp">C++11 (4.9.2)</option>
+						<option value="pas">Pascal (2.6.4)</option>
+						<option value="java">Java (1.7.0)</option>
+						<option value="py">Python (3.4.3)</option>
+					</select>
+					<br>
+					<label>Compile Options</label>
+					<pre></pre>
+				</div>
+			</div>
+		</div>
+		{{/unless}}
+		<form method="post" action="{{#if contest}}/contests/{{contest.id}}/submit/{{problem.title}}{{else}}/submissions/submit/{{problem.title}}{{/if}}" id="submitform">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-code"></i>
+				<h2>Edit Submission</h2>
+			</div>
+			<div class="submitbox">
+				<div class="selector">
+					{{!--<i class="fa fa-arrow-left"></i>--}}
+					{{!--<span>Loading</span>--}}
+					{{!--<i class="fa fa-arrow-right"></i>--}}
+					<span><i class="fa fa-cog fa-spin"></i></span>
+					<span class="right">
+						{{#if problem.files}}<i class="fa fa-arrow-left"></i>
+						<i class="fa fa-arrow-right"></i>{{/if}}
+						<i class="fa fa-upload"></i>
+					</span>
+				</div>
+				<div id="editor"></div>
+				{{#if problem.files}}{{#each problem.files}}<textarea id="{{this.name}}" name="{{this.name}}"></textarea>{{/each}}
+				{{else}}<textarea id="ans" name="code"></textarea>{{/if}}
+				{{!--<input type="hidden" name="prob" value="{{problem.title}}">--}}
+				<button id="submitbutton">Submit For Grading</button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
+<script>
+	window.addEventListener("load", function(){
+		var files = {{#if problem.files}}{{{json problem.files}}}{{else}}[{name:"ans",text:false}]{{/if}};
+		var languages = {
+			"cpp":{
+				"name":"C++11 (4.9.2)",
+				"mode":"c_cpp",
+				"def":"#include <bits/stdc++.h>\r\nusing namespace std;\r\n\r\nint main() {\r\n\t/* Your Code Here */\r\n\treturn 0;\r\n}",
+				"compiler":"g++ replace.cpp -o replace -O2 -std=c++0x"
+			},
+			"pas":{
+				"name":"Pascal (2.6.4)",
+				"mode":"pascal",
+				"def":"program replace;\r\n\r\nBegin\r\n\t(* Your Code Here *)\r\nEnd.",
+				"compiler":"fpc replace.pas -o replace -O2"
+			},
+			"java":{
+				"name":"Java (1.7.0)",
+				"mode":"java",
+				"def":"import java.util.*;\r\nimport java.lang.*;\r\nimport java.io.*;\r\n\nclass {{this.title}} {\r\n\tpublic static void main(String[] args) {\r\n\t\t/* Your Code Here */\r\n\t}\r\n}",
+				"compiler":"javac replace.java"
+			},
+			"py":{
+				"name":"Python (3.4.3)",
+				"mode":"python",
+				"def":"# Your Code Here\n",
+				"compiler":"python replace.py"
+			}
+		};
+		var editor = ace.edit("editor");
+	 	editor.setTheme("ace/theme/monokai");
+		editor.$blockScrolling = Infinity;
+		var position = 0, extension = "cpp";
+		
+		function update() {
+			var x = document.querySelector(".selector>span");
+			if(files[position].text) {
+				x.textContent = files[position].name;
+				editor.getSession().setMode("ace/mode/plain_text");
+				editor.setValue(document.querySelector("#"+files[position].name).value || "");
+			}
+			else {
+				x.textContent = files[position].name + "." + extension;
+				editor.getSession().setMode("ace/mode/"+languages[extension].mode);
+				if(files[position].def) editor.setValue(document.querySelector("#"+files[position].name).value || files[position].def[extension] || languages[extension].def);
+				else editor.setValue(document.querySelector("#"+files[position].name).value || languages[extension].def);
+			}
+		}
+		
+		update();
+		document.querySelector(".compiler pre").textContent = languages[extension].compiler.replace(new RegExp("replace", 'g'), files[0].name);
+		
+		if(document.querySelector(".selector .fa-arrow-left")){
+			document.querySelector(".selector .fa-arrow-left").addEventListener("click", function() {
+				document.querySelector("#"+files[position].name).value = editor.getValue();
+				position += (files.length - 1);
+				position %= files.length;
+				update();
+			});
+			document.querySelector(".selector .fa-arrow-right").addEventListener("click", function() {
+				document.querySelector("#"+files[position].name).value = editor.getValue();
+				position++;
+				position %= files.length;
+				update();
+			});
+		}
+		
+		document.getElementById("language").addEventListener("change", function() {
+			extension = this.value;
+			document.querySelector(".compiler pre").textContent = languages[this.value].compiler.replace(new RegExp("replace", 'g'), files[0].name);
+			files.forEach(function(item){
+				document.querySelector("#"+item.name).value = "";
+			});
+			update();
+		});
+		
+		document.getElementById("submitbutton").addEventListener("click", function() {
+			document.querySelector("#"+files[position].name).value = editor.getValue();
+			document.getElementById("submitform").submit();
+		});
+	});
+	// $(document).ready(function() {
+	// (function() {
+	// 	var editor = ace.edit("editor");
+	// 	editor.setTheme("ace/theme/monokai");
+	// 	function compileOptions() {
+	// 		var t = $("select option:selected").val();
+	// 		if (t === "cpp") {
+	// 			$(".compiler pre").html("g++ ans.cpp -o {{this.title}} -O2 -std=c++0x");
+	// 			editor.getSession().setMode("ace/mode/c_cpp");
+	// 			editor.setValue("#include <bits/stdc++.h>\r\nusing namespace std;\r\n\r\nint main() {\r\n\t/* Your Code Here */\r\n\treturn 0;\r\n}", 1);
+ //               editor.moveCursorToPosition({row: 4, column: 1});
+	// 		}
+	// 		else if (t === "pas") {
+	// 			$(".compiler pre").html("fpc ans.pas -o {{this.title}} -O2");
+	// 			editor.getSession().setMode("ace/mode/pascal");
+	// 			editor.setValue("program {{this.title}};\r\n\r\nBegin\r\n\t(* Your Code Here *)\r\nEnd.", 1);
+ //               editor.moveCursorToPosition({row: 3, column: 1});
+	// 		}
+	// 		else if (t === "java") {
+	// 			$(".compiler pre").html("javac ans.java");
+	// 			editor.getSession().setMode("ace/mode/java");
+	// 			editor.setValue("import java.util.*;\r\nimport java.lang.*;\r\nimport java.io.*;\r\n\nclass {{this.title}} {\r\n\tpublic static void main(String[] args) {\r\n\t\t/* Your Code Here */\r\n\t}\r\n}", 1);
+	// 			editor.moveCursorToPosition({row: 6, column: 2});
+	// 		}
+	// 		else if (t === "py") {
+	// 			$(".compiler pre").html("python -m py_compile script.py");
+	// 			editor.getSession().setMode("ace/mode/python");
+	// 			editor.setValue("# Your Code Here\n", 1);
+	// 			editor.moveCursorToPosition({row: 2, column: 0});
+	// 		}
+	// 	}
+	// 	$(document).ready(compileOptions);
+	// 	$("[name='language']").change(compileOptions);
+	// 		$("#submitbutton").click(function() {
+	// 			$("#mobileeditor").val(editor.getValue());
+	// 			$("#submitform").submit();
+	// 		});
+	// })();
+	// });
+</script>
+
+<!--div class="box problem-desc detail" id="p-desc">
+	<h2 data-toggle="collapse" data-target="#desc"><i class="fa fa-file-text"></i>Problem Description</h2>
+	<div id="desc" class="collapse in text-div-outer">
+		<div class="text-div-inner">
+			{{{problem.desc}}}
+		</div>
+	</div>
+</div>
+<div class="problem-full row" id="p-io">
+	{{#if problem.input}}
+	<div class="problem-hleft detail col-md-6">
+		<h2 data-toggle="collapse" data-target="#input"><i class="fa fa-sign-in"></i>Input</h2>
+		<div id="input" class="collapse in text-div-outer">
+			<div class="text-div-inner">
+				{{{problem.input}}}
+			</div>
+		</div>
+	</div>
+	{{/if}}
+	{{#if problem.output}}
+	<div class="problem-hright detail col-md-6">
+		<h2 data-toggle="collapse" data-target="#output">
+			<i class="fa fa-sign-out" data-toggle="collapse" data-target="#output"></i>Output
+		</h2>
+		<div id="output" class="collapse in text-div-outer">
+			<div class="text-div-inner">
+				{{{problem.output}}}
+			</div>
+		</div>
+	</div>
+	{{/if}}
+</div>
+{{#if problem.subtasks}}
+<div class="box problem-table detail" id="p-limits">
+	<h2 data-toggle="collapse" data-target="#subtasks"><i class="fa fa-tasks"></i>Subtasks &amp; Limits</h2>
+	<div id="subtasks" class="collapse in">
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Score</th>
+						<th>Testcases</th>
+						<th>Time</th>
+						<th>Memory</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each problem.subtasks}}
+					<tr>
+						<td>{{this.no}}</td>
+						<td>{{this.score}}</td>
+						<td>{{this.tcs}}</td>
+						<td>{{this.time}}s</td>
+						<td>{{this.mem}}MB</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{{/if}}
+{{#if problem.samples}}
+<div class="box problem-sampletcs detail" id="p-tcs">
+	<h2 data-toggle="collapse" data-target="#samples"><i class="fa fa-retweet"></i>Sample testcases</h2>
+	<div id="samples" class="collapse in">
+		<ul>
+			{{#each problem.samples}}
+			<li>
+				{{#if this.input}}
+				<h3>Input</h3>
+				<pre>{{{this.input}}}</pre>
+				{{/if}}
+				{{#if this.output}}
+				<h3>Output</h3>
+				<pre>{{{this.output}}}</pre>
+				{{/if}}
+				{{#if this.explanation}}
+				<h3>Explanation</h3>
+				<p>{{this.explanation}}</p>
+				{{/if}}
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+</div>
+{{/if}}
+<form method="post" action="{{#if contest}}/contest/{{contest.id}}/submit/{{problem.title}}{{else}}/submit/{{problem.title}}{{/if}}" id="submitform">
+	<div class="submit-options detail box" id="p-submit-options">
+		<h2 data-toggle="collapse" data-target="#compileoptions"><i class="fa fa-cog"></i>Compile Options</h2>
+		<div class="compiler collapse in text-div-outer" id="compileoptions">
+			<div class="text-div-inner">
+				<label>Language</label>
+				<select name="language" class="form-control">
+					<option value="C++11">C++11 (4.9.2)</option>
+					<option value="Pascal">Pascal (2.6.4)</option>
+					<option value="Java">Java (1.7.0)</option>
+					<option value="Python">Python (3.4.3)</option>
+				</select>
+				<br>
+				<label>Compile Options</label>
+				<pre></pre>
+			</div>
+		</div>
+	</div>
+	<div class="submit-editor detail box" id="p-submit">
+		<h2 data-toggle="collapse" data-target="#editorbox"><i class="fa fa-code"></i>Solution</h2>
+		<div id="editorbox" class="collapse in">
+			<div id="editor"></div>
+			<textarea id="mobileeditor" name="code"></textarea>
+			<input type="hidden" name="prob" value="{{title}}">
+			<button id="submitbutton">submit for grading</button>
+		</div>
+	</div>
+</form>
+<div class="problem-full row" id="p-subs">
+	<div class="problem-hleft problem-table detail col-md-6">
+		<h2 data-toggle="collapse" data-target="#mysubs"><i class="fa fa-user"></i>My Submissions</h2>
+		<div id="mysubs" class="collapse in">
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Time</th>
+							<th>Runtime</th>
+							<th>Score</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#if userSubmissions}}
+						{{#each userSubmissions}}
+						<tr>
+							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</td>
+							<td>{{this.time}}</td>
+							<td>{{this.runtime}}s</td>
+							<td>{{{scoreColour this.score}}}</td>
+						</tr>
+						{{/each}}
+						{{/if}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="problem-hright problem-table detail col-md-6" id="p-submissions">
+		<h2 data-toggle="collapse" data-target="#subs"><i class="fa fa-list"></i>Submissions</h2>
+		<div id="subs" class="collapse in">
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>User</th>
+							<th>Time</th>
+							<th>Score</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#if submissions}}
+						{{#each submissions}}
+						<tr>
+							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+							<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
+							<td>{{this.time}}</td>
+							<td>{{{scoreColour this.score}}}</td>
+						</tr>
+						{{/each}}
+						{{/if}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</div-->

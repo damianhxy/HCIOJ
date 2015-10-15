@@ -1,0 +1,39 @@
+<div class="container">
+	<div class="header">
+		<i class="fa fa-code"></i>
+		<h2>Problems</h2>
+	</div>
+	<div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Tags</th>
+					<th>Your Score</th>
+					{{#unless contest}}
+					<th>Points Awarded</th>
+					{{/unless}}
+				</tr>
+			</thead>
+			{{#each problems}}
+			<tr>
+				<td><a href="{{#if ../contest}}/contests/{{../../contest.id}}{{/if}}/problems/{{this.title}}">{{this.title}}</a></td>
+				<td><a href="/search?query={{this.subtitle}}" class="pltags">{{this.subtitle}}</a></td>
+				<td>{{#each this.tags}}<a href="/search?query={{this}}" class="pltags">{{this}}</a> {{/each}}</td>
+				<td>
+					{{#if ../contest}}
+						{{{contestScore ../entry this.title}}}
+					{{else}}
+						{{{score ../user this.title}}}
+					{{/if}}
+				</td>
+				
+				{{#unless ../contest}}
+					<td>{{this.awarded}}</td>
+				{{/unless}}
+			</tr>
+			{{/each}}
+		</table>
+	</div>
+</div>

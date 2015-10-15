@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport">
+	<title>CodeSenpai</title>
+	<!--script src="/pace/pace.min.js"></script>
+	<link href="/pace/themes/blue/pace-theme-minimal.css" rel="stylesheet"-->
+	<link href='https://fonts.googleapis.com/css?family=Amatic+SC|Lato:400,700' rel='stylesheet' type='text/css'>
+	<link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+	<link href="/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/css/fullcalendar.min.css" rel="stylesheet">
+	<link href="/css/lemonade.min.css" rel="stylesheet">
+	<link href="/css/main.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/>
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/fullcalendar.min.js"></script>
+    <script src="/js/ace/ace.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+
+<body>
+	<nav class="sidebar">
+	{{#if user}}
+	{{#if contest}}
+		<a href="/" class="sidelink sidelink-main">
+			<span class="logo">:]</span>
+			<span class="title">Contest</span>
+			<span class="subtitle">Good luck with {{contest.title}}!</span>
+		</a>
+		<a href="/contests/{{contest.id}}/info" class="sidelink">
+			<i class="fa fa-info"></i>
+			Info
+		</a>
+		<a href="/contests/{{contest.id}}/problems" class="sidelink">
+			<i class="fa fa-tasks"></i>
+			Problems
+		</a>
+		<a href="/contests/{{contest.id}}/problems" class="sidelink">
+			<i class="fa fa-cloud"></i>
+			My Subs
+		</a>
+		{{#if contest.scoreboard}}
+		<a href="/contests/{{contest.id}}/scoreboard" class="sidelink">
+			<i class="fa fa-trophy"></i>
+			Scores
+		</a>
+		{{/if}}
+		<a href="/submissions/queue" class="sidelink">
+			<i class="fa fa-cog"></i>
+			Grading Q.
+		</a>
+		<a href="/logout" class="sidelink">
+			<i class="fa fa-sign-out"></i>
+			Logout
+		</a>
+	{{else}}
+		<a href="/" class="sidelink sidelink-main">
+			<span class="logo">:D</span>
+			<span class="title">CodeSenpai</span>
+			<span class="subtitle">*notices you*</span>
+		</a>
+		<a href="/problems" class="sidelink">
+			<i class="fa fa-graduation-cap"></i>
+			Learn
+		</a>
+		<a href="/problems" class="sidelink">
+			<i class="fa fa-code"></i>
+			Practice
+		</a>
+		<a href="/contests" class="sidelink">
+			<i class="fa fa-calendar"></i>
+			Compete
+		</a>
+		<a href="/clarifications" class="sidelink">
+			<i class="fa fa-question"></i>
+			Clarify
+		</a>
+		<a href="/users/rankings" class="sidelink">
+			<i class="fa fa-trophy"></i>
+			Ranking
+		</a>
+		<a href="/submissions/queue" class="sidelink">
+			<i class="fa fa-cog"></i>
+			Grading Q.
+		</a>
+		<a href="/about" class="sidelink">
+			<i class="fa fa-info"></i>
+			About Me
+		</a>
+		<a href="/logout" class="sidelink">
+			<i class="fa fa-sign-out"></i>
+			Logout
+		</a>
+	{{/if}}
+	{{else}}
+		<a href="/" class="sidelink sidelink-main">
+			<span class="logo">:I</span>
+			<span class="title">CodeSenpai</span>
+			<span class="subtitle">*notices you*</span>
+		</a>
+		<a href="/signin" class="sidelink">
+			<i class="fa fa-user"></i>
+			Sign In
+		</a>
+		<a href="/signup" class="sidelink">
+			<i class="fa fa-user-plus"></i>
+			Register
+		</a>
+	{{/if}}
+	</nav>
+	<main>
+		<!--div class="frame">
+			<div class="bit-1">
+				<div class="container">
+					<h2><i class="fa fa-info"></i> Welcome! I'm CodeSenpai!</h2>
+					<div>
+						Sign up or Login to begin! 
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="frame">
+			<div class="left bit-2">
+				<div class="container">
+					<h2><i class="fa fa-calendar"></i> Contest Calendar</h2>
+					<div id="contestcalendar"></div>
+				</div>
+			</div>
+			<div class="right bit-2">
+				<div class="container">
+					<h2><i class="fa fa-user"></i> Online Users</h2>
+					<div>
+						Sign up or Login to begin!
+					</div>
+				</div>
+				<div class="container">
+					<h2><i class="fa fa-certificate"></i> Latest Submissions</h2>
+					<div></div>
+				</div>
+			</div>
+		</div-->
+		{{{body}}}
+	</main>
+	<script>
+		window.addEventListener("load", function(){
+			Array.prototype.forEach.call(document.querySelectorAll(".header"), function(item, counter) {
+				item.addEventListener("click",function() {
+					var n = this.parentElement.children[1]
+					if(n.dataset.closed!="true") {
+						n.style.maxHeight = "0";
+						n.style.overflow = "hidden";
+						n.dataset.closed = "true";
+					}
+					else {
+						n.style.maxHeight = "";
+						n.style.overflow = ""
+						n.dataset.closed = "false";
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

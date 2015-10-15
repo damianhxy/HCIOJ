@@ -1,0 +1,92 @@
+DOCUMENTATION OF OBJECTS
+------------------------
+
+Clarification = {
+	"problem":"fairandsquare", // name
+	"author":"test", // asker
+	"query":"Why is this oj so awesome?", // body of question
+	"answer":"Yes", // main answer (Yes, no, refer to elab)
+	"elaboration":"Because I built it", // answer elaboration
+	"answerer":"mingjiang", // answerer
+	"_id":"8XHKtStOs9pmkOO6" // nedb id
+}
+
+Problem = {
+	"title":"helloworld", // problem name
+	"subtitle":"Batch", // problem type (we can probably remove this)
+	"from":"stdin", // input from
+	"dest":"stdout", // output to
+	"desc-html":"/files/wherever/helloworld.html", // html statement location
+	"desc-txt":"/files/wherever/helloworld.txt", // txt statement location
+	"desc-doc":"/files/wherever/helloworld.pdf", // pdf/doc statement location
+	"desc-other":[ // array of misc attachment location
+		"/files/wherever/helloworld.exe"
+	],
+	"files":[ // array of files to be submitted if multiple files are required, optional
+		{
+			"name":"ans",  // name of file,
+			"text":false, // if file is text(non-highlighted) file
+			"def":{ // object of default code
+				"cpp":"#include <iostream>\nint main(){\n\t//Your code here\n}",
+				"python":"#insert code here\n"
+		},
+		{
+			"name":"dank.txt",
+			"text":true
+		}
+	],
+	"compiler":{
+		"cpp":"g++ dank.cpp -o replace -O2 -std=c++0x"
+	},
+	"subtasks":[{ // array of subtask objects
+		"no":1, // self explanatory
+		"score":100,
+		"tcs":1,
+		"time":0.1,
+		"mem":32
+    }],
+	"awarded":200, // number of marks awarded
+	"added":1426487053525, // time added
+	"_id":"IRRlP4LaMWwmEzeD" // nedb id
+}
+
+Contest = {
+    "id":"1", // contest id
+	"title":"Amazing", // contest title
+	"desc":"stuff", // contest description
+	"start":"2015-04-03 14:10", // start time (to be in iso 8601)
+	"end":"2015-04-03 16:30", // end time (to be in iso 8601)
+	"indi":true, // individual timer (boolean)
+	"time":50, // (if individual) time in minutes
+	"problems":["helloworld"], // string array of problem names
+	"scoreboard":true // false if scoreboard is hidden
+	"url":"/contest/1","_id":"tEd1Ot4jT6UH96fQ"
+}
+
+Entry = {
+	"username":"mingjiang", // user name
+	"contest":"1", // contest id
+	"start":"2015-04-03 14:10", // start time (to be in epoch)
+	"end":"2015-04-03 15:00", // end time (to be in epoch)
+	"awarded":{ // object of scores
+		"helloworld":100,
+		"fairandsquare":0
+	},
+	"total":100 // total score (optional)
+}
+
+User = {
+	"username":"admin", // user name
+	"realname":"adminname", // real name
+	"password":"$2a$10$gpYMnTcf2bVax3uxRHIONemks49VSvS7SioPM9z2/6Uep2kxJIDVq", // password
+	"email":"admin@admin.com", // email
+	"level":"HCI Sec 3/2015", // level
+	"admin":true, // whether the user is admin
+	"avatar":"https://s-media-cache-ak0.pinimg.com/236x/46/fa/7a/46fa7a12ed84713abfa2356a357650d1.jpg", // profile pic
+	"awarded":{"helloworld":100}, // points achieved on problems
+	"accepted":["helloworld"], // accepted problems
+	"partial":[], // partial problems
+	"failed":[], // failed problems
+	"score":100, // total score
+	"_id":"ZEMw3LW31JHw1E7u"
+}
