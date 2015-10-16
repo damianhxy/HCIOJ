@@ -40,7 +40,7 @@ exports.dispatch = function(submission) {
                 "lang": submission.language,
                 "prob": submission.title
             };
-            obj["ans." + settings.LANGUAGES[submission.language]] = submission.code;
+            obj["ans." + submission.language] = submission.code;
             obj = JSON.stringify(obj);
             client.write("JYv4pJZNIQidv1pp020" + "0" + ("00000000" + obj.length).slice(-8) + "0" + obj);
             client.end();
@@ -87,7 +87,7 @@ exports.update = function(response) {
             if(response.status) submission.status = response.status; // Grading time | "Compilation failed"
             if(response.compilation) submission.compile = response.compilation; // Compile time | Error Message
             if(response.verdict) submission.verdict = response.verdict; // Submission verdict
-            
+
             if(response.subtask) { // Subtask Done
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
                     if(submission.res[i].num == response.subtask.num){
@@ -96,7 +96,7 @@ exports.update = function(response) {
                     }
                 }
             }
-            
+
             if(response.tc) { // Update Testcase
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
                     if(submission.res[i].num == response.tc.subtask){
@@ -106,7 +106,7 @@ exports.update = function(response) {
                     }
                 }
             }
-            
+
             submission.progress = "Graded";
             Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
             .then(function() {
