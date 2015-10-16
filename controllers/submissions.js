@@ -110,7 +110,7 @@ router.get("/:id", function(req, res) {
         info.verdict = info.verdict.charAt(0).toUpperCase() + info.verdict.slice(1); // Capitalize
         res.render("submission", {
             user: req.user,
-            title: "<a href='/problem/" + info.title + "'>" + info.title + "</a>",
+            title: "<a href='/problems/" + info.title + "'>" + info.title + "</a>",
             subtitle: "#" + info.numid + " by <a href='/users/" + info.user + "'>" + info.user + "</a>",
             problem: info,
             isOwner: req.user && (req.user.username === info.user),
