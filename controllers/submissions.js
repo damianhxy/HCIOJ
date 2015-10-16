@@ -90,18 +90,17 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     progress: "Grading", // Update after all subtasks
                     type: 1 // Need to change this
                 };
-                return submission.add(obj);
+                submission.add(obj)
+                .then(function(obj) {
+                   return submission.dispatch(obj);
+                })
+                .then(function(obj) {
+                    res.redirect("/submissions/" + obj.numid);
+                });
             });
         })
-        .then(function(obj) {
-	    return submission.dispatch(obj);
-        })
-        .then(function(obj) {
-            res.redirect("/submissions/" + obj.numid);
-        })
-        .fail(function(err) {
+        .fail(function() {
             req.session.error = "An error was encountered";
-	    console.log(err);
             res.redirect(req.headers.referer || "/");
         });
 });

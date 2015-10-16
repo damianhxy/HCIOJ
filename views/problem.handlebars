@@ -167,32 +167,36 @@
 				"name":"C++11 (4.9.2)",
 				"mode":"c_cpp",
 				"def":"#include <bits/stdc++.h>\r\nusing namespace std;\r\n\r\nint main() {\r\n\t/* Your Code Here */\r\n\treturn 0;\r\n}",
-				"compiler":"g++ replace.cpp -o replace -O2 -std=c++0x"
+				"compiler":"g++ replace.cpp -o replace -O2 -std=c++0x",
+				"cursor": {row: 4, column: 1}
 			},
 			"pas":{
 				"name":"Pascal (2.6.4)",
 				"mode":"pascal",
 				"def":"program replace;\r\n\r\nBegin\r\n\t(* Your Code Here *)\r\nEnd.",
-				"compiler":"fpc replace.pas -o replace -O2"
+				"compiler":"fpc replace.pas -o replace -O2",
+				"cursor": {row: 3, column: 1}
 			},
 			"java":{
 				"name":"Java (1.7.0)",
 				"mode":"java",
 				"def":"import java.util.*;\r\nimport java.lang.*;\r\nimport java.io.*;\r\n\nclass {{this.title}} {\r\n\tpublic static void main(String[] args) {\r\n\t\t/* Your Code Here */\r\n\t}\r\n}",
-				"compiler":"javac replace.java"
+				"compiler":"javac replace.java",
+				"cursor": {row: 6, column: 2}
 			},
 			"py":{
 				"name":"Python (3.4.3)",
 				"mode":"python",
 				"def":"# Your Code Here\n",
-				"compiler":"python replace.py"
+				"compiler":"python replace.py",
+				"cursor": {row: 2, column: 0}
 			}
 		};
 		var editor = ace.edit("editor");
 	 	editor.setTheme("ace/theme/monokai");
 		editor.$blockScrolling = Infinity;
 		var position = 0, extension = "cpp";
-		
+
 		function update() {
 			var x = document.querySelector(".selector>span");
 			if(files[position].text) {
@@ -205,12 +209,13 @@
 				editor.getSession().setMode("ace/mode/"+languages[extension].mode);
 				if(files[position].def) editor.setValue(document.querySelector("#"+files[position].name).value || files[position].def[extension] || languages[extension].def);
 				else editor.setValue(document.querySelector("#"+files[position].name).value || languages[extension].def);
+				editor.moveCursorToPosition(languages[extension].cursor);
 			}
 		}
-		
+
 		update();
 		document.querySelector(".compiler pre").textContent = languages[extension].compiler.replace(new RegExp("replace", 'g'), files[0].name);
-		
+
 		if(document.querySelector(".selector .fa-arrow-left")){
 			document.querySelector(".selector .fa-arrow-left").addEventListener("click", function() {
 				document.querySelector("#"+files[position].name).value = editor.getValue();
@@ -225,7 +230,7 @@
 				update();
 			});
 		}
-		
+
 		document.getElementById("language").addEventListener("change", function() {
 			extension = this.value;
 			document.querySelector(".compiler pre").textContent = languages[this.value].compiler.replace(new RegExp("replace", 'g'), files[0].name);
@@ -234,7 +239,7 @@
 			});
 			update();
 		});
-		
+
 		document.getElementById("submitbutton").addEventListener("click", function() {
 			document.querySelector("#"+files[position].name).value = editor.getValue();
 			document.getElementById("submitform").submit();
