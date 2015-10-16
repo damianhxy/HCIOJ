@@ -57,7 +57,7 @@ router.get("/queue", function(req, res) {
 
 router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
     if (!settings.LANGUAGES[req.body.language]) {
-        res.session.error = "No such language";
+        req.session.error = "No such language";
         res.redirect(req.headers.referer || "/");
     } else
         submission.getID()
