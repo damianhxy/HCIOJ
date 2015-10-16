@@ -35,7 +35,7 @@ router.get("/latest", function(req, res) {
             return 1;
         });
         res.render("submissions", {
-            user: req.user,
+	    user: req.user,
             title: "Latest Submissions",
             subtitle: "dunjudge.them",
             submissions: submissions
@@ -57,6 +57,7 @@ router.get("/queue", function(req, res) {
 
 router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
     if (!settings.LANGUAGES[req.body.language]) {
+	console.log(req.body.language);	
         req.session.error = "No such language";
         res.redirect(req.headers.referer || "/");
     } else
@@ -93,19 +94,20 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
             });
         })
         .then(function(obj) {
-            return submission.dispatch(obj);
+	    return submission.dispatch(obj);
         })
         .then(function(obj) {
             res.redirect("/submissions/" + obj.numid);
         })
-        .fail(function() {
+        .fail(function(err) {
             req.session.error = "An error was encountered";
+	    console.log(err);
             res.redirect(req.headers.referer || "/");
         });
 });
 
 router.get("/:id", function(req, res) {
-    submission.get(parseInt(req.params.id))
+    submission.get(parseInt(req.pa/ams.id))
     .then(function(info) {
         info.verdict = info.verdict.charAt(0).toUpperCase() + info.verdict.slice(1); // Capitalize
         res.render("submission", {

@@ -10,6 +10,7 @@ exports.add = function(submission) {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "insert", submission)
         .then(function() {
+	    console.log(submission);
             resolve(submission);
         })
         .fail(function() {
