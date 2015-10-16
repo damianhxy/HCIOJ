@@ -109,6 +109,7 @@
 		</div>
 	</div>
 	<div class="bit-2 right">
+		<form method="post" action="{{#if contest}}/contests/{{contest.id}}/submit/{{problem.title}}{{else}}/submissions/submit/{{problem.title}}{{/if}}" id="submitform">
 		{{#unless noCompileOptions}}
 		<div class="container">
 			<div class="header">
@@ -131,7 +132,6 @@
 			</div>
 		</div>
 		{{/unless}}
-		<form method="post" action="{{#if contest}}/contests/{{contest.id}}/submit/{{problem.title}}{{else}}/submissions/submit/{{problem.title}}{{/if}}" id="submitform">
 		<div class="container">
 			<div class="header">
 				<i class="fa fa-code"></i>
