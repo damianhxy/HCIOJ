@@ -6,4 +6,4 @@ exports.GRADER_PORT = "9500";
 exports.GRADER_IP = "78.46.167.196";
 exports.SUBMISSION_TIME_FORMAT = "DD MMM YY, HH:mm:ss";
 exports.API_SECRET = "360n0sc0p3d";
-exports.LANGUAGES = { "Java": "java", "Python": "py", "Pascal": "pas", "C++11": "cpp" };
+exports.LANGUAGES = { "java": "Java", "py": "Python", "pas": "Pascal", "cpp": "C++11" };
