@@ -22,11 +22,6 @@ router.post("/api", function(req, res) {
 router.get("/latest", function(req, res) {
     submission.all()
     .then(function(submissions) {
-        submissions.sort(function(a, b) {
-            if (a.numid < b.numid)
-                return -1;
-            return 1;
-        });
         res.render("submissions", {
 	    user: req.user,
             title: "Latest Submissions",
@@ -72,7 +67,7 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     code: req.body.code, // User code
                     score: 0, // Total Score
                     compile: "", // Time taken to compile / error message
-                    time: moment().format(settings.TIME_FORMAT), // Graded Time
+                    time: moment().format(), // Graded Time
                     runtime: 0, // Max Time
                     contest: 0, // Contest
                     language: req.body.language, // Language

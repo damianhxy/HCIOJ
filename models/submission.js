@@ -22,6 +22,12 @@ exports.all = function() {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "find", {})
         .then(function(list) {
+            list.sort(function(a, b) {
+                return a.numid - b.numid;
+            });
+            list.map(function(e) {
+                e.time = moment(e.time).format(settings.SUBMISSION_TIME_FORMAT);
+            });
             resolve(list);
         })
         .fail(function() {
@@ -99,7 +105,7 @@ exports.update = function(response) {
                     }
                 }
             }
-            
+
             if(response.tc) { // Update Testcase
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
                     if(submission.res[i].num == response.tc.subtask){

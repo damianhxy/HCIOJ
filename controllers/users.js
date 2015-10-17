@@ -42,11 +42,6 @@ router.get("/:user", function(req, res) {
         }
         submission.all()
         .then(function(submissions) {
-            submissions.sort(function(a, b) {
-                if (a.numid < b.numid)
-                    return -1;
-                return 1;
-            });
             submissions.filter(function(e) {
                 return e.user === req.params.user;
             });
