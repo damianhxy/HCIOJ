@@ -5,6 +5,7 @@ var net = require("net");
 var settings = require("../controllers/settings.js");
 var user = require("./user.js");
 var problem = require("./problem.js");
+var moment = require("moment");
 
 exports.add = function(submission) {
     return Q.promise(function(resolve, reject) {
