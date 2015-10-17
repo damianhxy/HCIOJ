@@ -95,7 +95,7 @@ exports.update = function(response) {
                 submission.progress = "Graded";
             }
             if(response.status) submission.status = response.status; // Grading time | "Compilation failed"
-            if(response.compilation) submission.compile = response.compilation; // Compile time | Error Message
+            if(response.compilation) submission.compile = atob(response.compilation); // Compile time | Error Message
             if(response.verdict) submission.verdict = response.verdict; // Submission verdict)
 
             if(response.subtask) { // Subtask Done
