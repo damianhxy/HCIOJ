@@ -89,11 +89,10 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     progress: "Grading", // Update after all subtasks
                     type: 1 // Need to change this
                 };
-                console.log("SUBMITTING DANK MEMES");
                 submission.add(obj)
-                // .then(function(obj) {
-                //     return submission.dispatch(obj);
-                // })
+                .then(function(obj) {
+                    return submission.dispatch(obj);
+                })
                 .then(function(obj) {
                     res.redirect("/submissions/" + obj.numid);
                 });
