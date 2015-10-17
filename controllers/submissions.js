@@ -106,7 +106,7 @@ router.get("/:id", function(req, res) {
             user: req.user,
             title: "<a href='/problems/" + info.title + "'>" + info.title + "</a>",
             subtitle: "#" + info.numid + " by <a href='/users/" + info.user + "'>" + info.user + "</a>",
-            problem: info,
+            submission: info,
             isOwner: req.user && (req.user.username === info.user),
             isViewable: req.user && (req.user.username === info.user || ~ req.user.accepted.indexOf(info.title))
         });

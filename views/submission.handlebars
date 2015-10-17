@@ -9,7 +9,7 @@
 	</div>
 </div>
 
-<form method="post" action="/submit/{{problem.title}}" id="submitform">
+<form method="post" action="/submit/{{submission.title}}" id="submitform">
 <div class="frame">
 	<div class="bit-2 left">
 		<div class="container">
@@ -17,13 +17,13 @@
 				<i class="fa fa-info-circle"></i>
 				<h2>Submission Info</h2>
 			</div>
-			<div class="nopad">
+			<div>
 				<table class="table table-striped table-bordered">
-					<tr><td>Verdict</td><td>{{problem.verdict}} ({{problem.score}}%)</td></tr>
-					<tr><td>Language</td><td id="language">{{problem.language}}</td></tr>
-					<tr><td>Time</td><td>{{problem.time}}</td></tr>
-					<tr><td>Runtime</td><td>{{problem.runtime}}s</td></tr>
-					<tr><td>Contest</td><td>{{{getContest problem.contest}}}</td></tr>
+					<tr><td>Verdict</td><td>{{submission.verdict}} ({{submission.score}}%)</td></tr>
+					<tr><td>Language</td><td id="language">{{submission.language}}</td></tr>
+					<tr><td>Time</td><td>{{submission.time}}</td></tr>
+					<tr><td>Runtime</td><td>{{submission.runtime}}s</td></tr>
+					<tr><td>Contest</td><td>{{{getContest submission.contest}}}</td></tr>
 				</table>
 			</div>
 		</div>
@@ -32,8 +32,10 @@
 				<i class="fa fa-spinner"></i>
 				<h2>Compile Status</h2>
 			</div>
-			<div class="monospace">	
-				{{problem.compile}}
+			<div>
+				<div class="monospace">	
+					{{submission.compile}}
+				</div>
 			</div>
 		</div>
 		
@@ -43,17 +45,19 @@
 				<i class="fa fa-cog"></i>
 				<h2>Compile Options</h2>
 			</div>
-			<div class="compiler">
-				<label>Language</label>
-				<select name="language" class="alt-select">
-					<option value="C++11">C++11 (4.9.2)</option>
-					<option value="Pascal">Pascal (2.6.4)</option>
-					<option value="Java">Java (1.7.0)</option>
-					<option value="Python">Python (3.4.3)</option>
-				</select>
-				<br>
-				<label>Compile Options</label>
-				<pre></pre>
+			<div>
+				<div class="compiler">
+					<label>Language</label>
+					<select name="language" class="alt-select">
+						<option value="C++11">C++11 (4.9.2)</option>
+						<option value="Pascal">Pascal (2.6.4)</option>
+						<option value="Java">Java (1.7.0)</option>
+						<option value="Python">Python (3.4.3)</option>
+					</select>
+					<br>
+					<label>Compile Options</label>
+					<pre></pre>
+				</div>
 			</div>
 		</div>
 		{{/if}}
@@ -64,22 +68,24 @@
 				<i class="fa fa-code"></i>
 				<h2>Edit Submission</h2>
 			</div>
-			<div id="editor"></div>
-			<input type="hidden" name="prob" value="{{problem.title}}">
-			<button id="submitbutton">Submit For Grading</button>
+			<div>
+				<div id="editor"></div>
+				<input type="hidden" name="prob" value="{{submission.title}}">
+				<button id="submitbutton">Submit For Grading</button>
+			</div>
 		</div>
 		{{/if}}
 		</form>
 	</div>
 	
 	<div class="bit-2 right">
-		{{#each problem.res}}
+		{{#each submission.res}}
 		<div class="container">
 			<div class="header">
 				<i class="fa fa-tasks"></i>
 				<h2>Subtask {{this.num}} ({{this.score}} / {{this.maxscore}})</h2>
 			</div>
-			<div class="nopad">
+			<div>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -120,11 +126,11 @@
 			var t = override || $("select option:selected").val();
 			if (override) $("select").val(override);
 			if (t === "C++11") {
-				$(".compiler pre").html("g++ ans.cpp -o {{problem.title}} -O2 -std=c++0x");
+				$(".compiler pre").html("g++ ans.cpp -o {{submission.title}} -O2 -std=c++0x");
 				editor.getSession().setMode("ace/mode/c_cpp");
 			}
 			else if (t === "Pascal") {
-				$(".compiler pre").html("fpc ans.pas -o {{problem.title}} -O2");
+				$(".compiler pre").html("fpc ans.pas -o {{submission.title}} -O2");
 				editor.getSession().setMode("ace/mode/pascal");
 			}
 			else if (t === "Java") {
@@ -156,19 +162,19 @@
 	})();
 </script>
 {{/if}}
-<!--div class="problem-full row">
-	<div class="problem-hleft col-md-6">
-		<div class="detail problem-table">
+<!--div class="submission-full row">
+	<div class="submission-hleft col-md-6">
+		<div class="detail submission-table">
 			<h2 data-toggle="collapse" data-target="#subinfo">
 				<i class="fa fa-info-circle"></i>Submission info
 			</h2>
 			<div class="collapse in table-responsive" id="subinfo">
 				<table class="table table-striped table-bordered">
-				<tr><td>Verdict</td><td>{{problem.verdict}} ({{problem.score}}%)</td></tr>
-					<tr><td>Language</td><td id="language">{{problem.language}}</td></tr>
-					<tr><td>Time</td><td>{{problem.time}}</td></tr>
-					<tr><td>Runtime</td><td>{{problem.runtime}}s</td></tr>
-					<tr><td>Contest</td><td>{{{getContest problem.contest}}}</td></tr>
+				<tr><td>Verdict</td><td>{{submission.verdict}} ({{submission.score}}%)</td></tr>
+					<tr><td>Language</td><td id="language">{{submission.language}}</td></tr>
+					<tr><td>Time</td><td>{{submission.time}}</td></tr>
+					<tr><td>Runtime</td><td>{{submission.runtime}}s</td></tr>
+					<tr><td>Contest</td><td>{{{getContest submission.contest}}}</td></tr>
 				</table>
 			</div>
 		</div>
@@ -177,10 +183,10 @@
 				Compile Status
 			</h2>
 			<div id="compilestatus" class="collapse in text-div-outer">
-				<div class="text-div-inner">{{problem.compile}}</div>
+				<div class="text-div-inner">{{submission.compile}}</div>
 			</div>
 		</div>
-		<form method="post" action="/submit/{{problem.title}}" id="submitform">
+		<form method="post" action="/submit/{{submission.title}}" id="submitform">
 			{{#if isOwner}}
 			<div class="submit-options detail" id="p-submit-options">
 				<h2 data-toggle="collapse" data-target="#compileoptions">
@@ -206,7 +212,7 @@
 			<div class="submit-editor detail" id="p-submit">
 				<h2 data-toggle="collapse" data-target="#editordiv"><i class="fa fa-code"></i>View Solution</h2>
 				<div class="editor-s collapse in" id="editordiv">
-					<div id="editor" class="editor-s">{{problem.code}}</div>
+					<div id="editor" class="editor-s">{{submission.code}}</div>
 					<textarea id="mobileeditor" class="editor-s" name="code"></textarea>
 					{{#if isOwner}}<button id="submitbutton">resubmit</button>{{/if}}
 				</div>
@@ -222,11 +228,11 @@
 					var t = override || $("select option:selected").val();
 					if (override) $("select").val(override);
 					if (t === "C++11") {
-						$(".compiler pre").html("g++ ans.cpp -o {{problem.title}} -O2 -std=c++0x");
+						$(".compiler pre").html("g++ ans.cpp -o {{submission.title}} -O2 -std=c++0x");
 						editor.getSession().setMode("ace/mode/c_cpp");
 					}
 					else if (t === "Pascal") {
-						$(".compiler pre").html("fpc ans.pas -o {{problem.title}} -O2");
+						$(".compiler pre").html("fpc ans.pas -o {{submission.title}} -O2");
 						editor.getSession().setMode("ace/mode/pascal");
 					}
 					else if (t === "Java") {
@@ -259,9 +265,9 @@
 		</script>
 		{{/if}}
 	</div>
-	<div class="problem-hright col-md-6">
-		{{#each problem.res}}
-		<div class="problem-table detail">
+	<div class="submission-hright col-md-6">
+		{{#each submission.res}}
+		<div class="submission-table detail">
 			<h2 data-toggle="collapse" data-target="#subtask-{{this.num}}">
 				<i class="fa fa-tasks"></i>Subtask {{this.num}} ({{this.score}} / {{this.maxscore}})
 			</h2>
