@@ -102,10 +102,14 @@ exports.update = function(response) {
                     }
                 }
             }
-
+            
+            console.log(response.tc);
+            console.log(submission.res);
+            
             if(response.tc) { // Update Testcase
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
                     if(submission.res[i].num == response.tc.subtask){
+                        console.log("Found subtask "+response.tc.subtask);
                         response.tc.subtask = null;
                         if(submission.res[i].tcs) submission.res[i].tcs.push(response.tc) // Update Testcase in Subtask
                         else submission.res[i].tcs = [response.tc];
