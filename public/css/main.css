@@ -257,7 +257,7 @@ main{
 	background: #34495E;
 }
 
-.left > .container, .right > .container{
+.left .container, .right .container{
 	margin-bottom: 0.6em;
 }
 
