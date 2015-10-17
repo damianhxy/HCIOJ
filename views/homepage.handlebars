@@ -1,89 +1,9 @@
-<!--div class="problem-full row">
-<div class="problem-hleft detail col-md-6">
-<h2 data-toggle="collapse" data-target="#contestcalendar"><i class="fa fa-calendar"></i>Contests</h2>
-<div id="contestcalendar" class="collapse in"></div>
-</div>
-<div class="problem-hright problem-table detail col-md-6">
-<h2 data-toggle="collapse" data-target="#onlineUsers"><i class="fa fa-user"></i>Online Users</h2>
-<div id="onlineUsers" class="collapse in">
-<table id="onlineUsers" class="table table-striped">
-<tbody>
-{{{generateOnline onlineUsers}}}
-</tbody>
-</table>
-</div>
-<br>
-<br>
-<h2 data-toggle="collapse" data-target="#latestsubs"><i class="fa fa-certificate"></i>Latest Submissions</h2>
-<div id="latestsubs" class="collapse in">
-<div class="table-responsive">
-<table class="table table-striped">
-<thead>
-<tr>
-<th>ID</th>
-<th>User</th>
-<th>Problem</th>
-<th>Time</th>
-<th>Progress</th>
-<th>Score</th>
-</tr>
-</thead>
-<tbody style="overflow: auto;">
-{{#each submissions}}
-<tr>
-<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
-<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
-<td><a href="/problem/{{this.title}}">{{this.title}}</a></td>
-<td>{{this.time}}</td>
-<td><span style='color: gray'>{{this.progress}}</span></td>
-<td>{{{scoreColour this.score}}}</td>
-</tr>
-{{/each}}
-</tbody>
-</table>
-</div>
-</div>
-{{#if user}}
-<br>
-<br>
-<h2 data-toggle="collapse" data-target="#mysubs"><i class="fa fa-certificate"></i>Your Submissions</h2>
-<div id="mysubs" class="collapse in">
-<div class="table-responsive">
-<table class="table table-striped">
-<thead>
-<tr>
-<th>ID</th>
-<th>Contest</th>
-<th>Problem</th>
-<th>Time</th>
-<th>Progress</th>
-<th>Score</th>
-</tr>
-</thead>
-<tbody>
-{{#each userSubmissions}}
-<tr>
-<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
-<td>{{{getContest this.contest}}}</td>
-<td><a href="/problem/{{this.title}}">{{this.title}}</a></td>
-<td>{{this.time}}</td>
-<td><span style='color: gray'>{{this.progress}}</span></td>
-<td>{{{scoreColour this.score}}}</td>
-</tr>
-{{/each}}
-</tbody>
-</table>
-</div>
-</div>
-{{/if}}
-</div>
-</div-->
 <div class="frame">
 	<div class="bit-1">
 		<div class="container">
 			<div class="header">
 				<i class="fa fa-comment-o"></i>
-				<h2>Hello, {{user.realname}}!</h2>
+				<h2>Hello, {{user.username}}!</h2>
 			</div>
 			<div>
 				<div>
@@ -132,8 +52,8 @@
 							<th>User</th>
 							<th>Problem</th>
 							<th>Time</th>
-							<th>Progress</th>
 							<th>Score</th>
+							<th>Progress</th>
 						</tr>
 					</thead>
 					<tbody style="overflow: auto;">
@@ -143,8 +63,8 @@
 							<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
 							<td><a href="/problems/{{this.title}}">{{this.title}}</a></td>
 							<td>{{this.time}}</td>
-							<td><span style='color: gray'>{{this.progress}}</span></td>
 							<td><span class='label label-{{{scoreColour this.score}}}'>{{this.score}}</span></td>
+							<td><span style='color: gray'>{{this.progress}}</span></td>
 						</tr>
 						{{/each}}
 					</tbody>
