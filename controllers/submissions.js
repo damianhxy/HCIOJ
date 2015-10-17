@@ -15,13 +15,16 @@ var prob_type = {
 };
 
 router.post("/api", function(req, res) {
-    if (req.body.secret !== settings.API_SECRET)
+    if (req.body.secret !== settings.API_SECRET){
+        console.log("NOOB "+req.body.secret+" != "+settings.API_SECRET);
         res.status(401).send("Unauthorised");
+    }
     else submission.update(JSON.parse(req.body.data))
     .then(function() {
         res.send("Success");
     })
     .fail(function(err) {
+        console.log("NOOB ERROR " + err);
         res.send(err);
     });
 });
