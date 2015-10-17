@@ -197,6 +197,7 @@ router.get("/:id/problems/:problem", ensureAuthenticated, function(req, res) {
 			return submission.all();
 		})
 		.then(function(subs) {
+			subs.sort(function(a,b){return b.numid-a.numid});
 			var mysubs = subs.filter(function(e) {
 				return e.title === scope.problem.title && e.user === req.user.username && e.contest === scope.contest.id;
 			});
@@ -222,7 +223,11 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 		req.session.error = "No such language";
 		res.redirect(req.headers.referer || "/");
 	}
-	else submission.getID()
+	else contest.get(req.params.id)
+		.then(function(contest) {
+			scope.contest = contest;
+			return submission.getID();
+		})
 		.then(function(num) {
 			scope.curid = num;
 			return problem.get(req.params.prob);
@@ -237,12 +242,12 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 				});
 			var obj = {
 				numid: scope.curid + 1, // Problem ID
-				title: req.params.id, // Problem Title
+				title: req.params.prob, // Problem Title
 				user: req.user.username, // User name
 				code: req.body.code, // User code
 				score: 0, // Total Score
 				compile: "", // Time taken to compile / error message
-				time: moment().format(settings.SUBMISSION_TIME_FORMAT), // Graded Time
+				time: moment().format(), // Graded Time
 				runtime: 0, // Max Time
 				contest: req.params.id, // Contest
 				language: req.body.language, // Language
@@ -251,10 +256,10 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 				status: "Sending to server", // Update after compiling and judging
 				progress: "Grading" // Update after all subtasks
 			};
-			return submission.submit(obj); // Realistically this should be something else
+			return submission.add(obj); // Realistically this should be something else
 		})
 		.then(function() {
-			res.redirect("/submissions/" + (scope.curid + 1));
+			res.redirect("/contests/" + req.params.id + "/submissions/" + (scope.curid + 1));
 		})
 		.fail(function() {
 			req.session.error = "An error was encountered while processing your request";
@@ -262,8 +267,42 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 		});
 });
 
-router.post("/:id/scoreboard", ensureAuthenticated, function(req, res) {
-	// Stub - 
+router.get("/:id/submissions/:sub", ensureAuthenticated, function(req, res) {
+	var scope = {};
+	contest.get(req.params.id)
+		.then(function(contest) {
+			scope.contest = contest;
+			return submission.get(parseInt(req.params.sub));
+		})
+		.then(function(sub) {
+			scope.submission = sub;
+			if(sub.contest != req.params.id){
+				throw new Error("Wrong submission bro"); // Not sure if this is the correct way to terminate a promise chain early
+				return null;
+			}
+			return problem.get(sub.title);
+		})
+		.then(function(prob) {
+			scope.submission.verdict = scope.submission.verdict.charAt(0).toUpperCase() + scope.submission.verdict.slice(1); // Capitalize
+	        res.render("submission", {
+	            user: req.user,
+	            title: "<a href='/contests/" + req.params.id + "/problems/" + prob.title + "'>" + prob.title + "</a>",
+	            subtitle: "#" + scope.submission.numid + " by <a href='/users/" + scope.submission.user + "'>" + scope.submission.user + "</a>",
+	            submission: scope.submission,
+	            problem: prob,
+	            isOwner: req.user && (req.user.username === scope.submission.user),
+	            isViewable: req.user && (req.user.username === scope.submission.user || ~ req.user.accepted.indexOf(scope.submission.title)),
+	            contest: scope.contest
+	        });
+		})
+		.fail(function(err) {
+			req.session.error = "An error was encountered while processing your request";
+			res.redirect(req.headers.referer || "/");
+		});
+});
+
+router.get("/:id/scoreboard", ensureAuthenticated, function(req, res) {
+	// Stub - must flesh it out
 	res.render("scoreboard",{
 		user: req.user,
 		problems: []

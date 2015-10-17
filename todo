@@ -4,9 +4,16 @@ Todo List
 
 Web Server
 ----------
+- contests
+	- scoreboard
+	- score updating
+	- clarifications
+	- timer
+	- delay
+	- make submission viewing from frontpage link to contest submission viewing
+- someone needs to come up with a variable naming scheme for all those promise chains
 - rename variables to camelCase (submission.js, submissions.js, handlebars)
 - Implement submission viewing in problem.handlebars
-- contests - scoreboard, delay, sub limit
 - contest management - problems, contest windows, out of competition, etc
 - admin panel - problem, user, contest, grader management, etc
 - landing page, though not urgent (to be completed right before launch)

@@ -93,8 +93,13 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
 });
 
 router.get("/:id", function(req, res) {
+    var info; // Someone should really rename this, I'm just lazy to
     submission.get(parseInt(req.params.id))
-    .then(function(info) {
+    .then(function(sub) {
+        info = sub;
+        return problem.get(info.title);
+    })
+    .then(function(prob) {
         info.verdict = info.verdict.charAt(0).toUpperCase() + info.verdict.slice(1); // Capitalize
         res.render("submission", {
             user: req.user,
@@ -102,7 +107,8 @@ router.get("/:id", function(req, res) {
             subtitle: "#" + info.numid + " by <a href='/users/" + info.user + "'>" + info.user + "</a>",
             submission: info,
             isOwner: req.user && (req.user.username === info.user),
-            isViewable: req.user && (req.user.username === info.user || ~ req.user.accepted.indexOf(info.title))
+            isViewable: req.user && (req.user.username === info.user || ~ req.user.accepted.indexOf(info.title)),
+            problem: prob
         });
     })
     .fail(function() {
