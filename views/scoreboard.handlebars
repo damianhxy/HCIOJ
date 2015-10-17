@@ -1,0 +1,30 @@
+<div class="container">
+	<div class="header">
+		<i class="fa fa-trophy"></i>
+		<h2>Scoreboard</h2>
+	</div>
+	<div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Rank</th>
+					<th>Name</th>
+					{{#each problems}}
+					<th>{{this}}</th>
+					{{/each}}
+					<th>Total</th>
+				</tr>
+			</thead>
+			{{#each entries}}
+			<tr>
+				<td></td>
+				<td>{{this.username}}</td>
+				{{#each problems}}
+				<td>{{!--score this--}}100</td>
+				{{/each}}
+				<td>{{this.total}}</td>
+			</tr>
+			{{/each}}
+		</table>
+	</div>
+</div>

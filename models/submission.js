@@ -89,6 +89,7 @@ exports.update = function(response) {
             if(response.date) submission.time = response.date; // Graded Time
             if(response.status) {
                 submission.status = response.status; // Grading time | "Compilation failed"
+                console.log(response.status);
                 if(response.status == "Judging failed") submission.progress = "Graded";
             }
             if(response.compilation) submission.compile = response.compilation; // Compile time | Error Message

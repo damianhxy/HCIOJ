@@ -33,6 +33,7 @@ router.get("/", function(req, res, next) {
             .then(function(submissions) {
                 session.all()
                 .then(function(users) {
+                    submissions.sort(function(a, b){ return a.numid - b.numid });
                     var userSubmissions = submissions.filter(function(e) {
                         return e.user === req.user.username;
                     });

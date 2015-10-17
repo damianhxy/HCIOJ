@@ -262,4 +262,12 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 		});
 });
 
+router.post("/:id/scoreboard", ensureAuthenticated, function(req, res) {
+	// Stub - 
+	res.render("scoreboard",{
+		user: req.user,
+		problems: []
+	})
+});
+
 module.exports = router;
