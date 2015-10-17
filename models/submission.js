@@ -80,7 +80,6 @@ exports.update = function(response) {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "findOne", { numid: response.subid })
         .then(function(submission) {
-            console.log("Ayy Lmao " + response);
             if(response.totalscore) {
                 submission.score = response.totalscore; // Total Score  
                 submission.progress = "Graded";
@@ -108,7 +107,8 @@ exports.update = function(response) {
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
                     if(submission.res[i].num == response.tc.subtask){
                         response.tc.subtask = null;
-                        submission.res[i].tcs.push(response.tc) // Update Testcase in Subtask
+                        if(submission.res[i].tcs) submission.res[i].tcs.push(response.tc) // Update Testcase in Subtask
+                        else submission.res[i].tcs = [response.tc];
                         break;
                     }
                 }

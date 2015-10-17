@@ -6,14 +6,6 @@ var settings = require("./settings.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
 var moment = require("moment");
 
-var prob_type = {
-	PT_BATCH : 1,
-	PT_OUTPUT_ONLY : 2,
-	PT_FUNC_CALL : 3,
-	PT_INTERACTIVE : 4,
-	PT_COMMUNICATION : 5
-};
-
 router.post("/api", function(req, res) {
     if (req.body.secret !== settings.API_SECRET){
         res.status(401).send("Unauthorised");
