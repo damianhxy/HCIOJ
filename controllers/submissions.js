@@ -6,14 +6,6 @@ var settings = require("./settings.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
 var moment = require("moment");
 
-var prob_type = {
-	PT_BATCH : 1,
-	PT_OUTPUT_ONLY : 2,
-	PT_FUNC_CALL : 3,
-	PT_INTERACTIVE : 4,
-	PT_COMMUNICATION : 5
-};
-
 router.post("/api", function(req, res) {
     console.log("RECEIVED SOMETHING VIA POST REQUEST YAYYYY");
     if (req.body.secret !== settings.API_SECRET){
@@ -60,6 +52,7 @@ router.get("/queue", function(req, res) {
 });
 
 router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
+    console.log("Submitting for some problem");
     if (!settings.LANGUAGES[req.body.language]) {
         req.session.error = "No such language";
         res.redirect(req.headers.referer || "/");
