@@ -15,6 +15,7 @@ var prob_type = {
 };
 
 router.post("/api", function(req, res) {
+    console.log("RECEIVED SOMETHING VIA POST REQUEST YAYYYY");
     if (req.body.secret !== settings.API_SECRET){
         console.log("NOOB "+req.body.secret+" != "+settings.API_SECRET);
         res.status(401).send("Unauthorised");
