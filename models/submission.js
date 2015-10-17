@@ -80,20 +80,16 @@ exports.update = function(response) {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "findOne", { numid: response.subid })
         .then(function(submission) {
-            if(response.totalscore) {
-                submission.score = response.totalscore; // Total Score  
-                submission.progress = "Graded";
-            }
+            if(response.totalscore) submission.score = response.totalscore; // Total Score
             if(response.totaltime) submission.totaltime = response.totaltime; // Total Time
             if(response.maxtime) submission.runtime = response.maxtime; // Max Time
-            if(response.date) submission.time = response.date; // Graded Time
-            if(response.status) {
-                submission.status = response.status; // Grading time | "Compilation failed"
-                console.log(response.status);
-                if(response.status == "Judging failed") submission.progress = "Graded";
+            if(response.graded_date) {
+                submission.time = response.graded_date; // Graded Time
+                submission.progress = "Graded";
             }
+            if(response.status) submission.status = response.status; // Grading time | "Compilation failed"
             if(response.compilation) submission.compile = response.compilation; // Compile time | Error Message
-            if(response.verdict) submission.verdict = response.verdict; // Submission verdict
+            if(response.verdict) submission.verdict = response.verdict; // Submission verdict)
 
             if(response.subtask) { // Subtask Done
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
