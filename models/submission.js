@@ -80,11 +80,17 @@ exports.update = function(response) {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "findOne", { numid: response.subid })
         .then(function(submission) {
-            if(response.totalscore) submission.score = response.totalscore; // Total Score
+            if(response.totalscore) {
+                submission.score = response.totalscore; // Total Score  
+                submission.progress = "Graded";
+            }
             if(response.totaltime) submission.totaltime = response.totaltime; // Total Time
             if(response.maxtime) submission.runtime = response.maxtime; // Max Time
             if(response.date) submission.time = response.date; // Graded Time
-            if(response.status) submission.status = response.status; // Grading time | "Compilation failed"
+            if(response.status) {
+                submission.status = response.status; // Grading time | "Compilation failed"
+                if(response.status == "Judging failed") submission.progress = "Graded";
+            }
             if(response.compilation) submission.compile = response.compilation; // Compile time | Error Message
             if(response.verdict) submission.verdict = response.verdict; // Submission verdict
 
@@ -106,8 +112,9 @@ exports.update = function(response) {
                     }
                 }
             }
+            
+            console.log(submission);
 
-            submission.progress = "Graded";
             Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
             .then(function() {
                 return user.update(response.user, response.problem, response.totalscore, response.verdict);
