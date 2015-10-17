@@ -103,9 +103,6 @@ exports.update = function(response) {
                 }
             }
             
-            console.log(response.tc);
-            console.log(submission.res);
-            
             if(response.tc) { // Update Testcase
                 for(var i = 0; i < submission.res.length; i++){ // Loop to find Subtask
                     if(submission.res[i].num == response.tc.subtask){
