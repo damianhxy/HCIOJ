@@ -212,7 +212,7 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton{
 	background: #E74C3C;
 	color: #eee;
 }
-	
+
 .sidebar > .sidelink.sidelink-main > .title{
 	font-size: 1.7em;
 	display: block;
@@ -238,7 +238,7 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton{
 	width: 0px;
 	height: 0px;
 	border-top: .4em solid transparent;
-	border-bottom: .4em solid transparent; 
+	border-bottom: .4em solid transparent;
 	border-right: .4em solid #141c24;
 }
 
@@ -378,4 +378,42 @@ main{
 
 .monospace{
 	font-family: monospace;
+}
+
+.alert {
+	cursor: pointer !important;
+	position: fixed;
+	bottom: 1em;
+	left: 1em;
+    -webkit-transition: opacity .4s linear 0s;
+    transition: opacity .4s linear 0s;
+    user-select: none;
+    z-index: 1;
+    box-shadow: 0 1px 1px #888;
+    border-radius: 0px !important;
+    border: 0px;
+    color: #fefefe;
+    background: #777;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.alert.alert-danger {
+    background: #E74C3C;
+}
+
+.alert.alert-success {
+	background: #27AE60;
+}
+
+.alert.alert-warning {
+	background: #F38630;
+}
+
+.alert-hidden {
+    opacity: 0;
+}
+
+.fc-unthemed .fc-today {
+  	background-color: #415d76;
 }
