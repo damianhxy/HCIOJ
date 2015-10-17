@@ -284,6 +284,8 @@ router.get("/:id/submissions/:sub", ensureAuthenticated, function(req, res) {
 		})
 		.then(function(prob) {
 			scope.submission.verdict = scope.submission.verdict.charAt(0).toUpperCase() + scope.submission.verdict.slice(1); // Capitalize
+        	scope.submission.language = settings.LANGUAGES[scope.submission.language]; // Change language to be displayed
+			scope.submission.compile = atob(scope.submission.compile);
 	        res.render("submission", {
 	            user: req.user,
 	            title: "<a href='/contests/" + req.params.id + "/problems/" + prob.title + "'>" + prob.title + "</a>",

@@ -102,6 +102,7 @@ router.get("/:id", function(req, res) {
     .then(function(prob) {
         info.verdict = info.verdict.charAt(0).toUpperCase() + info.verdict.slice(1); // Capitalize
         info.language = settings.LANGUAGES[info.language]; // Change language to be displayed
+        info.compile = atob(info.compile);
         res.render("submission", {
             user: req.user,
             title: "<a href='/problems/" + info.title + "'>" + info.title + "</a>",
