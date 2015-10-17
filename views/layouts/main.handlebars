@@ -122,7 +122,7 @@
 				<div class="container">
 					<h2><i class="fa fa-info"></i> Welcome! I'm CodeSenpai!</h2>
 					<div>
-						Sign up or Login to begin! 
+						Sign up or Login to begin!
 					</div>
 				</div>
 			</div>
@@ -147,10 +147,16 @@
 				</div>
 			</div>
 		</div-->
+		{{#if success}}
+			<p class="alert alert-success"><i class="fa fa-rocket"></i>&nbsp;&nbsp;&nbsp;{{success}}</p>
+		{{/if}}
+		{{#if error}}
+			<p class="alert alert-danger"><i class="fa fa-warning"></i>&nbsp;&nbsp;&nbsp;{{error}}</p>
+		{{/if}}
 		{{{body}}}
 	</main>
 	<script>
-		window.addEventListener("load", function(){
+		window.addEventListener("load", function() {
 			Array.prototype.forEach.call(document.querySelectorAll(".header"), function(item, counter) {
 				item.addEventListener("click",function() {
 					var n = this.parentElement.children[1]

@@ -6,7 +6,7 @@ if ($(".alert")) {
         $(".alert").remove();
     });
     $(".alert").click(hide);
-    setTimeout(hide, 5000);
+    setTimeout(hide, 2500);
 }
 
 $(".dropdown-menu").hover(function() {
@@ -26,22 +26,7 @@ $("[type='search']").keydown(function(e) {
 	else if (e.which === 27)
 		$(this).blur();
 });
-/*
-var team_names =
-[
-	"Zhi Jian",
-	"Gui Ming Jiang",
-	"Damian Ho",
-	"Dae Koon Lim",
-	"Silas Yeo",
-	"FanPu Zeng",
-	"Yudong Sun",
-	"Tan Wei Seng",
-	"Cai Kaian"
-];
 
-$("footer .team span").html(team_names.map(function(e) { return "<b>" + e + "</b>"; }).join(" & "));
-*/
 $("nav.mobile-nav > ul > li > a").click(function() {
 	var dropdown = $(this).parent().find("ul.mobile-nav-dropdown");
 	if (dropdown.css("display") === "block") dropdown.slideUp();
@@ -54,38 +39,3 @@ $("nav.mobile-nav > ul > li > a").click(function() {
 $("pre").each(function() {
 	$(this).html("<div class='copy-button'>Copy</div><div>" + $(this).html() + "</div>");
 });
-/*
-$main = $("main");
-
-$(function() {
-	String.prototype.decodeHTML = function() {
-		return $("<div>", {html: "" + this}).html();
-	};
-
-	ajaxLoad = function(html) {
-		document.title = html
-		.match(/<title>(.*?)<\/title>/)[1]
-		.trim()
-		.decodeHTML();
-	},
-
-	loadPage = function(href) {
-		$main.load(href + " main>*", ajaxLoad);
-	};
-
-	$(window).on("popstate", function(e) {
-		if (e.originalEvent.state !== null) {
-			loadPage(location.href);
-		}
-	});
-
-	$(document).on("click", "a, area", function(e) {
-		var href = $(this).attr("href");
-		if (~ href.indexOf(document.domain) !== -1 || ! ~ href.indexOf(':')) {
-			history.pushState({}, '', href);
-			loadPage(href);
-			e.preventDefault();
-			e.stopImmediatePropagation();
-		}
-	});
-});*/
