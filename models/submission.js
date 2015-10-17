@@ -77,11 +77,10 @@ exports.getID = function() {
 };
 
 exports.update = function(response) {
-    console.log("Updating something");
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "findOne", { numid: response.subid })
         .then(function(submission) {
-            console.log("Submission found");
+            console.log("Ayy Lmao " + response);
             if(response.totalscore) {
                 submission.score = response.totalscore; // Total Score  
                 submission.progress = "Graded";
@@ -114,8 +113,6 @@ exports.update = function(response) {
                     }
                 }
             }
-            
-            console.log(submission);
 
             Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
             .then(function() {
@@ -132,7 +129,6 @@ exports.update = function(response) {
             });
         })
         .fail(function() {
-            console.log("This sucks - no submission received")
             reject(Error("Failed to update submission"));
         });
     });
