@@ -49,7 +49,7 @@ router.get("/:user", function(req, res) {
                 user: req.user,
                 title: info.realname,
                 subtitle: "(" + info.username + ", " + info.level + ")",
-                ranking: rank,
+                ranking: rank + " (of " + users.length + ")",
                 profile: info,
                 userSubmissions: submissions
             });

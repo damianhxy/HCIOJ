@@ -56,7 +56,7 @@ router.get("/latest", function(req, res) {
 router.get("/search", function(req, res) {
     problem.all()
     .then(function(problems) {
-        var tag = req.body.query.toLowerCase();
+        var tag = req.query.query.toLowerCase();
         problems = problems.filter(function(e) {
             if (~ e.title.indexOf(tag) || ~ e.subtitle.toLowerCase().indexOf(tag))
                 return true;
