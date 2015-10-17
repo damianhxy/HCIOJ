@@ -96,7 +96,6 @@ router.get("/:id", function(req, res) {
     submission.get(parseInt(req.params.id))
     .then(function(info) {
         info.verdict = info.verdict.charAt(0).toUpperCase() + info.verdict.slice(1); // Capitalize
-        info.language = settings.LANGUAGES[info.language]; // Long form
         res.render("submission", {
             user: req.user,
             title: "<a href='/problems/" + info.title + "'>" + info.title + "</a>",
