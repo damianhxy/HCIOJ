@@ -9,20 +9,11 @@ var moment = require("moment");
 
 router.post("/api", function(req, res) {
     var sub = JSON.parse(req.body.data);
-    if (req.body.secret !== settings.API_SECRET){
+    if (req.body.secret !== settings.API_SECRET)
         res.status(401).send("Unauthorised");
-    }
-    else if (parseInt(sub.contest)) entry.update(sub) //contest 0 is no contest
-    .then(function() {
-        return submission.update(sub);
-    })
-    .then(function() {
-        res.send("Success");
-    })
-    .fail(function(err) {
-        res.send(err);
-    });
-    else submission.update(sub)
+    // Check if it's a contest or not
+    // entry.update(sub)
+    submission.update(sub)
     .then(function() {
         res.send("Success");
     })
@@ -34,7 +25,6 @@ router.post("/api", function(req, res) {
 router.get("/latest", function(req, res) {
     submission.all()
     .then(function(submissions) {
-        submissions.sort(function(a,b){return b.numid-a.numid});
         res.render("submissions", {
 	    user: req.user,
             title: "Latest Submissions",
@@ -51,7 +41,6 @@ router.get("/latest", function(req, res) {
 router.get("/mine", function(req, res) {
     submission.all()
     .then(function(submissions) {
-        submissions.sort(function(a,b){return b.numid-a.numid});
         submissions = submissions.filter(function(e) {
             return e.user === req.user.username;
         });
@@ -78,7 +67,7 @@ router.get("/queue", function(req, res) {
 
 router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
     if (!settings.LANGUAGES[req.body.language]) {
-        req.session.error = "No such language";
+        req.session.error = "Invalid language";
         res.redirect(req.headers.referer || "/");
     } else
         submission.getID()
@@ -100,7 +89,8 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     code: req.body.code, // User code
                     score: 0, // Total Score
                     compile: "", // Time taken to compile / error message
-                    time: moment().format(), // Graded Time
+                    submitted_date: moment().format(), // Submission
+                    graded_date: moment(0).format(), // Grading
                     runtime: 0, // Max Time
                     contest: 0, // Contest
                     language: req.body.language, // Language
@@ -126,24 +116,22 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
 });
 
 router.get("/:id", function(req, res) {
-    var info; // Someone should really rename this, I'm just lazy to
     submission.get(parseInt(req.params.id))
     .then(function(sub) {
-        info = sub;
-        return problem.get(info.title);
-    })
-    .then(function(prob) {
-        info.verdict = info.verdict.charAt(0).toUpperCase() + info.verdict.slice(1); // Capitalize
-        info.language = settings.LANGUAGES[info.language]; // Change language to be displayed
-        info.compile = atob(info.compile);
-        res.render("submission", {
-            user: req.user,
-            title: "<a href='/problems/" + info.title + "'>" + info.title + "</a>",
-            subtitle: "#" + info.numid + " by <a href='/users/" + info.user + "'>" + info.user + "</a>",
-            submission: info,
-            isOwner: req.user && (req.user.username === info.user),
-            isViewable: req.user && (req.user.username === info.user || ~ req.user.accepted.indexOf(info.title)),
-            problem: prob
+        problem.get(sub.title)
+        .then(function(prob) {
+            sub.verdict = sub.verdict.charAt(0).toUpperCase() + sub.verdict.slice(1); // Capitalize
+            sub.language = settings.LANGUAGES[sub.language]; // Change language to be displayed
+            sub.compile = atob(sub.compile);
+            res.render("submission", {
+                user: req.user,
+                title: "<a href='/problems/" + sub.title + "'>" + sub.title + "</a>",
+                subtitle: "#" + sub.numid + " by <a href='/users/" + sub.user + "'>" + sub.user + "</a>",
+                submission: sub,
+                isOwner: req.user && (req.user.username === sub.user),
+                isViewable: req.user && (req.user.username === sub.user || ~ req.user.accepted.indexOf(sub.title)),
+                problem: prob
+            });
         });
     })
     .fail(function() {

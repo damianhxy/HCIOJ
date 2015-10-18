@@ -59,7 +59,6 @@ exports.create = function(req, username, password) {
                 "accepted": {},
                 "partial": {},
                 "failed": {},
-                "contests": {},
                 "score": 0
             };
             return Q.ninvoke(users, "insert", user);
