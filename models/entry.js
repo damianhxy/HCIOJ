@@ -25,3 +25,15 @@ exports.get = function(obj) {
         });
     });
 };
+
+exports.update = function(obj) {
+    return Q.promise(function(resolve, reject) {
+        Q.ninvoke(entries, "findOne", obj)
+        .then(function(entry) {
+            // THIS IS A STUB
+        })
+        .fail(function() {  
+            reject(Error("Failed to update entry"));
+        });
+    });
+}

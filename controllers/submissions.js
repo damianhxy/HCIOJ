@@ -1,16 +1,28 @@
 var express = require("express");
 var router = express.Router();
 var submission = require("../models/submission.js");
+var entry = require("../models/entry.js");
 var problem = require("../models/problem.js");
 var settings = require("./settings.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
 var moment = require("moment");
 
 router.post("/api", function(req, res) {
+    var sub = JSON.parse(req.body.data);
     if (req.body.secret !== settings.API_SECRET){
         res.status(401).send("Unauthorised");
     }
-    else submission.update(JSON.parse(req.body.data))
+    else if (parseInt(sub.contest)) entry.update(sub) //contest 0 is no contest
+    .then(function() {
+        return submission.update(sub);
+    })
+    .then(function() {
+        res.send("Success");
+    })
+    .fail(function(err) {
+        res.send(err);
+    });
+    else submission.update(sub)
     .then(function() {
         res.send("Success");
     })
@@ -22,9 +34,30 @@ router.post("/api", function(req, res) {
 router.get("/latest", function(req, res) {
     submission.all()
     .then(function(submissions) {
+        submissions.sort(function(a,b){return b.numid-a.numid});
         res.render("submissions", {
 	    user: req.user,
             title: "Latest Submissions",
+            subtitle: "dunjudge.them",
+            submissions: submissions
+        });
+    })
+    .fail(function() {
+        req.session.error = "An error was encountered";
+        res.redirect(req.headers.referer || "/");
+    });
+});
+
+router.get("/mine", function(req, res) {
+    submission.all()
+    .then(function(submissions) {
+        submissions.sort(function(a,b){return b.numid-a.numid});
+        submissions = submissions.filter(function(e) {
+            return e.user === req.user.username;
+        });
+        res.render("submissions", {
+	    user: req.user,
+            title: "My Submissions",
             subtitle: "dunjudge.them",
             submissions: submissions
         });

@@ -381,6 +381,7 @@ main{
 }
 
 .alert {
+	padding: 0.5em 1em;
 	cursor: pointer !important;
 	position: fixed;
 	bottom: 1em;
@@ -389,7 +390,6 @@ main{
     transition: opacity .4s linear 0s;
     user-select: none;
     z-index: 1;
-    box-shadow: 0 1px 1px #888;
     border-radius: 0px !important;
     border: 0px;
     color: #fefefe;
