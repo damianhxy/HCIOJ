@@ -114,7 +114,7 @@ exports.update = function(response) {
                     }
                 });
 
-            if (res_type !== 5)
+            if (response.res_type !== 5)
                 Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
                 .then(function() {
                     resolve();

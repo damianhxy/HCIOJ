@@ -249,7 +249,8 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 				code: req.body.code, // User code
 				score: 0, // Total Score
 				compile: "", // Time taken to compile / error message
-				time: moment().format(), // Graded Time
+                submitted_date: moment().format(), // Submission
+                graded_date: moment(0).format(), // Grading
 				runtime: 0, // Max Time
 				contest: req.params.id, // Contest
 				language: req.body.language, // Language
@@ -258,7 +259,7 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 				status: "Sending to server", // Update after compiling and judging
 				progress: "Grading" // Update after all subtasks
 			};
-			return submission.add(obj); // Realistically this should be something else
+			return submission.add(obj);
 		})
 		.then(function() {
 			res.redirect("/contests/" + req.params.id + "/submissions/" + (scope.curid + 1));
