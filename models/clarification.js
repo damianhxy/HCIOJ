@@ -49,3 +49,15 @@ exports.edit = function(id, newClarification) {
         });
     });
 };
+
+exports.getClars = function(contest) { // Returns array of clarifications based on contest id
+    return Q.promise(function(resolve, reject) {
+        Q.ninvoke(clarifications, "find", { contest : contest })
+        .then(function(list) {
+            resolve(list);
+        })
+        .fail(function() {
+             reject(Error("Failed to get entries"));
+        });
+    });
+}

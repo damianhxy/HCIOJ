@@ -109,7 +109,7 @@
 		</div>
 	</div>
 	<div class="bit-2 right">
-		<form method="post" action="{{#if contest}}/contests/{{contest.id}}/submit/{{problem.title}}{{else}}/submissions/submit/{{problem.title}}{{/if}}" id="submitform">
+		<form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{problem.title}}" id="submitform">
 		{{#unless noCompileOptions}}
 		<div class="container">
 			<div class="header">

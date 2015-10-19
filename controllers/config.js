@@ -21,7 +21,8 @@ module.exports = function(app, express) {
 			get: require("../helpers/get.js"),
             getStat: require("../helpers/getStat.js"),
             generateOnline: require("../helpers/generateOnline.js"),
-            json: require("../helpers/json.js")
+            json: require("../helpers/json.js"),
+            inc: require("../helpers/inc.js")
         }
     });
     

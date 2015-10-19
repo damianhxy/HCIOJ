@@ -26,6 +26,18 @@ exports.get = function(obj) {
     });
 };
 
+exports.getEntries = function(contest) { // Returns array of entries based on contest id
+    return Q.promise(function(resolve, reject) {
+        Q.ninvoke(entries, "find", { contest : contest })
+        .then(function(list) {
+            resolve(list);
+        })
+        .fail(function() {
+             reject(Error("Failed to get entries"));
+        });
+    });
+}
+
 exports.update = function(obj) {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(entries, "findOne", obj)

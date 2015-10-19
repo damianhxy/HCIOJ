@@ -28,7 +28,7 @@
 	{{#if contest}}
 		<a href="/" class="sidelink sidelink-main">
 			<span class="logo">:]</span>
-			<span class="title">Contest</span>
+			<span class="title">13:04</span> {{!--Change this to a working timer HH:MM--}}
 			<span class="subtitle">Good luck with {{contest.title}}!</span>
 		</a>
 		{{!--<a href="/contests/{{contest.id}}/info" class="sidelink">--}}
@@ -39,13 +39,17 @@
 			<i class="fa fa-tasks"></i>
 			Problems
 		</a>
-		<a href="/contests/{{contest.id}}/submissions/mine" class="sidelink">
+		<a href="/contests/{{contest.id}}/submissions/latest" class="sidelink">
 			<i class="fa fa-cloud"></i>
 			All Subs
 		</a>
 		<a href="/contests/{{contest.id}}/submissions/mine" class="sidelink">
 			<i class="fa fa-cloud"></i>
 			My Subs
+		</a>
+		<a href="/contests/{{contest.id}}/clarifications" class="sidelink">
+			<i class="fa fa-question"></i>
+			Clarify
 		</a>
 		{{#if contest.scoreboard}}
 		<a href="/contests/{{contest.id}}/scoreboard" class="sidelink">
