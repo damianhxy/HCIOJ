@@ -90,7 +90,6 @@ exports.update = function(response) {
         .then(function(submission) {
             var isContest = submission.contest !== 0;
             if (response.totalscore) submission.score = response.totalscore; // Total Score
-            if (response.totaltime) submission.totaltime = response.totaltime; // Total Time
             if (response.maxtime) submission.runtime = response.maxtime; // Max Time
             if (response.graded_date) {
                 submission.graded_date = response.graded_date; // Graded Date
@@ -115,7 +114,7 @@ exports.update = function(response) {
                     }
                 });
 
-            if (res_type !== 5) // STUB
+            if (res_type !== 5)
                 Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
                 .then(function() {
                     resolve();
