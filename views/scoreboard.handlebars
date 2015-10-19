@@ -9,7 +9,7 @@
 				<tr>
 					<th>Rank</th>
 					<th>Name</th>
-					{{#each problems}}
+					{{#each contest.problems}}
 					<th>{{this}}</th>
 					{{/each}}
 					<th>Total</th>
@@ -17,10 +17,10 @@
 			</thead>
 			{{#each entries}}
 			<tr>
-				<td></td>
+				<td>{{inc @index}}</td>
 				<td>{{this.username}}</td>
-				{{#each problems}}
-				<td>{{!--score this--}}100</td>
+				{{#each ../contest.problems}}
+				<td>{{{contestScore ../this.awarded this}}}</td>
 				{{/each}}
 				<td>{{this.total}}</td>
 			</tr>

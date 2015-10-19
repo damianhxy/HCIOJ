@@ -381,7 +381,7 @@ main{
 }
 
 .alert {
-	padding: 0.5em 1em;
+	padding: 0.75em 1em;
 	cursor: pointer !important;
 	position: fixed;
 	bottom: 1em;
@@ -389,7 +389,7 @@ main{
     -webkit-transition: opacity .4s linear 0s;
     transition: opacity .4s linear 0s;
     user-select: none;
-    z-index: 1;
+    z-index: 9999;
     border-radius: 0px !important;
     border: 0px;
     color: #fefefe;
@@ -412,6 +412,7 @@ main{
 
 .alert-hidden {
     opacity: 0;
+    z-index: -1;
 }
 
 .fc-unthemed .fc-today {

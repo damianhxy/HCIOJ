@@ -4,6 +4,7 @@ var ensureAdmin = require("../middlewares/admin.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
 var problem = require("../models/problem.js");
 var contest = require("../models/contest.js");
+var clarification = require("../models/clarification.js");
 var submission = require("../models/submission.js");
 var moment = require("moment");
 var settings = require("./settings.js");
@@ -69,7 +70,7 @@ router.post("/add", ensureAdmin, function(req, res) {
 router.get("/:id", ensureAuthenticated, function(req, res) {
 	var scope = {};
 	contest.get(req.params.id)
-		.then(function(cont) { //check that contest exists
+		.then(function(cont) { // Check that contest exists
 			scope.contest = cont;
 			return entry.get({
 				username: req.user.username,
@@ -77,18 +78,19 @@ router.get("/:id", ensureAuthenticated, function(req, res) {
 			});
 		})
 		.then(function(ent) {
-			if (ent) { //if entry exists
+			if (ent) { // If entry exists
 				return entry.get({
 					username: req.user.username,
 					contest: req.params.id
 				});
 			}
-			else {
+			else { // This should be changed to an enter screen
 				return entry.add({
 					username: req.user.username,
 					contest: req.params.id,
 					start: moment().format(),
-					end: moment().add(scope.contest.time,'m').format()
+					end: moment().add(scope.contest.time,'m').format(),
+					total: "0"
 				})
 			}
 		})
@@ -304,11 +306,72 @@ router.get("/:id/submissions/:sub", ensureAuthenticated, function(req, res) {
 });
 
 router.get("/:id/scoreboard", ensureAuthenticated, function(req, res) {
+	var scope = {};
+	contest.get(req.params.id)
+		.then(function(contest) {
+			scope.contest = contest;
+			return entry.getEntries(req.params.id);
+		})
+		.then(function(entries) {
+			entries.sort(function(a,b){return b.total-a.total});
+			res.render("scoreboard",{
+				user: req.user,
+				contest: scope.contest,
+				entries: entries
+			})
+		})
+		.fail(function(err) {
+			req.session.error = "An error was encountered while processing your request";
+			res.redirect(req.headers.referer || "/");
+		});
+});
+
+router.get("/:id/clarifications", ensureAuthenticated, function(req, res) {
 	// Stub - must flesh it out
-	res.render("scoreboard",{
-		user: req.user,
-		problems: []
-	})
+	var scope = {};
+	contest.get(req.params.id)
+		.then(function(contest) {
+			scope.contest = contest;
+			return problem.getProblems(contest.problems);
+		})
+		.then(function(problems) {
+	        scope.problems = problems;
+	        return clarification.getClars(req.params.id);
+	    })
+	    .then(function(clarifications) {
+	        res.render("clarifications", {
+	            user: req.user,
+	            title: "Clarifications",
+	            subtitle: "speak now or forever hold your peace",
+	            problems: scope.problems,
+	            contest: scope.contest,
+	            clarifications: clarifications
+	        });
+	    })
+	    .fail(function() {
+	        req.session.error = "An error was encountered while processing your request";
+	        res.redirect(req.headers.referer || "/");
+    });
+});
+
+router.post("/:id/clarifications", function(req, res) {
+    contest.get(req.params.id)
+		.then(function(contest) {
+			return clarification.add({
+		        "problem": req.body.problem,
+		    	"author": req.user.username,
+		    	"query": req.body.query,
+		    	"contest": req.params.id
+		    });
+		})
+        .then(function() {
+            res.redirect("/contests/" + req.params.id + "/clarifications");
+        })
+        .fail(function() {
+            req.session.error = "An error was encountered";
+            res.redirect(req.headers.referer || "/");
+            res.redirect("/contests/" + req.params.id + "/clarifications");
+        })
 });
 
 module.exports = router;
