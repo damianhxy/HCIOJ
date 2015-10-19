@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 var submission = require("../models/submission.js");
-var entry = require("../models/entry.js");
 var problem = require("../models/problem.js");
 var settings = require("./settings.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
@@ -11,8 +10,6 @@ router.post("/api", function(req, res) {
     var sub = JSON.parse(req.body.data);
     if (req.body.secret !== settings.API_SECRET)
         res.status(401).send("Unauthorised");
-    // Check if it's a contest or not
-    // entry.update(sub)
     submission.update(sub)
     .then(function() {
         res.send("Success");

@@ -5,6 +5,7 @@ var net = require("net");
 var settings = require("../controllers/settings.js");
 var user = require("./user.js");
 var problem = require("./problem.js");
+var entry = require("./entry.js");
 var moment = require("moment");
 
 exports.add = function(submission) {
@@ -87,6 +88,7 @@ exports.update = function(response) {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "findOne", { numid: response.subid })
         .then(function(submission) {
+            var isContest = submission.contest !== 0;
             if (response.totalscore) submission.score = response.totalscore; // Total Score
             if (response.totaltime) submission.totaltime = response.totaltime; // Total Time
             if (response.maxtime) submission.runtime = response.maxtime; // Max Time
@@ -98,40 +100,45 @@ exports.update = function(response) {
             if (response.compilation) submission.compile = response.compilation; // Compile time | Error Message
             if (response.verdict) submission.verdict = response.verdict; // Submission verdict)
 
-            if (response.subtask) { // Subtask Done
-                for(var i = 0; i < submission.res.length; i++) { // Loop to find Subtask
-                    if (submission.res[i].num === response.subtask.num) {
-                        submission.res[i].score = response.subtask.score; // Update Score
-                        break;
-                    }
-                }
-            }
+            if (response.subtask) // Subtask Done
+                submission.res.some(function(e, i) {
+                    if (e.num === response.subtask.num)
+                        return submission.res[i].score = response.subtask.score;
+                });
 
-            if (response.tc) { // Update Testcase
-                for(var i = 0; i < submission.res.length; i++) { // Loop to find Subtask
-                    if (submission.res[i].num === response.tc.subtask) {
-                        console.log("Found subtask #" + response.tc.subtask);
+            if (response.tc) // Update Testcase
+                submission.res.some(function(e, i) {
+                    if (e.num === response.tc.subtask) {
                         delete response.tc.subtask;
-                        if (submission.res[i].tcs) submission.res[i].tcs.push(response.tc) // Update Testcase in Subtask
-                        else submission.res[i].tcs = [response.tc];
-                        break;
+                        if (e.tcs) return submission.res[i].tcs.push(response.tc);
+                        else return submission.res[i].tcs = [response.tc];
                     }
-                }
-            }
+                });
 
-            Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
-            .then(function() {
-                return user.update(response.user, response.problem, response.totalscore, response.verdict);
-            })
-            .then(function(difference) {
-                return problem.update(response.problem, difference);
-            })
-            .then(function() {
-                resolve("Updated score");
-            })
-            .fail(function() {
-                reject(Error("Failed to update score"));
-            });
+            if (res_type !== 5) // STUB
+                Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
+                .then(function() {
+                    resolve();
+                });
+            else if (!isContest)
+                Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
+                .then(function() {
+                    return user.update(response.user, response.problem, response.totalscore, response.verdict);
+                })
+                .then(function(difference) {
+                    return problem.update(response.problem, difference);
+                })
+                .then(function() {
+                    resolve();
+                });
+            else // Contest
+                Q.ninvoke(submissions, "update", { numid: response.subid }, { $set: submission })
+                .then(function() {
+                    return entry.update(response.user, submission.contest, response.problem, response.totalscore);
+                })
+                .then(function() {
+                    resolve();
+                });
         })
         .fail(function() {
             reject(Error("Failed to update submission"));

@@ -20,19 +20,26 @@ exports.get = function(obj) {
         .then(function(entry) {
             resolve(entry);
         })
-        .fail(function() {  
+        .fail(function() {
             reject(Error("Failed to get entry"));
         });
     });
 };
 
-exports.update = function(obj) {
+exports.update = function(name, contest, problem, score) {
     return Q.promise(function(resolve, reject) {
-        Q.ninvoke(entries, "findOne", obj)
+        Q.ninvoke(entries, "findOne", { username: name, contest: contest })
         .then(function(entry) {
-            // THIS IS A STUB
+            var difference = score - entry.awarded[problem];
+            if (difference <= 0) return resolve();
+            entry.awarded[problem] = score;
+            entry.total += difference;
+            Q.ninvoke(entries, "findOne", { username: name, contest: contest }, { $set: entry })
+            .then(function() {
+                resolve();
+            });
         })
-        .fail(function() {  
+        .fail(function() {
             reject(Error("Failed to update entry"));
         });
     });
