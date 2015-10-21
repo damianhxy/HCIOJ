@@ -5,6 +5,7 @@ var problem = require("../models/problem.js");
 var settings = require("./settings.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
 var moment = require("moment");
+var atob = require("atob");
 
 router.post("/api", function(req, res) {
     var sub = JSON.parse(req.body.data);
