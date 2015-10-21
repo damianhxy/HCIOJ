@@ -99,6 +99,7 @@ router.get("/:id", ensureAuthenticated, function(req, res) {
 			return problem.getProblems(scope.contest.problems);
 		})
 		.then(function(prob) {
+			scope.contest.end = moment(scope.contest.end).format();
 			res.render("problems", {
 				user: req.user,
 				title: scope.contest.title,
@@ -321,7 +322,7 @@ router.get("/:id/scoreboard", ensureAuthenticated, function(req, res) {
 				entries: entries
 			})
 		})
-		.fail(function(err) {
+		.fail(function() {
 			req.session.error = "An error was encountered while processing your request";
 			res.redirect(req.headers.referer || "/");
 		});
