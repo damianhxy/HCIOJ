@@ -44,7 +44,7 @@ exports.create = function(req, username, password) {
         .then(function(count) {
             if (count)
                 return reject(Error("Username in use"));
-            return Q.ninvoke(bcryptjs, "password", password, 10);
+            return Q.ninvoke(bcryptjs, "hash", password, 10);
         })
         .then(function(password) {
             var user = {
@@ -66,7 +66,8 @@ exports.create = function(req, username, password) {
         .then(function(user) {
             resolve(user);
         })
-        .fail(function() {
+        .fail(function(err) {
+            console.error(err);
             reject(Error("User creation failed"));
         });
 
