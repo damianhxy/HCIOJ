@@ -1,9 +1,0 @@
-exports.SECRET = "hwachong";
-exports.LOG_TIME_FORMAT = "dd mmm HH:MM:ss";
-exports.PORT = process.env.PORT || "8080";
-exports.IP = process.env.IP || "0.0.0.0";
-exports.GRADER_PORT = "9500";
-exports.GRADER_IP = "127.0.0.1";
-exports.SUBMISSION_TIME_FORMAT = "DD MMM YY, HH:mm:ss";
-exports.API_SECRET = "360n0sc0p3d";
-exports.LANGUAGES = { "java": "Java", "py": "Python", "pas": "Pascal", "cpp": "C++11" };
