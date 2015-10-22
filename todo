@@ -1,0 +1,61 @@
+=========
+Todo List
+=========
+
+Web Server
+----------
+- contests
+	- score updating
+	- timer
+	- delay
+	- make submission viewing from frontpage link to contest submission viewing
+- someone needs to come up with a variable naming scheme for all those promise chains
+- rename variables to camelCase (submission.js, submissions.js, handlebars)
+- Implement submission viewing in problem.handlebars
+- contest management - problems, contest windows, out of competition, etc
+- admin panel - problem, user, contest, grader management, etc
+- landing page, though not urgent (to be completed right before launch)
+- blog/learning page - topics to learn, maybe similar to codecademy
+- lessons/problem sets - classify problems in lists
+- manager view - could be easier for teachers to view submissions by user/problem
+- notifications
+- live updating for scores
+
+
+Grading Server ([!] = priority, [-] = normal)
+--------------
+[!] Objectify grading process to make modification of task types easier (YES DONE SO DANK)
+[-] Improve sandbox messages (ACTUALLY KEEP THEM VAGUE)
+[-] Stress test sandbox modifications (IS OK NOW)
+[-] Implement pulling of test data from external servers (NOT URGENT
+
+=============
+Launch Stages
+=============
+
+Alpha Launch
+------------
+Date  - October 2015
+Users - Ex-Competitive Programming Team (those who tried for NOI 2015 and prior)
+Goals - Submission/Contests fully working
+      - Usable for internal selection test/training
+      - Live updating working
+
+Beta Launch
+-----------
+Date  - November/December 2015
+Users - New Blood (members new to cp), (possibly) HCJC computing students, Dec Training people
+Goals - Informational landing page (not necessarily aesthetically pleasing)
+      - Courses/Lessons working
+      - Manager view working
+      - Admin panel working
+      - Usable for lesssons
+      
+Final Launch
+------------
+Date  - Early 2016
+Users - Any interested members (could be open in previous stages of completion)
+Goals - Pretty landing page
+      - Multiple themes working
+      - Learning page working
+      - Start finding juniors to manage

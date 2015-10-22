@@ -1,0 +1,310 @@
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-cube"></i>
+				<h2>{{problem.title}} <small>{{problem.subtitle}}</small></h2>
+			</div>
+		</div>
+	</div>
+</div>
+{{#if problem.tags}}
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-tags"></i>
+				<h2>Tags <small>
+					{{#each problem.tags}}
+						{ {{this}} }
+					{{/each}}
+				</small></h2>
+			</div>
+		</div>
+	</div>
+</div>
+{{/if}}
+<div class="frame">
+	<div class="bit-2 left">
+		{{#if problem.desc-html}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-file-text"></i>
+				<h2>Description</h2>
+			</div>
+			<div>
+				<div class="desc">
+					{{{get problem.desc-html}}}
+				</div>
+			</div>
+		</div>
+		{{/if}}
+		{{#if problem.desc-txt}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-file-text"></i>
+				<h2>Description</h2>
+			</div>
+			<div>
+				<div>
+					<pre>
+						{{get problem.desc-txt}}
+					</pre>
+				</div>
+			</div>
+		</div>
+		{{/if}}
+		{{#if problem.desc-doc}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-file-text"></i>
+				<h2>Description</h2>
+			</div>
+			<div>
+				<iframe src="https://docs.google.com/viewer?url={{problem.desc-doc}}&embedded=true" frameborder="0"></iframe>
+			</div>
+		</div>
+		{{/if}}
+		{{#if problem.desc-others}}
+		{{#each problem.desc-others}}
+		<div class="container">
+			<a href="{{this}}">
+				<div class="header">
+					<i class="fa fa-download"></i>
+					<h2>Download Attachment ({{this}})</h2>
+				</div>
+			</a>
+		</div>
+		{{/each}}
+		{{/if}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-tasks"></i>
+				<h2>Subtasks</h2>
+			</div>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Score</th>
+							<th>#TCs</th>
+							<th>Max Time</th>
+							<th>Max Memory</th>
+						</tr>
+					</thead>
+					<tbody>
+					{{#each problem.subtasks}}
+						<tr>
+							<td>{{this.no}}</td>
+							<td>{{this.score}}</td>
+							<td>{{this.tcs}}</td>
+							<td>{{this.time}}s</td>
+							<td>{{this.mem}} MB</td>
+						</tr>
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="bit-2 right">
+		<form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{problem.title}}" id="submitform">
+		{{#unless noCompileOptions}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-cog"></i>
+				<h2>Compile Options</h2>
+			</div>
+			<div>
+				<div class="compiler">
+					<label>Language</label>
+					<select name="language" class="alt-select" id="language">
+						<option value="cpp">C++11 (4.9.2)</option>
+						<option value="pas">Pascal (2.6.4)</option>
+						<option value="java">Java (1.7.0)</option>
+						<option value="py">Python (3.4.3)</option>
+					</select>
+					<br>
+					<label>Compile Options</label>
+					<pre></pre>
+				</div>
+			</div>
+		</div>
+		{{/unless}}
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-code"></i>
+				<h2>Edit Submission</h2>
+			</div>
+			<div class="submitbox">
+				<div class="selector">
+					{{!--<i class="fa fa-arrow-left"></i>--}}
+					{{!--<span>Loading</span>--}}
+					{{!--<i class="fa fa-arrow-right"></i>--}}
+					<span><i class="fa fa-cog fa-spin"></i></span>
+					{{!--<span class="right">--}}
+					{{!--	{{#if problem.files}}<i class="fa fa-arrow-left"></i>--}}
+					{{!--	<i class="fa fa-arrow-right"></i>{{/if}}--}}
+					{{!--	<i class="fa fa-upload"></i>--}}
+					{{!--</span>--}}
+				</div>
+				<div id="editor"></div>
+				{{#if problem.files}}{{#each problem.files}}<textarea id="{{this.name}}" name="{{this.name}}"></textarea>{{/each}}
+				{{else}}<textarea id="ans" name="code"></textarea>{{/if}}
+				{{!--<input type="hidden" name="prob" value="{{problem.title}}">--}}
+				<button id="submitbutton">Submit For Grading</button>
+			</div>
+		</div>
+		</form>
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-certificate"></i>
+				<h2>Your Submissions</h2>
+			</div>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Time</th>
+							<th>Score</th>
+							<th>Max Time</th>
+							<th>Progress</th>
+
+						</tr>
+					</thead>
+					<tbody style="overflow: auto;">
+						{{#each submissions}}
+						<tr>
+							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+							<td>{{this.time}}</td>
+							<td><span class='label label-{{{scoreColour this.score}}}'>{{this.score}}</span></td>
+							<td>{{this.runtime}}s</td>
+							<td><span style='color: gray'>{{this.progress}}</span></td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-certificate"></i>
+				<h2>Latest Submissions</h2>
+			</div>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>User</th>
+							<th>Time</th>
+							<th>Score</th>
+							<th>Progress</th>
+						</tr>
+					</thead>
+					<tbody style="overflow: auto;">
+						{{#each submissions}}
+						<tr>
+							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+							<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
+							<td>{{this.time}}</td>
+							<td><span class='label label-{{{scoreColour this.score}}}'>{{this.score}}</span></td>
+							<td><span style='color: gray'>{{this.progress}}</span></td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	window.addEventListener("load", function(){
+		var files = {{#if problem.files}}{{{json problem.files}}}{{else}}[{name:"ans",text:false}]{{/if}};
+		var languages = {
+			"cpp":{
+				"name":"C++11 (4.9.2)",
+				"mode":"c_cpp",
+				"def":"#include <bits/stdc++.h>\r\nusing namespace std;\r\n\r\nint main() {\r\n\t/* Your Code Here */\r\n\treturn 0;\r\n}",
+				"compiler":"g++ replace.cpp -o replace -O2 -std=c++0x",
+				"cursor": {row: 4, column: 1}
+			},
+			"pas":{
+				"name":"Pascal (2.6.4)",
+				"mode":"pascal",
+				"def":"program replace;\r\n\r\nBegin\r\n\t(* Your Code Here *)\r\nEnd.",
+				"compiler":"fpc replace.pas -o replace -O2",
+				"cursor": {row: 3, column: 1}
+			},
+			"java":{
+				"name":"Java (1.7.0)",
+				"mode":"java",
+				"def":"import java.util.*;\r\nimport java.lang.*;\r\nimport java.io.*;\r\n\nclass {{this.title}} {\r\n\tpublic static void main(String[] args) {\r\n\t\t/* Your Code Here */\r\n\t}\r\n}",
+				"compiler":"javac replace.java",
+				"cursor": {row: 6, column: 2}
+			},
+			"py":{
+				"name":"Python (3.4.3)",
+				"mode":"python",
+				"def":"# Your Code Here\n",
+				"compiler":"python replace.py",
+				"cursor": {row: 2, column: 0}
+			}
+		};
+		var editor = ace.edit("editor");
+	 	editor.setTheme("ace/theme/monokai");
+		editor.$blockScrolling = Infinity;
+		var position = 0, extension = "cpp";
+
+		function update() {
+			var x = document.querySelector(".selector>span");
+			if(files[position].text) {
+				x.textContent = files[position].name;
+				editor.getSession().setMode("ace/mode/plain_text");
+				editor.setValue(document.querySelector("#"+files[position].name).value || "");
+			}
+			else {
+				x.textContent = files[position].name + "." + extension;
+				editor.getSession().setMode("ace/mode/"+languages[extension].mode);
+				if(files[position].def) editor.setValue(document.querySelector("#"+files[position].name).value || files[position].def[extension] || languages[extension].def);
+				else editor.setValue(document.querySelector("#"+files[position].name).value || languages[extension].def);
+				// editor.moveCursorToPosition(languages[extension].cursor);
+				editor.moveCursorToPosition({ row: 0, column: 0 });
+			}
+		}
+
+		update();
+		document.querySelector(".compiler pre").textContent = languages[extension].compiler.replace(new RegExp("replace", 'g'), files[0].name);
+
+		if(document.querySelector(".selector .fa-arrow-left")){
+			document.querySelector(".selector .fa-arrow-left").addEventListener("click", function() {
+				document.querySelector("#"+files[position].name).value = editor.getValue();
+				position += (files.length - 1);
+				position %= files.length;
+				update();
+			});
+			document.querySelector(".selector .fa-arrow-right").addEventListener("click", function() {
+				document.querySelector("#"+files[position].name).value = editor.getValue();
+				position++;
+				position %= files.length;
+				update();
+			});
+		}
+
+		document.getElementById("language").addEventListener("change", function() {
+			extension = this.value;
+			document.querySelector(".compiler pre").textContent = languages[this.value].compiler.replace(new RegExp("replace", 'g'), files[0].name);
+			files.forEach(function(item){
+				document.querySelector("#"+item.name).value = "";
+			});
+			update();
+		});
+
+		document.getElementById("submitbutton").addEventListener("click", function() {
+			document.querySelector("#"+files[position].name).value = editor.getValue();
+			document.getElementById("submitform").submit();
+		});
+	});
+</script>

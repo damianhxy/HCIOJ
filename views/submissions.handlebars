@@ -1,0 +1,38 @@
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-code"></i>
+				<h2>{{title}}</h2>
+			</div>
+			<div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Problem</th>
+                            <th>Language</th>
+                            <th>Time</th>
+                            <th>Runtime</th>
+                            <th>Status</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    {{#each submissions}}
+                    <tr>
+                        <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+                        <td><a href="/users/{{this.user}}">{{this.user}}</a></td>
+                        <td><a href="/problems/{{this.title}}">{{this.title}}</a></td>
+                        <td>{{this.language}}</td>
+                        <td>{{this.time}}</td>
+                        <td>{{this.runtime}}s</td>
+                        <td>{{this.status}}</td>
+                        <td class="score-{{this.score}}">{{{this.score}}}</td>
+                    </tr>
+                    {{/each}}
+                </table>
+			</div>
+		</div>
+	</div>
+</div>
