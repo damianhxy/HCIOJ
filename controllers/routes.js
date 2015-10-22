@@ -33,10 +33,10 @@ router.get("/", function(req, res, next) {
             .then(function(submissions) {
                 session.all()
                 .then(function(users) {
-                    submissions.sort(function(a,b){return b.numid-a.numid});
                     var userSubmissions = submissions.filter(function(e) {
                         return e.user === req.user.username;
                     });
+                    var submissions = submissions.slice(0, 10);
                     res.render("homepage", {
                         user: req.user,
                         title: "Home",

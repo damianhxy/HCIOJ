@@ -54,6 +54,7 @@ exports.create = function(req, username, password) {
                 "email": req.body.email,
                 "level": req.body.level,
                 "admin": false,
+                "disabled": false,
                 "avatar": defaultAvatar,
                 "awarded": {},
                 "accepted": {},
