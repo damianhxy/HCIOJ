@@ -18,6 +18,7 @@ exports.all = function() {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(clarifications, "find", {})
         .then(function(list) {
+            list = list || [];
             resolve(list);
         })
         .fail(function() {

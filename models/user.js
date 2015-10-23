@@ -21,12 +21,12 @@ exports.authenticate = function(username, password) {
         Q.ninvoke(users, "findOne", { username: username })
         .then(function(user) {
             if (!user)
-                return reject(Error("User not found"));
+                return reject(Error("User not found: " + username));
             Q.ninvoke(bcryptjs, "compare", password, user.password)
             .then(function(flag) {
                 if (flag)
                     return resolve(user);
-                return reject(Error("Wrong Password"));
+                return reject(Error("Wrong Password for user: " + username));
             });
         })
         .fail(function() {
@@ -43,7 +43,7 @@ exports.create = function(req, username, password) {
         Q.ninvoke(users, "count", { username: username })
         .then(function(count) {
             if (count)
-                return reject(Error("Username in use"));
+                return reject(Error("Username in use: " + username));
             return Q.ninvoke(bcryptjs, "hash", password, 10);
         })
         .then(function(password) {

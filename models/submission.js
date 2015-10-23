@@ -24,6 +24,7 @@ exports.all = function() {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(submissions, "find", {})
         .then(function(list) {
+            list = list || [];
             list.sort(function(a, b) {
                 return a.numid - b.numid;
             });

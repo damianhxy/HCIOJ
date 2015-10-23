@@ -33,6 +33,7 @@ router.get("/", function(req, res, next) {
             .then(function(submissions) {
                 session.all()
                 .then(function(users) {
+                    submissions = submissions || []; // [] turns into undefined
                     var userSubmissions = submissions.filter(function(e) {
                         return e.user === req.user.username;
                     });
