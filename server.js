@@ -45,7 +45,7 @@ session.clear()
     			  			"progress":"steel beams",
     			  			};
     	  
-		  io.emit('new submission',JSON.stringify(submission));
+		  io.emit('new submission',submission);
     });
 })
 .fail(function() {
