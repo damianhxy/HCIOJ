@@ -28,10 +28,17 @@
 	<div class="bit-3">
 		<div class="container">
 			<div class="header">
-				<h2>WHAT AM I?</h2>
+				<h2>WHAT AM I? SOCKET IO TEST</h2>
 			</div>
 			<div>
-				<div>
+			<script type="text/javascript">
+				var socket = io();
+    			socket.emit('message', 'cilent -> server');
+    			socket.on('message', function(msg){
+			    	$('#messages').append($('<li>').text(msg));
+			  	});
+			</script>
+				<div id="messages">
 					PLEASE INSERT PROPOGANDA
 				</div>
 			</div>
