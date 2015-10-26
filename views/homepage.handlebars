@@ -45,7 +45,21 @@
 				<h2>Latest Submissions</h2>
 			</div>
 			<div>
-				<table class="table">
+				<script type="text/javascript">
+					var socket = io();
+	    			socket.on('new submission', function(msg){
+	    				var submission = JSON.parse(msg);
+				    	$('#subtable tbody').append('<tr>' + 
+				    								'<td>' + submission.id + '</td>' +
+				    								'<td>' + submission.user + '</td>' +
+				    								'<td>' + submission.problem + '</td>' +
+				    								'<td>' + submission.time + '</td>' +
+				    								'<td>' + submission.score + '</td>' +
+				    								'<td>' + submission.progress + '</td>' +
+				    								'</tr>');
+				  	});
+				</script>
+				<table class="table" id="subtable">
 					<thead>
 						<tr>
 							<th>ID</th>

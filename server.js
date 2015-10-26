@@ -36,6 +36,16 @@ session.clear()
     		  console.log('client sent: '+ msg);
     		  io.emit('message', 'dank server test');
     	  });
+    	  var submission = {
+    			  			"id":"1",
+    			  			"user":"dank",
+    			  			"problem":"memes",
+    			  			"time":"cant",
+    			  			"score":"melt",
+    			  			"progress":"steel beams",
+    			  			};
+    	  
+		  io.emit('new submission',JSON.stringify(submission));
     });
 })
 .fail(function() {
