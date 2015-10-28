@@ -1,3 +1,4 @@
+#!/usr/bin/node
 var express = require("express");
 var app = express();
 var settings = require("./controllers/settings.js");
