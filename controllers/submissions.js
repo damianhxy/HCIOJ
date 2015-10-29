@@ -56,10 +56,21 @@ router.get("/mine", function(req, res) {
 });
 
 router.get("/queue", function(req, res) {
-    res.render("queue", {
-        user: req.user,
-        title: "Grading Queue",
-        subtitle: "estimated waiting time: forevah"
+	submission.all()
+    .then(function(submissions) {
+        submissions = submissions.filter(function(e) {
+            return e.restype < 5;
+        });
+
+        res.render("queue", {
+            user: req.user,
+            title: "Grading Queue",
+            subtitle: "estimated waiting time: forevah"
+        });
+    })
+    .fail(function() {
+        req.session.error = "An error was encountered";
+        res.redirect(req.headers.referer || "/");
     });
 });
 
