@@ -7,7 +7,8 @@ socket.attach = function(server)
 {
 	io.attach(server);
 };
-var submission = {
+var submission = 
+			{
 			"id":"1",
 			"user":"dank",
 			"problem":"memes",
@@ -17,7 +18,7 @@ var submission = {
 			};
 
 io.on('connection', function(socket){
-	  console.log('socket connected');
+	  console.log('socket connected id: ' + socket.id);
 	  socket.on('disconnect', function(){
 		    console.log('socket disconnected');
 	  });
