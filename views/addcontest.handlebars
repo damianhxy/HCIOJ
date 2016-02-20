@@ -8,7 +8,7 @@
 			<input type="text" placeholder="End Time: YYYY-MM-DD HH:MM(:SS)" name="end" class="" required/>
 			<p><input type="checkbox" name="indi" id="indi"><label for="indi" class="checklabel"><span class="fakecheck"></span>&nbsp;&nbsp;Individual Timer?</label></p>
 			<input type="number" min="0" max="500" placeholder="Time for each user in minutes (if individual timer)" name="time" value = "240" required/>
-			<select name="problems" multiple required>
+			<select name="problems" multiple>
 				<option value="" disabled>Contest Problems: Hold Ctrl to select multiple</option>
 				{{#if probs}}
 				{{#each probs}}

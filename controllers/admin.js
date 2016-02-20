@@ -100,6 +100,7 @@ router.get("/contests/:id", function(req, res) {
 router.post("/addcontest", function(req, res) {
     contest.getID()
 	.then(function(numid) {
+        if(!("problems" in req.body)) req.body.problems = "";
 		return contest.add({
 			id: numid.toString(),
 			title: req.body.title,
@@ -126,6 +127,7 @@ router.post("/addcontest", function(req, res) {
 router.post("/editcontest", function(req, res) {
     contest.get(req.body.id)
 	.then(function(cont) {
+        if(!("problems" in req.body)) req.body.problems = "";
 		return contest.edit(cont.id, {
 			title: req.body.title,
 			desc: req.body.desc,
