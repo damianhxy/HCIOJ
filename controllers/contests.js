@@ -216,12 +216,12 @@ router.post("/:id/join", ensureAuthenticated, function(req, res) {
 			})
 		})
 		.then(function(entry){
-			res.redirect(".");
+			res.redirect("/contests/" + scope.contest.id);
 		})
 		.fail(function(err) {
 			if(err.message == "Already in contest"){
                 req.session.error = "Already in contest";
-				res.redirect(".");
+				res.redirect("/contests/" + scope.contest.id);
 			}
 			else{
 				req.session.error = "An error was encountered while processing your request";
@@ -358,7 +358,13 @@ router.get("/:id/scoreboard", ensureAuthenticated, function(req, res) {
 	contest.get(req.params.id)
 		.then(function(contest) {
 			scope.contest = contest;
-			return entry.getEntries(req.params.id);
+            if(contest.scoreboard) {
+                return entry.getEntries(req.params.id);
+            }
+            else {
+                req.session.error = "Scoreboard hidden";
+                res.redirect("/contests/" + scope.contest.id);
+            }
 		})
 		.then(function(entries) {
 			entries.sort(function(a,b){return b.total-a.total});

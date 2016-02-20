@@ -47,7 +47,8 @@ router.get("/contests", function(req, res) {
         	user: req.user,
         	title: "Editing Contests",
         	subtitle: "Admin",
-        	problems: problems
+        	problems: problems,
+        	submit: "/admin/addcontest"
         });
     })
     .fail(function() {
@@ -111,6 +112,7 @@ router.post("/addcontest", function(req, res) {
 			time: parseInt(req.body.time),
 			problems: req.body.problems.split(","),
 			hidden: req.body.hidden === "on",
+            scoreboard: req.body.scoreboard === "on",
 			url: "/contests/" + numid
 		});
 	})

@@ -23,6 +23,7 @@
 					<input type="text" placeholder="End Time: YYYY-MM-DD HH:MM(:SS)" name="end" class="" {{#if contest}}value="{{contest.end}}"{{/if}} required/>
 					<p><input type="checkbox" name="indi" id="indi"><label for="indi" class="checklabel">&nbsp;&nbsp;Individual Timer?</label></p>
 					<p><input type="checkbox" name="hidden" id="hidden"><label for="hidden" class="checklabel">&nbsp;&nbsp;Hidden?</label></p>
+					<p><input type="checkbox" name="scoreboard" id="scoreboard" checked><label for="scoreboard" class="checklabel">&nbsp;&nbsp;Show scoreboard?</label></p>
 					<input type="number" min="1" placeholder="Time for each user in minutes (if individual timer)" name="time" value = "" {{#if contest}}value="{{contest.time}}"{{/if}}/>
 					<select name="problems" multiple>
 						<option value="" disabled>Contest Problems: Hold Ctrl to select multiple</option>

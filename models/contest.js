@@ -4,6 +4,7 @@ var contests = new Datastore({filename: './database/contests', autoload: true});
 
 exports.add = function(contest) {
     return Q.promise(function(resolve, reject) {
+        console.log(contest);
         Q.ninvoke(contests, "insert", contest)
         .then(function() {
             resolve("Added contest");
