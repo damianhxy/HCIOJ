@@ -25,7 +25,7 @@ router.get("/", ensureAuthenticated, function(req, res) {
 			res.redirect("/");
 		});
 });
-
+/*
 router.get("/add", ensureAdmin, function(req, res) {
 	problem.all()
 		.then(function(prob) {
@@ -66,7 +66,7 @@ router.post("/add", ensureAdmin, function(req, res) {
 			res.redirect("/add");
 		});
 });
-
+*/
 router.get("/:id", ensureAuthenticated, function(req, res) {
 	var scope = {};
 	contest.get(req.params.id)
@@ -84,14 +84,16 @@ router.get("/:id", ensureAuthenticated, function(req, res) {
 					contest: req.params.id
 				});
 			}
-			else { // This should be changed to an enter screen
-				return entry.add({
+			else { // Should add check for time
+				scope.entry = ent;
+				throw new Error("noentry");
+				/*return entry.add({
 					username: req.user.username,
 					contest: req.params.id,
 					start: moment().format(),
 					end: moment().add(scope.contest.time,'m').format(),
 					total: "0"
-				})
+				})*/
 			}
 		})
 		.then(function(ent) {
@@ -100,7 +102,7 @@ router.get("/:id", ensureAuthenticated, function(req, res) {
 		})
 		.then(function(prob) {
 			scope.contest.end = moment(scope.contest.end).format();
-			res.render("problems", {
+			res.render("contest", {
 				user: req.user,
 				title: scope.contest.title,
 				subtitle: scope.entry.end,
@@ -110,8 +112,20 @@ router.get("/:id", ensureAuthenticated, function(req, res) {
 			});
 		})
 		.fail(function(err) {
-			req.session.error = "An error was encountered while processing your request";
-			res.redirect("/contests");
+			console.log(scope);
+			if(err.message == "noentry"){
+				console.log("DNAK");
+				res.render("joincontest", {
+					user: req.user,
+					title: scope.contest.title,
+					subtitle: "contest",
+					contest: scope.contest
+				});
+			}
+			else{
+				req.session.error = "An error was encountered while processing your request";
+				res.redirect("/contests");
+			}
 		})
 		// contest.get(req.params.id)
 		// .then(function(contest) { //check that contest exists
@@ -188,6 +202,24 @@ router.get("/:id", ensureAuthenticated, function(req, res) {
 		// });
 });
 
+router.post("/:id/join", ensureAuthenticated, function(req, res) {
+	var scope = {};
+	contest.get(req.params.id)
+		.then(function(cont) { // Check that contest exists
+			scope.contest = cont;
+			return entry.add({ // Should add a check for time 
+				username: req.user.username,
+				contest: req.params.id,
+				start: moment().format(),
+				end: moment().add(scope.contest.time,'m').format(),
+				total: "0"
+			})
+		})
+		.then(function(entry){
+			res.redirect()
+		})
+});	
+
 router.get("/:id/problems/:problem", ensureAuthenticated, function(req, res) {
 	var scope = {};
 	contest.get(req.params.id)
@@ -199,9 +231,12 @@ router.get("/:id/problems/:problem", ensureAuthenticated, function(req, res) {
 			scope.problem = prob;
 			return submission.all();
 		})
-		.then(function(subs) {
-			subs.sort(function(a,b){return b.numid-a.numid});
-			var mysubs = subs.filter(function(e) {
+		.then(function(submissions) {
+            submissions = submissions.filter(function(e) {
+                 return e.contest === scope.contest.id;
+            });
+			submissions.sort(function(a,b){return b.numid-a.numid});
+			var mysubs = submissions.filter(function(e) {
 				return e.title === scope.problem.title && e.user === req.user.username && e.contest === scope.contest.id;
 			});
 			res.render("problem", {
@@ -209,7 +244,7 @@ router.get("/:id/problems/:problem", ensureAuthenticated, function(req, res) {
 				problem: scope.problem,
 				title: scope.problem.title,
 				subtitle: scope.problem.subtitle,
-				submissions: subs,
+				submissions: submissions,
 				mysubmissions: mysubs,
 				contest: scope.contest
 			});
@@ -265,7 +300,7 @@ router.post("/:id/submit/:prob", ensureAuthenticated, function(req, res) {
 		.then(function() {
 			res.redirect("/contests/" + req.params.id + "/submissions/" + (scope.curid + 1));
 		})
-		.fail(function() {
+		.fail(function(err) {
 			req.session.error = "An error was encountered while processing your request";
 			res.redirect(req.headers.referer || "/");
 		});
@@ -302,7 +337,8 @@ router.get("/:id/submissions/:sub", ensureAuthenticated, function(req, res) {
 	        });
 		})
 		.fail(function(err) {
-			req.session.error = "An error was encountered while processing your request";
+			//req.session.error = "An error was encountered while processing your request";
+			req.session.error = JSON.stringify(err);
 			res.redirect(req.headers.referer || "/");
 		});
 });

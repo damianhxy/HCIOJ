@@ -25,6 +25,9 @@ router.use("/clarifications", require("./clarifications.js"));
 /* Contests */
 router.use("/contests", require("./contests.js"));
 
+/* Admin */
+router.use("/admin", require("./admin.js"));
+
 router.get("/", function(req, res, next) {
     if (req.user)
 		contest.all()
@@ -70,6 +73,17 @@ router.get("/logout", ensureAuthenticated, function(req, res) {
         res.redirect(req.headers.referer || "/");
     });
 });
+
+/*
+// For testing handlebars pages
+router.get("/test", function(req, res){
+    res.render("joincontest", {
+        user: req.user,
+        title: "Home",
+        subtitle: "an overview"
+    })
+});
+*/
 
 router.get("/signin", function(req, res) {
     if (req.user) {

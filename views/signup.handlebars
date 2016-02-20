@@ -13,6 +13,12 @@
 	<link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
+	{{#if success}}
+		<p class="alert alert-success"><i class="fa fa-rocket"></i>&nbsp;&nbsp;&nbsp;{{success}}</p>
+	{{/if}}
+	{{#if error}}
+		<p class="alert alert-danger"><i class="fa fa-warning"></i>&nbsp;&nbsp;&nbsp;{{error}}</p>
+	{{/if}}
 	<div class="login-container">
 		<div class="login">
 			<div class="login-head">

@@ -73,7 +73,7 @@ exports.getID = function() {
     return Q.promise(function(resolve, reject) {
         Q.ninvoke(contests, "count", {})
         .then(function(count) {
-            resolve(count);
+            resolve(count+1);
         })
         .fail(function() {
             reject(Error("Failed to get contest count"));

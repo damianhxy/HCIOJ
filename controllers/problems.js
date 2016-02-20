@@ -20,6 +20,7 @@ router.get("/", function(req, res) {
     });
 });
 
+/*
 router.get("/add", ensureAdmin, function(req, res) {
     res.render("addproblem", {
         user: req.user,
@@ -31,6 +32,7 @@ router.get("/add", ensureAdmin, function(req, res) {
 router.post("/add", ensureAdmin, function(req, res) {
     res.status(400).send("Not Implemented");
 });
+*/
 
 router.get("/latest", function(req, res) {
     problem.all()
@@ -87,6 +89,7 @@ router.get("/:problem", function(req, res) {
             submissions = submissions.filter(function(e) {
                  return e.title === info.title;
             });
+			submissions.sort(function(a,b){return b.numid-a.numid});
             var userSubmissions = submissions.filter(function(e) {
                 return req.user && e.user === req.user.username;
             });

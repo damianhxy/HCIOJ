@@ -4,7 +4,19 @@ Todo List
 
 Web Server
 ----------
+
+[Errors List]
+ - Login is somewhat buggy
+ - Submission viewing in contests don't work
+ - WHY THE HECK DO SUBMISSION DATES MESS UP SO MUCH (on the problem page)
+
+[Style Issues]
+ - not all promise chains are refactored
+ - indentation not consistent
+ - extra files leftover from old style
+
 - contests
+	- home page (just combine contest and problem list)
 	- score updating
 	- timer
 	- delay
@@ -22,28 +34,27 @@ Web Server
 - live updating for scores
 
 
-Grading Server ([!] = priority, [-] = normal)
+Grading Server ([!] = priority, [-] = normal, [O] = completed)
 --------------
-[!] Objectify grading process to make modification of task types easier (YES DONE SO DANK)
-[-] Improve sandbox messages (ACTUALLY KEEP THEM VAGUE)
-[-] Stress test sandbox modifications (IS OK NOW)
-[-] Implement pulling of test data from external servers (NOT URGENT
-
+[-] Improve sandbox messages
+[-] Stress test sandbox modifications
+[-] Implement pulling of test data from external servers
+[O] Objectify grading process to make modification of task types easier
 =============
 Launch Stages
 =============
 
 Alpha Launch
 ------------
-Date  - October 2015
-Users - Ex-Competitive Programming Team (those who tried for NOI 2015 and prior)
+Date  - February 2016
+Users - Ex-Competitive Programming Team (those who tried for NOI 2016 and prior)
 Goals - Submission/Contests fully working
       - Usable for internal selection test/training
       - Live updating working
 
 Beta Launch
 -----------
-Date  - November/December 2015
+Date  - April 2016
 Users - New Blood (members new to cp), (possibly) HCJC computing students, Dec Training people
 Goals - Informational landing page (not necessarily aesthetically pleasing)
       - Courses/Lessons working
@@ -53,7 +64,7 @@ Goals - Informational landing page (not necessarily aesthetically pleasing)
       
 Final Launch
 ------------
-Date  - Early 2016
+Date  - Q2 2016
 Users - Any interested members (could be open in previous stages of completion)
 Goals - Pretty landing page
       - Multiple themes working

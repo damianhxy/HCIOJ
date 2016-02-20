@@ -1,0 +1,33 @@
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-calendar"></i>
+				<h2>{{title}}</h2>
+			</div>
+			<div>
+				<div class="desc">
+					<h3>Description</h3>
+					<p>{{contest.desc}}</p>
+					<h3>Start Time</h3>
+					<p>{{contest.start}}</p>
+					<h3>End Time</h3>
+					<p>{{contest.end}}</p>
+					<h3>Contest Timer</h3>
+					<p>
+					{{#if contest.indi}}
+					Individual Timer</p>
+					<h3>Duration (in minutes)</h3>
+					<p>{{contest.time}}
+					{{else}}
+					Common Timer
+					{{/if}}
+					</p>
+				</div>
+				<form action="/contests/{{contest.id}}/join" method="post">
+					<input type="submit" class="button" value="Begin Contest">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

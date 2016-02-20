@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport">
-	<title>CodeSenpai</title>
+	<title>Judge.SG</title>
 	<!--script src="/pace/pace.min.js"></script>
 	<link href="/pace/themes/blue/pace-theme-minimal.css" rel="stylesheet"-->
 	<link href='https://fonts.googleapis.com/css?family=Amatic+SC|Lato:400,700' rel='stylesheet' type='text/css'>
@@ -68,8 +68,8 @@
 	{{else}}
 		<a href="/" class="sidelink sidelink-main">
 			<span class="logo">:D</span>
-			<span class="title">CodeSenpai</span>
-			<span class="subtitle">*notices you*</span>
+			<span class="title">Judge.SG</span>
+			<span class="subtitle">I am cute</span>
 		</a>
 		<a href="/problems" class="sidelink">
 			<i class="fa fa-graduation-cap"></i>
@@ -99,6 +99,12 @@
 			<i class="fa fa-user"></i>
 			Profile
 		</a>
+		{{#if user.admin}}
+		<a href="/admin" class="sidelink">
+			<i class="fa fa-magic"></i>
+			Admin
+		</a>
+		{{/if}}
 		<a href="/logout" class="sidelink">
 			<i class="fa fa-sign-out"></i>
 			Logout
@@ -107,8 +113,8 @@
 	{{else}}
 		<a href="/" class="sidelink sidelink-main">
 			<span class="logo">:I</span>
-			<span class="title">CodeSenpai</span>
-			<span class="subtitle">*notices you*</span>
+			<span class="title">Judge.SG</span>
+			<span class="subtitle">Hai There Pls Login</span>
 		</a>
 		<a href="/signin" class="sidelink">
 			<i class="fa fa-user"></i>

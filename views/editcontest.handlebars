@@ -1,0 +1,42 @@
+<div class="frame">
+	<div class="bit-1">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-cube"></i>
+				<h2>{{title}} <small>{{subtitle}}</small></h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="frame">
+	<div class="bit-2 left">
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-cube"></i>
+				<h2>Contest Details <small>idek</small></h2>
+			</div>
+			<div>
+				<form action="{{submit}}" method="post">
+					<input type="text" placeholder="Contest Title" name="title" {{#if contest}}value="{{contest.title}}"{{/if}} required/>
+					<textarea placeholder="Contest Description" name="desc" {{#if contest}}value="{{contest.desc}}"{{/if}}></textarea>
+					<input type="text" placeholder="Start Time: YYYY-MM-DD HH:MM(:SS)" name="start" class="" {{#if contest}}value="{{contest.start}}"{{/if}} required/>
+					<input type="text" placeholder="End Time: YYYY-MM-DD HH:MM(:SS)" name="end" class="" {{#if contest}}value="{{contest.end}}"{{/if}} required/>
+					<p><input type="checkbox" name="indi" id="indi"><label for="indi" class="checklabel">&nbsp;&nbsp;Individual Timer?</label></p>
+					<p><input type="checkbox" name="hidden" id="hidden"><label for="hidden" class="checklabel">&nbsp;&nbsp;Hidden?</label></p>
+					<input type="number" min="1" placeholder="Time for each user in minutes (if individual timer)" name="time" value = "" {{#if contest}}value="{{contest.time}}"{{/if}}/>
+					<select name="problems" multiple required>
+						<option value="" disabled>Contest Problems: Hold Ctrl to select multiple</option>
+						{{#if problems}}
+						{{#each problems}}
+						<option value="{{this.title}}">{{this.title}}</option>
+						{{/each}}
+						{{/if}}
+					</select>
+					<input type="submit" value="Add Contest">
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="bit-2 right">
+	</div>
+</div>

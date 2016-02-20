@@ -133,12 +133,12 @@ label{
 	font-family: 'Amatic SC', cursive;
 }
 
-.login input, .login .alt-button{
+.login input, .login .alt-button, .button{
 	margin-bottom: 0.5em;
 	font-size: 1.2em;
 }
 
-input, .alt-button, textarea, select, #submitbutton{
+input, .alt-button, textarea, select, #submitbutton, .button{
 	width: 100%;
 	font-size: 1em;
 	font-family: inherit;
@@ -149,7 +149,7 @@ input, .alt-button, textarea, select, #submitbutton{
 	display: block;
 }
 
-input[type="submit"], .login .alt-button, .alt-select, #submitbutton{
+input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
 	background: #263645;
 	cursor: pointer;
 }
@@ -249,9 +249,10 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton{
 
 main{
 	display: inline-block;
-	min-height: 100%;
-	width: calc(100% - 5.4em);
-	margin-left: -0.3em;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	width: calc(100% - 6em);
 	vertical-align: top;
 	padding: 1em;
 	background: #34495E;

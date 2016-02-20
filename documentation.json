@@ -61,7 +61,9 @@ Contest = {
 	"time":50, // (if individual) time in minutes
 	"problems":["helloworld"], // string array of problem names
 	"scoreboard":true // false if scoreboard is hidden
-	"url":"/contest/1","_id":"tEd1Ot4jT6UH96fQ"
+	"url":"/contest/1",
+	"hidden":false, // whether contest is hidden on calendar
+	"_id":"tEd1Ot4jT6UH96fQ"
 }
 
 Entry = {
@@ -92,6 +94,24 @@ User = {
 	"_id":"ZEMw3LW31JHw1E7u"
 }
 
+Submission = {
+	"numid":1,
+	"title":"helloworld",
+	"user":"kohkt",
+	"score":0,
+	"compile":"",
+	"submitted_date":"2016-02-16T10:38:06+00:00",
+	"graded_date":"1970-01-01T00:00:00+00:00",
+	"runtime":0,
+	"contest":0,
+	"language":"cpp",
+	"res":[{"num":1,"maxscore":100,"score":0}],
+	"verdict":"failed",
+	"status":"Sending to server",
+	"progress":"Grading",
+	"type":1,
+	"_id":"BJtF5jS76Sa7rGCG"
+}
 
 
 Results Received
