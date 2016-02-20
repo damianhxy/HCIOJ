@@ -82,7 +82,10 @@ module.exports = function(app, express) {
             .then(function(user) {
                 console.info("Signed up " + user.username);
                 req.session.success = "Welcome, " + user.username;
-                done(null, user);
+                session.add(user.username)
+                .then(function() {
+                    done(null, user);
+                });
             })
             .fail(function(err) {
                 console.error(err.stack);

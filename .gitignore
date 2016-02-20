@@ -4,3 +4,4 @@ database/
 .npmignore
 .project
 .settings/
+.*.swp
