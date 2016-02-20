@@ -216,7 +216,17 @@ router.post("/:id/join", ensureAuthenticated, function(req, res) {
 			})
 		})
 		.then(function(entry){
-			res.redirect()
+			res.redirect(".");
+		})
+		.fail(function(err) {
+			if(err.message == "Already in contest"){
+                req.session.error = "Already in contest";
+				res.redirect(".");
+			}
+			else{
+				req.session.error = "An error was encountered while processing your request";
+				res.redirect("/contests");
+			}
 		})
 });	
 

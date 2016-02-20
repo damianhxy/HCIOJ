@@ -6,12 +6,26 @@ var moment = require("moment");
 
 exports.add = function(entry) {
     return Q.promise(function(resolve, reject) {
-        Q.ninvoke(entries, "insert", entry)
-        .then(function() {
-            resolve("Entered contest");
+        Q.ninvoke(entries, "findOne", { 
+            username: entry.username,
+            contest: entry.contest
+        })
+        .then(function(oentry) {
+            if(oentry){
+                reject(Error("Already in contest"));
+            }
+            else{
+                Q.ninvoke(entries, "insert", entry)
+                .then(function() {
+                    resolve("Entered contest");
+                })
+                .fail(function() {
+                    reject(Error("Failed to enter contest"));
+                });
+            }
         })
         .fail(function() {
-            reject(Error("Failed to enter contest"));
+            reject(Error("Failed to check entry uniqueness"));
         });
     });
 };
