@@ -17,22 +17,15 @@
 			</div>
 			<div>
 				<form action="{{submit}}" method="post">
-					<input type="text" placeholder="Contest Title" name="title" required/>
-					<textarea placeholder="Contest Description" name="desc"></textarea>
-					<input type="text" placeholder="Start Time: YYYY-MM-DD HH:MM(:SS)" name="start" class="" required/>
-					<input type="text" placeholder="End Time: YYYY-MM-DD HH:MM(:SS)" name="end" class="" required/>
-					<p><input type="checkbox" name="indi" id="indi"><label for="indi" class="checklabel">&nbsp;&nbsp;Individual Timer?</label></p>
-					<p><input type="checkbox" name="hidden" id="hidden"><label for="hidden" class="checklabel">&nbsp;&nbsp;Hidden?</label></p>
-					<input type="number" min="1" placeholder="Time for each user in minutes (if individual timer)" name="time" value = ""/>
-					<select name="problems" multiple required>
-						<option value="" disabled>Contest Problems: Hold Ctrl to select multiple</option>
-						{{#if problems}}
-						{{#each problems}}
-						<option value="{{this.title}}">{{this.title}}</option>
-						{{/each}}
-						{{/if}}
-					</select>
-					<input type="submit" value="Add Contest">
+					<input type="text" placeholder="Problem Title" name="title" required/>
+					<input type="text" placeholder="Problem Type (Batch, Output Only, etc.)" name="subtitle" required></input>
+					<input type="text" placeholder="Input From" name="from"></input>
+					<input type="text" placeholder="Output To" name="dest"></input>
+					<input type="text" placeholder="HTML Statement URL" name="desc-html"></input>
+					<input type="text" placeholder="Text Statement URL" name="desc-txt"></input>
+					<input type="text" placeholder="PDF/Doc Statement URL" name="desc-doc"></input>
+					<input type="text" placeholder="Misc. Files URLs (comma separated, no spaces)" name="desc-other"></input>
+					<input type="submit" value="Add Problem">
 				</form>
 			</div>
 		</div>

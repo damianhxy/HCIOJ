@@ -9,7 +9,7 @@
 	</div>
 </div>
 
-<form method="post" action="/submit/{{submission.title}}" id="submitform">
+<form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{submission.title}}" id="submitform">
 <div class="frame">
 	<div class="bit-2 left">
 		<div class="container">
@@ -21,7 +21,7 @@
 				<table class="table table-striped table-bordered">
 					<tr><td>Verdict</td><td>{{submission.verdict}} ({{submission.score}}%)</td></tr>
 					<tr><td>Language</td><td id="language">{{submission.language}}</td></tr>
-					<tr><td>Time</td><td>{{submission.time}}</td></tr>
+					<tr><td>Time</td><td>{{submission.graded_date}}</td></tr>
 					<tr><td>Runtime</td><td>{{submission.runtime}}s</td></tr>
 					<tr><td>Contest</td><td>{{{getContest submission.contest}}}</td></tr>
 				</table>
@@ -254,10 +254,10 @@
 					<div class="text-div-inner">
 						<label>Language</label>
 						<select name="language" class="form-control">
-							<option value="C++11">C++11 (4.9.2)</option>
-							<option value="Pascal">Pascal (2.6.4)</option>
-							<option value="Java">Java (1.7.0)</option>
-							<option value="Python">Python (3.4.3)</option>
+							<option value="cpp">C++11 (4.9.2)</option>
+							<option value="pas">Pascal (2.6.4)</option>
+							<option value="java">Java (1.7.0)</option>
+							<option value="py">Python (3.4.3)</option>
 						</select>
 						<br>
 						<label>Compile Options</label>

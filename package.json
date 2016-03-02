@@ -23,7 +23,7 @@
     "dateformat": "^1.0.12",
     "express": "^4.13.3",
     "express-handlebars": "^2.0.1",
-    "express-session": "^1.9.3",
+    "express-session": "^1.13.0",
     "method-override": "^2.3.0",
     "moment": "^2.10.6",
     "morgan": "^1.5.3",

@@ -1,8 +1,8 @@
-*{
+* {
 	box-sizing: border-box;
 }
 
-html, body{
+html, body {
 	margin: 0;
 	width: 100%;
 	height: 100%;
@@ -11,34 +11,34 @@ html, body{
 	font-family: 'Lato', sans-serif;
 }
 
-a{
+a {
 	color: inherit;
 	text-decoration: none;
 }
 
-pre{
+pre {
 	background: #263645;
 	padding: 1em;
 }
 
-label{
+label {
 	display: block;
 	margin-bottom: 0.5em;
 }
 
-.table{
+.table {
     border: 1px solid #263645;
     border-collapse: collapse;
 	width: 100%;
 	text-align: left;
 }
 
-.table td, .table th{
+.table td, .table th {
 	padding: 0.8em;
 	text-align: left;
 }
 
-.table th{
+.table th {
 	background: #263645;
 }
 
@@ -50,26 +50,26 @@ label{
     background: #2C3E50;
 }
 
-.table a{
+.table a {
 	text-decoration: none;
 }
 
-.table a:hover{
+.table a:hover {
 	text-decoration: underline;
 }
 
-.error-404{
+.error-404 {
 	text-align: center;
 	padding: 0.3em;
 	font-size: 2em;
 	font-family: 'Amatic SC', cursive;
 }
 
-.error-404 .header{
+.error-404 .header {
 	font-size: 3em;
 }
 
-.error-404 .logo{
+.error-404 .logo {
 	display: inline-block;
 	font-size: 0.5em;
 	background: #eee;
@@ -85,28 +85,28 @@ label{
 	vertical-align: middle;
 }
 
-.error-404 h1{
+.error-404 h1 {
 	font-weight: normal;
 }
 
-.login-container{
+.login-container {
 	width: 100%;
 	min-height: 100%;
 	background: #34495E;
 	padding: 1em;
 }
 
-.login{
+.login {
 	max-width: 20em;
 	text-align: center;
 	margin: auto;
 }
 
-.login .login-head{
+.login .login-head {
 	padding: 3em 0 1em 0;
 }
 
-.login .logo{
+.login .logo {
 	font-size: 3em;
 	background: #eee;
 	color: #1a252f;
@@ -121,24 +121,24 @@ label{
 	font-family: 'Amatic SC', cursive;
 }
 
-.login .title{
+.login .title {
 	font-size: 3em;
 	display: block;
 	font-family: 'Amatic SC', cursive;
 }
 
-.login .subtitle{
+.login .subtitle {
 	font-size: 1.5em;
 	display: block;
 	font-family: 'Amatic SC', cursive;
 }
 
-.login input, .login .alt-button, .button{
+.login input, .login .alt-button, .button {
 	margin-bottom: 0.5em;
 	font-size: 1.2em;
 }
 
-input, .alt-button, textarea, select, #submitbutton, .button{
+input, .alt-button, textarea, select, #submitbutton, .button {
 	width: 100%;
 	font-size: 1em;
 	font-family: inherit;
@@ -149,12 +149,12 @@ input, .alt-button, textarea, select, #submitbutton, .button{
 	display: block;
 }
 
-input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
+input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button {
 	background: #263645;
 	cursor: pointer;
 }
 
-.fa.bigicon{
+.fa.bigicon {
 	display: block;
 	width: 100%;
 	text-align: center;
@@ -162,7 +162,7 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
 	margin: 0.3em 0;
 }
 
-.sidebar{
+.sidebar {
 	width: 6em;
 	font-size: 0.9em;
 	text-align: center;
@@ -171,30 +171,30 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
 	overflow-x: hidden;
 }
 
-.sidebar > .sidelink{
+.sidebar > .sidelink {
 	color: #ccc;
 	display: block;
 	padding: 1em 0;
 	transition: 0.3s;
 }
 
-.sidebar > .sidelink:hover{
+.sidebar > .sidelink:hover {
 	background: #263645;
 	color: #eee;
 }
 
-.sidebar > .sidelink > .fa{
+.sidebar > .sidelink > .fa {
 	font-size: 2em;
 	display: block;
 	padding-bottom: 10px;
 }
 
-.sidebar > .sidelink.sidelink-main{
+.sidebar > .sidelink.sidelink-main {
 	color: #eee;
 	font-family: 'Amatic SC', cursive;
 }
 
-.sidebar > .sidelink.sidelink-main > .logo{
+.sidebar > .sidelink.sidelink-main > .logo {
 	font-size: 2.2em;
 	background: #eee;
 	color: #1a252f;
@@ -208,17 +208,17 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
 	transform: rotate(90deg);
 }
 
-.sidebar > .sidelink.sidelink-main > .logo.load{
+.sidebar > .sidelink.sidelink-main > .logo.load {
 	background: #E74C3C;
 	color: #eee;
 }
 
-.sidebar > .sidelink.sidelink-main > .title{
+.sidebar > .sidelink.sidelink-main > .title {
 	font-size: 1.7em;
 	display: block;
 }
 
-.sidebar > .sidelink.sidelink-main > .subtitle{
+.sidebar > .sidelink.sidelink-main > .subtitle {
 	opacity: 0;
 	z-index: -1;
 	position: absolute;
@@ -230,7 +230,7 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
 	transition: 0.3s;
 }
 
-.sidebar > .sidelink.sidelink-main > .subtitle:before{
+.sidebar > .sidelink.sidelink-main > .subtitle:before {
 	content: "\A";
 	position: absolute;
 	top: 0.7em;
@@ -242,12 +242,12 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button{
 	border-right: .4em solid #141c24;
 }
 
-.sidebar > .sidelink.sidelink-main:hover > .subtitle{
+.sidebar > .sidelink.sidelink-main:hover > .subtitle {
 	opacity: 1;
 	z-index: 1;
 }
 
-main{
+main {
 	display: inline-block;
 	top: 0;
 	bottom: 0;
@@ -258,16 +258,16 @@ main{
 	background: #34495E;
 }
 
-.left .container, .right .container{
+.left .container, .right .container {
 	margin-bottom: 0.6em;
 }
 
-.container{
+.container {
 	background: #2C3E50;
 	text-align: left;
 }
 
-.container > .header{
+.container > .header {
 	margin: 0;
 	padding: 0.8em;
 	background: #263645;
@@ -277,21 +277,21 @@ main{
 	-moz-user-select: none;
 }
 
-.container > .header > h2{
+.container > .header > h2 {
 	display: inline-block;
 	font-size: 1.2em;
 	vertical-align: middle;
 	margin: 0;
 }
 
-.container > .header > .fa{
+.container > .header > .fa {
 	display: inline-block;
 	width: 1.6em;
 	text-align: center;
 	vertical-align: middle;
 }
 
-.container > div{
+.container > div {
 	margin: 0;
 }
 
@@ -299,18 +299,18 @@ main{
 	padding: 1em 1em 1.5em 1em;
 }
 
-.container .desc > *{
+.container .desc > * {
 	line-height: 1.5em;
 	margin: 0 1em 0.4em 1em;
 }
 
-.container .desc > h3{
+.container .desc > h3 {
 	/*font-size: 1.8em;*/
 	/*font-weight: normal;*/
 	margin: 0 0 0.4em 0;
 }
 
-.container div.selector{
+.container div.selector {
 	padding: 1em;
 	user-select: none;
 	-webkit-user-select: none;
@@ -318,66 +318,66 @@ main{
 	/*text-align: center;*/
 }
 
-.container div.selector > span{
+.container div.selector > span {
 	cursor: default;
 }
 
-.container div.selector > .right{
+.container div.selector > .right {
 	float: right;
 }
 
-.container div.selector > .right > i.fa{
+.container div.selector > .right > i.fa {
 	display: inline-block;
 	width: 2em;
 	text-align: center;
 	cursor: pointer;
 }
 
-.container .submitbox > textarea{
+.container .submitbox > textarea {
 	display: none;
 }
 
-/*.container div.selector > .fa-arrow-left{*/
+/*.container div.selector > .fa-arrow-left {*/
 /*	float: left;*/
 /*	cursor: pointer;*/
 /*}*/
 
-/*.container div.selector > .fa-arrow-right{*/
+/*.container div.selector > .fa-arrow-right {*/
 /*	float: right;*/
 /*	cursor: pointer;*/
 /*}*/
 
-.container iframe{
+.container iframe {
 	width: 100%;
 	min-height: 40em;
 }
 
-.clars tr{
+.clars tr {
 	vertical-align: top;
 }
 
-.answer.Yes, .score-100{
+.answer.Yes, .score-100 {
 	color: #54d98c;
 }
 
-.answer.No, .score-0{
+.answer.No, .score-0 {
 	color: #ed7669;
 }
 
-.head{
+.head {
 	margin-bottom: 1em;
 }
 
-#editor{
+#editor {
 	height: 20em;
 	font-size: 1em;
 }
 
-#submitbutton{
+#submitbutton {
 	padding: 1em;
 }
 
-.monospace{
+.monospace {
 	font-family: monospace;
 }
 

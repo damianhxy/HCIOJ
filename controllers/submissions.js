@@ -95,7 +95,7 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     numid: id + 1, // Problem ID
                     title: req.params.problem, // Problem Title
                     user: req.user.username, // User name
-                    code: req.body.code, // User code
+                    code: req.body.ans, // User code
                     score: 0, // Total Score
                     compile: "", // Time taken to compile / error message
                     submitted_date: moment().format(), // Submission

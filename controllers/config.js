@@ -9,6 +9,7 @@ var expressSession = require("express-session");
 var exphbs = require("express-handlebars");
 var localStrategy = require("passport-local");
 var compression = require("compression");
+var io = require("./socket.js");
 
 module.exports = function(app, express) {
     var hbs = exphbs.create({
@@ -46,11 +47,12 @@ module.exports = function(app, express) {
     app.use(cookieParser(settings.SECRET));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    app.use(expressSession({
+    var expresssession = expressSession({
         secret: settings.SECRET,
         saveUninitialized: true,
         resave: true
-    }));
+    });
+    app.use(expresssession);
     app.use(passport.initialize());
     app.use(passport.session());
 
@@ -116,4 +118,40 @@ module.exports = function(app, express) {
     app.disable("x-powered-by");
     app.engine("handlebars", hbs.engine);
     app.set("view engine", "handlebars");
+    
+    var io = require('socket.io')();
+
+    var submission = 
+			{
+			"id":"1",
+			"user":"dank",
+			"problem":"memes",
+			"time":"cant",
+			"score":"melt",
+			"progress":"steel beams",
+			};
+    io.use(function(socket, next){
+            // Wrap the express middleware
+            expresssession(socket.request, {}, next);
+    });
+    var pinit = passport.initialize();
+    io.use(function(socket, next){
+    		pinit(socket.request, {}, next);
+    });
+    var psess = passport.session();
+    io.use(function(socket, next){
+    		psess(socket.request, {}, next);
+    });
+    io.on('connection', function(socket){
+    	  var user;
+    	  if(socket.request.isAuthenticated())user = socket.request.user.username;
+    	  else user = 'none';
+    	  console.log('socket connected id: ' + socket.id + ' user: ' + user);
+    	  socket.on('disconnect', function(){
+    		    console.log('socket disconnected');
+    	  });
+    	  
+    });
+    app.io = io;
+    global.io = io;
 };

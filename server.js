@@ -3,7 +3,6 @@ var express = require("express");
 var app = express();
 var settings = require("./controllers/settings.js");
 var session = require("./models/session.js");
-var socket = require("./controllers/socket.js");
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
@@ -26,8 +25,8 @@ session.clear()
     var https_server = https.createServer(https_options, app).listen(8443, settings.IP);
     console.log("HTTPS Listening on port " + 8443 + " @ " + settings.IP + " in " + app.get("env") + " mode.");
     
-    socket.attach(http_server);
-    socket.attach(https_server);
+    app.io.attach(http_server);
+    app.io.attach(https_server);
    
 })
 .fail(function() {

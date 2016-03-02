@@ -2,6 +2,9 @@
 Todo List
 =========
 
+[-] for undone
+[x] for done
+
 Web Server
 ----------
 
@@ -14,24 +17,33 @@ Web Server
  - not all promise chains are refactored
  - indentation not consistent
  - extra files leftover from old style
+ - someone needs to come up with a variable naming scheme for all those promise chains
+ - rename variables to camelCase (submission.js, submissions.js, handlebars)
+ - users page looks crappy
+ - 
 
-- contests
-	- home page (just combine contest and problem list)
-	- score updating
-	- timer
-	- delay
-	- make submission viewing from frontpage link to contest submission viewing
-- someone needs to come up with a variable naming scheme for all those promise chains
-- rename variables to camelCase (submission.js, submissions.js, handlebars)
-- Implement submission viewing in problem.handlebars
-- contest management - problems, contest windows, out of competition, etc
-- admin panel - problem, user, contest, grader management, etc
-- landing page, though not urgent (to be completed right before launch)
-- blog/learning page - topics to learn, maybe similar to codecademy
-- lessons/problem sets - classify problems in lists
-- manager view - could be easier for teachers to view submissions by user/problem
-- notifications
-- live updating for scores
+[Missing Features]
+ - contests
+ 	x home page (just combine contest and problem list)
+ 	- score updating
+ 	- timer
+ 	- delay
+ 	- make submission viewing from frontpage link to contest submission viewing
+ - admin
+	- just use json editor for everything :)
+ 	- add problems
+ 	- edit problems
+ 	x add contests
+ 	- edit contests
+ 	- grader management
+ 	- user management
+ - Implement submission viewing in problem.handlebars
+ - landing page, though not urgent (to be completed right before launch)
+ - blog/learning page - topics to learn, maybe similar to codecademy
+ - lessons/problem sets - classify problems in lists
+ - manager view - could be easier for teachers to view submissions by user/problem
+ - notifications
+ - live updating for scores
 
 
 Grading Server ([!] = priority, [-] = normal, [O] = completed)
@@ -40,13 +52,14 @@ Grading Server ([!] = priority, [-] = normal, [O] = completed)
 [-] Stress test sandbox modifications
 [-] Implement pulling of test data from external servers
 [O] Objectify grading process to make modification of task types easier
+
 =============
 Launch Stages
 =============
 
 Alpha Launch
 ------------
-Date  - February 2016
+Date  - March 2016
 Users - Ex-Competitive Programming Team (those who tried for NOI 2016 and prior)
 Goals - Submission/Contests fully working
       - Usable for internal selection test/training
