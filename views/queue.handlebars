@@ -6,20 +6,16 @@
                 <th>User</th>
                 <th>Problem</th>
                 <th>Language</th>
-                <th>Grader</th>
                 <th>Progress</th>
-                <th>Estimated</th>
             </tr>
         </thead>
         {{#each submissions}}
         <tr>
-            <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+            <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td> <!-- please add a check if it is a contest -->
             <td><a href="/users/{{this.user}}">{{this.user}}</a></td>
             <td><a href="/problems/{{this.title}}">{{this.title}}</a></td>
             <td>{{this.language}}</td>
-            <td>{{this.grader}}</td>
-            <td>{{this.progress}}</td>
-            <td>{{this.estimate}}</td>
+            <td><span style='color: gray'>{{this.progress}}</span></td>
         </tr>
         {{/each}}
     </table>

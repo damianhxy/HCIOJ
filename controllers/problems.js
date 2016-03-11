@@ -3,6 +3,7 @@ var router = express.Router();
 var problem = require("../models/problem.js");
 var submission = require("../models/submission.js");
 var ensureAdmin = require("../middlewares/admin.js");
+var io = global.io;
 
 router.get("/", function(req, res) {
     problem.all()

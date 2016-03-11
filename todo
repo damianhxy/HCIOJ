@@ -20,7 +20,7 @@ Web Server
  - someone needs to come up with a variable naming scheme for all those promise chains
  - rename variables to camelCase (submission.js, submissions.js, handlebars)
  - users page looks crappy
- - 
+ - submission messages/tables are not styled properly
 
 [Missing Features]
  - contests
@@ -44,6 +44,7 @@ Web Server
  - manager view - could be easier for teachers to view submissions by user/problem
  - notifications
  - live updating for scores
+ - estimate and grader name for grading queue
 
 
 Grading Server ([!] = priority, [-] = normal, [O] = completed)

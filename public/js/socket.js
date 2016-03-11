@@ -1,5 +1,5 @@
 var socket = io();
-socket.on('submission-new', function(submission){
+socket.on('newSub', function(submission){
 	$('#submissions tbody').prepend('<tr style="height: 0px;" >' + 
 								'<td>' + submission.id + '</td>' +
 								'<td>' + submission.user + '</td>' +
@@ -9,4 +9,7 @@ socket.on('submission-new', function(submission){
 								'<td>' + submission.progress + '</td>' +
 								'</tr>');
 	$('#submissions tbody tr:first').slideDown(500);
+});
+socket.on('dank',function(data){
+	alert(data);
 });

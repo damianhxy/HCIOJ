@@ -114,7 +114,8 @@ Submission = {
 }
 
 
-Results Received
+RESULTS RECEIVED
+----------------
 
 #1: When grading starts
 
@@ -177,4 +178,22 @@ Results Received
 	"graded_date": "2015-05-26 22:38:24"
 }
 
+SOCKET OPERATIONS
+-----------------
 
+Sending Data
+
+io.to('authed').emit('dataTypeName (any string)', messageObj)
+
+authed is a group (.to('whatever') can be omitted)
+dataTypeName is any string
+messageObj can be any data type
+
+Receiving Data
+
+socket.on('dataTypeName',function(messageObj){
+
+});
+
+dataTypeName is any string
+messageObj can be any data type

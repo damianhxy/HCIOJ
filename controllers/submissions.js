@@ -6,6 +6,7 @@ var settings = require("./settings.js");
 var ensureAuthenticated = require("../middlewares/auth.js");
 var moment = require("moment");
 var atob = require("atob");
+var io = global.io;
 
 router.post("/api", function(req, res) {
     var sub = JSON.parse(req.body.data);
@@ -109,6 +110,7 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     progress: "Grading", // Update after all subtasks
                     type: 1 // Need to change this
                 };
+                io.to('authed').emit('newSub',{user:req.user.username, numid: id+1});
                 submission.add(obj)
                 .then(function(obj) {
                     return submission.dispatch(obj);

@@ -9,7 +9,7 @@ var expressSession = require("express-session");
 var exphbs = require("express-handlebars");
 var localStrategy = require("passport-local");
 var compression = require("compression");
-var io = require("./socket.js");
+var io = require('socket.io')();
 
 module.exports = function(app, express) {
     var hbs = exphbs.create({
@@ -119,7 +119,6 @@ module.exports = function(app, express) {
     app.engine("handlebars", hbs.engine);
     app.set("view engine", "handlebars");
     
-    var io = require('socket.io')();
 
     var submission = 
 			{
@@ -130,28 +129,34 @@ module.exports = function(app, express) {
 			"score":"melt",
 			"progress":"steel beams",
 			};
+    
     io.use(function(socket, next){
-            // Wrap the express middleware
-            expresssession(socket.request, {}, next);
+        // Wrap the express middleware
+        expresssession(socket.request, {}, next);
     });
     var pinit = passport.initialize();
     io.use(function(socket, next){
-    		pinit(socket.request, {}, next);
+        pinit(socket.request, {}, next);
     });
     var psess = passport.session();
     io.use(function(socket, next){
-    		psess(socket.request, {}, next);
+        psess(socket.request, {}, next);
     });
+
     io.on('connection', function(socket){
-    	  var user;
-    	  if(socket.request.isAuthenticated())user = socket.request.user.username;
-    	  else user = 'none';
-    	  console.log('socket connected id: ' + socket.id + ' user: ' + user);
-    	  socket.on('disconnect', function(){
-    		    console.log('socket disconnected');
-    	  });
-    	  
+        var user;
+        if(socket.request.isAuthenticated())
+        {
+            user = socket.request.user.username;
+            socket.join('authed');
+        } 
+        else user = 'none';
+        console.log('socket connected id: ' + socket.id + ' user: ' + user);
+        socket.on('disconnect', function(){
+            console.log('socket disconnected');
+        });
     });
+
     app.io = io;
     global.io = io;
 };
