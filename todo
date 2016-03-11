@@ -23,8 +23,6 @@ Web Server
  - submission messages/tables are not styled properly
  - sort subs in queue 
  - don't display wrong password but rather wrong username OR password (optional security idk)
- - style dates properly
-
 [Missing Features]
  - contests
  	x home page (just combine contest and problem list)
