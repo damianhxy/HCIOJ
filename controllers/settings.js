@@ -1,5 +1,6 @@
 exports.SECRET = "hwachong";
-exports.LOG_TIME_FORMAT = "dd mmm HH:MM:ss";
+// exports.LOG_TIME_FORMAT = "dd mmm HH:MM:ss";
+exports.LOG_TIME_FORMAT = "DD MMM YY, HH:MM:ss";
 exports.PORT = process.env.PORT || "8080";
 exports.IP = process.env.IP || "0.0.0.0";
 exports.GRADER_PORT = "9500";

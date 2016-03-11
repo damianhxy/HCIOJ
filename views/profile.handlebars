@@ -51,16 +51,18 @@
                     <thead>
                         <th>ID</th>
                         <th>Problem</th>
-                        <th>Time</th>
+                        <th>Submitted Date</th>
+                        <th>Language</th>
                         <th>Score</th>
                         <th>Progress</th>
                     </thead>
-                    <tbody>
-                        {{#each userSubmissions}}
+                    <tbody id="userSubmissions">
+                        {{#each submissions}}
                         <tr>
                             <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
                             <td><a href="/problems/{{this.problem}}">{{this.problem}}</a></td>
-                            <td>{{this.time}}</td>
+                            <td>{{this.submitted_date}}</td>
+                            <td>{{this.language}}</td>
                             <td><span class="score score-{{this.score}}">{{this.score}}</span></td>
                             <td><span style='color: gray'>{{this.progress}}</span></td>
                         </tr>

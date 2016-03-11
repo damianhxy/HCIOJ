@@ -3,6 +3,8 @@ var router = express.Router();
 var problem = require("../models/problem.js");
 var submission = require("../models/submission.js");
 var ensureAdmin = require("../middlewares/admin.js");
+var settings = require("./settings.js");
+var moment = require("moment");
 var io = global.io;
 
 router.get("/", function(req, res) {
@@ -90,7 +92,14 @@ router.get("/:problem", function(req, res) {
             submissions = submissions.filter(function(e) {
                  return e.title === info.title;
             });
-			submissions.sort(function(a,b){return b.numid-a.numid});
+			submissions.sort(function(a,b) {
+			    return b.numid-a.numid
+			});
+            submissions.forEach(function(e){
+                e.language = settings.LANGUAGES[e.language];
+                e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
+                e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+            })
             var userSubmissions = submissions.filter(function(e) {
                 return req.user && e.user === req.user.username;
             });

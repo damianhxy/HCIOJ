@@ -29,13 +29,47 @@
 				<i class="fa fa-rocket"></i>
 				<h2>Glorious Creators of Best Judge</h2>
 			</div>
-			<div>
+			<div data-closed="true" style="max-height: 0px; overflow: hidden;">
 				<div>
 					Wang Zhi Jian - Noob person who got B for Econs<br><br>
 					Gui Ming Jiang - Noob person who got B for IHC<br><br>
 					Damian Ho - Noob person who didn't work<br><br>
 					Ho Jiefeng - Noob in general
 				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="header">
+				<i class="fa fa-certificate"></i>
+				<h2>Your Submissions</h2>
+			</div>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Problem</th>
+							<th>Submitted Date</th>
+							<th>Runtime</th>
+							<th>Language</th>
+							<th>Score</th>
+							<th>Progress</th>
+						</tr>
+					</thead>
+					<tbody style="overflow: auto;" id="yourSubmissions">
+						{{#each userSubmissions}}
+						<tr>
+							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
+							<td><a href="/problems/{{this.problem}}">{{this.problem}}</a></td>
+							<td>{{this.submitted_date}}</td>
+							<td>{{this.runtime}}</td>
+							<td>{{this.language}}</td>
+							<td><span class='score-{{{this.score}}}'>{{this.score}}</span></td>
+							<td><span style='color: gray'>{{this.progress}}</span></td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -59,24 +93,26 @@
 				<h2>Latest Submissions</h2>
 			</div>
 			<div>
-				<table class="table" id="submissions">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>ID</th>
 							<th>User</th>
 							<th>Problem</th>
 							<th>Submitted Date</th>
+							<th>Language</th>
 							<th>Score</th>
 							<th>Progress</th>
 						</tr>
 					</thead>
-					<tbody style="overflow: auto;">
+					<tbody style="overflow: auto;" id="submissions">
 						{{#each submissions}}
 						<tr>
 							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
 							<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
 							<td><a href="/problems/{{this.problem}}">{{this.problem}}</a></td>
 							<td>{{this.submitted_date}}</td>
+							<td>{{this.language}}</td>
 							<td><span class='score-{{{this.score}}}'>{{this.score}}</span></td>
 							<td><span style='color: gray'>{{this.progress}}</span></td>
 						</tr>
@@ -97,3 +133,4 @@
 		});
 	});
 </script>
+<script src="/js/submission.js"></script>

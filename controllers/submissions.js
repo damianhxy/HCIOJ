@@ -64,11 +64,9 @@ router.get("/queue", function(req, res) {
         });
         
         // Replace this sort with some sort of sorting mechanism maybe
-        submissions.sort(function(a, b) {
-            if (a.numid < b.numid)
-                return -1;
-            return 1;
-        });
+		submissions.sort(function(a,b) {
+		    return b.numid-a.numid
+		});
         
         // Replace the file extensions with the name of the Language
         submissions.forEach(function(e){
@@ -112,7 +110,7 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     code: req.body.ans, // User code
                     score: 0, // Total Score
                     compile: "", // Time taken to compile / error message
-                    submitted_date: moment().format(), // Submission
+                    submitted_date: moment().format(), // Submission date
                     graded_date: "", // Grading
                     runtime: 0, // Max Time
                     contest: 0, // Contest
@@ -125,7 +123,17 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     type: 1 // Need to change this
                 };
                 // Send only a bit of info to all users about the submission
-                io.emit('newSub',{user:req.user.username, numid: id+1, problem: req.params.problem, language: req.body.language, progress: "Grading"});
+                io.emit('newSub',{
+                    user:req.user.username,
+                    numid: id+1,
+                    problem: req.params.problem,
+                    language: req.body.language,
+                    progress: "Grading",
+                    submitted_date: moment().format(),
+                    graded_date: "",
+                    runtime: 0,
+                    score: 0
+                });
                 submission.add(obj)
                 .then(function(obj) {
                 //     return submission.dispatch(obj);

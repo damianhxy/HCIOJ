@@ -23,6 +23,9 @@ Web Server
  - submission messages/tables are not styled properly
  - sort subs in queue 
  - don't display wrong password but rather wrong username OR password (optional security idk)
+ - front page only displays 10 subs (due to our crappy truncation)
+ - is the only way to get the current user 
+
 [Missing Features]
  - contests
  	x home page (just combine contest and problem list)
@@ -30,6 +33,7 @@ Web Server
  	- timer
  	- delay
  	- make submission viewing from frontpage link to contest submission viewing
+ 	- latest submissions should not include contest subs
  - admin
 	- just use json editor for everything :)
  	- add problems
@@ -38,7 +42,6 @@ Web Server
  	- edit contests
  	- grader management
  	- user management
- - Implement submission viewing in problem.handlebars
  - landing page, though not urgent (to be completed right before launch)
  - blog/learning page - topics to learn, maybe similar to codecademy
  - lessons/problem sets - classify problems in lists
@@ -47,7 +50,11 @@ Web Server
  - live updating for scores
  - estimate and grader name for grading queue
  - populate the language list in submission/problem page programmatically
+ - language changing on submission page doesn't work
 
+[Missing sockets pages]
+ - User profile page
+ - Submission page
 
 Grading Server ([!] = priority, [-] = normal, [O] = completed)
 --------------

@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var user = require("../models/user.js");
 var submission = require("../models/submission.js");
+var settings = require("./settings.js");
+var moment = require("moment");
 
 router.get("/rankings", function(req, res) {
     user.all()
@@ -45,13 +47,18 @@ router.get("/:user", function(req, res) {
             submissions.filter(function(e) {
                 return e.user === req.params.user;
             });
+            submissions.forEach(function(e){
+                e.language = settings.LANGUAGES[e.language];
+                e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
+                e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+            })
             res.render("profile", {
                 user: req.user,
                 title: info.realname,
                 subtitle: "(" + info.username + ", " + info.level + ")",
                 ranking: rank + " (of " + users.length + ")",
                 profile: info,
-                userSubmissions: submissions
+                submissions: submissions
             });
         });
     })

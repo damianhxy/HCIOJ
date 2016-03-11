@@ -1,1 +1,0 @@
-var languages = { "java": "Java", "py": "Python", "pas": "Pascal", "cpp": "C++11" };

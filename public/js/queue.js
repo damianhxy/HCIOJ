@@ -9,7 +9,7 @@ socket.on('newSub', function(submission){
 					'<td>' + submission.language + '</td>' +
 					'<td><span style="color: gray">' + submission.progress + '</span></td>' +
 					'</tr>';
-	document.querySelector(".table tbody").appendChild(x);
+	document.getElementById("queue").appendChild(x);
 	// $('.table tbody').prepend('<tr style="height: 0px;" >' + 
 	// 							'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
 	// 							'<td>' + submission.user + '</td>' + // add links for the below
@@ -18,7 +18,4 @@ socket.on('newSub', function(submission){
 	// 							'<td>' + submission.progress + '</td>' +
 	// 							'</tr>');
 	// $('.table tbody tr:first').slideDown(500);
-});
-socket.on('dank',function(data){
-	alert(data);
 });

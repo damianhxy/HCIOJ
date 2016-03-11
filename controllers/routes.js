@@ -7,6 +7,8 @@ var submission = require("../models/submission.js");
 var user = require("../models/user.js");
 var passport = require("passport");
 var session = require("../models/session.js");
+var settings = require("./settings.js");
+var moment = require("moment");
 var io = global.io;
 
 router.use(notification);
@@ -41,8 +43,12 @@ router.get("/", function(req, res, next) {
                     var userSubmissions = submissions.filter(function(e) {
                         return e.user === req.user.username;
                     });
-                    var submissions = submissions.slice(0, 10);
-                    submissions.
+                    submissions = submissions.slice(0, 10);
+                    submissions.forEach(function(e){
+                        e.language = settings.LANGUAGES[e.language];
+                        e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
+                        e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+                    })
                     res.render("homepage", {
                         user: req.user,
                         title: "Home",

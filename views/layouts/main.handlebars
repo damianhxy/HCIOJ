@@ -20,7 +20,6 @@
     <script src="/js/fullcalendar.min.js"></script>
     <script src="/js/ace/ace.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
-	<script src="/js/settings.js"></script>
 </head>
 
 <body class="flexbox">
@@ -184,6 +183,8 @@
 				});
 			});
 		});
+		var languages = { "java": "Java", "py": "Python", "pas": "Pascal", "cpp": "C++11" };
+		var username = "{{user.username}}";
 	</script>
 	<script src="/js/main.js"></script>
 	{{#if contest}}<script src="/js/contest.js"></script>{{/if}}
