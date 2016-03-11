@@ -7,6 +7,7 @@ var submission = require("../models/submission.js");
 var user = require("../models/user.js");
 var passport = require("passport");
 var session = require("../models/session.js");
+var io = global.io;
 
 router.use(notification);
 
@@ -41,6 +42,7 @@ router.get("/", function(req, res, next) {
                         return e.user === req.user.username;
                     });
                     var submissions = submissions.slice(0, 10);
+                    submissions.
                     res.render("homepage", {
                         user: req.user,
                         title: "Home",
@@ -74,16 +76,17 @@ router.get("/logout", ensureAuthenticated, function(req, res) {
     });
 });
 
-/*
+
 // For testing handlebars pages
 router.get("/test", function(req, res){
-    res.render("joincontest", {
+    // io.emit();
+    res.render("404", {
         user: req.user,
-        title: "Home",
+        title: "Hey",
         subtitle: "an overview"
     })
 });
-*/
+
 
 router.get("/signin", function(req, res) {
     if (req.user) {

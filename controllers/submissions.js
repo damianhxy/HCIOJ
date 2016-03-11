@@ -62,11 +62,24 @@ router.get("/queue", function(req, res) {
         submissions = submissions.filter(function(e) {
             return e.restype < 5;
         });
-
+        
+        // Replace this sort with some sort of sorting mechanism maybe
+        submissions.sort(function(a, b) {
+            if (a.numid < b.numid)
+                return -1;
+            return 1;
+        });
+        
+        // Replace the file extensions with the name of the Language
+        submissions.forEach(function(e){
+            e.language = settings.LANGUAGES[e.language];
+        })
+        
         res.render("queue", {
             user: req.user,
             title: "Grading Queue",
-            subtitle: "estimated waiting time: forevah"
+            subtitle: "estimated waiting time: forevah",
+            submissions: submissions
         });
     })
     .fail(function() {
@@ -94,13 +107,13 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                 });
                 var obj = {
                     numid: id + 1, // Problem ID
-                    title: req.params.problem, // Problem Title
+                    problem: req.params.problem, // Problem Title
                     user: req.user.username, // User name
                     code: req.body.ans, // User code
                     score: 0, // Total Score
                     compile: "", // Time taken to compile / error message
                     submitted_date: moment().format(), // Submission
-                    graded_date: moment(0).format(), // Grading
+                    graded_date: "", // Grading
                     runtime: 0, // Max Time
                     contest: 0, // Contest
                     language: req.body.language, // Language
@@ -108,14 +121,16 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     verdict: "failed", // Verdict
                     status: "Sending to server", // Update after compiling and judging
                     progress: "Grading", // Update after all subtasks
+                    restype: 0, // 0 means sending to grader, 5 means done grading
                     type: 1 // Need to change this
                 };
-                io.to('authed').emit('newSub',{user:req.user.username, numid: id+1});
+                // Send only a bit of info to all users about the submission
+                io.emit('newSub',{user:req.user.username, numid: id+1, problem: req.params.problem, language: req.body.language, progress: "Grading"});
                 submission.add(obj)
                 .then(function(obj) {
-                    return submission.dispatch(obj);
-                })
-                .then(function(obj) {
+                //     return submission.dispatch(obj);
+                // })
+                // .then(function(obj) {
                     res.redirect("/submissions/" + obj.numid);
                 });
             });
@@ -129,18 +144,20 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
 router.get("/:id", function(req, res) {
     submission.get(parseInt(req.params.id))
     .then(function(sub) {
-        problem.get(sub.title)
+        problem.get(sub.problem)
         .then(function(prob) {
             sub.verdict = sub.verdict.charAt(0).toUpperCase() + sub.verdict.slice(1); // Capitalize
             sub.language = settings.LANGUAGES[sub.language]; // Change language to be displayed
             sub.compile = atob(sub.compile);
+            sub.graded_date = moment(sub.graded_date).format(settings.TIME_FORMAT);
+            sub.submitted_date = moment(sub.submitted_date).format(settings.TIME_FORMAT);
             res.render("submission", {
                 user: req.user,
-                title: "<a href='/problems/" + sub.title + "'>" + sub.title + "</a>",
+                title: "<a href='/problems/" + sub.problem + "'>" + sub.problem + "</a>",
                 subtitle: "#" + sub.numid + " by <a href='/users/" + sub.user + "'>" + sub.user + "</a>",
                 submission: sub,
                 isOwner: req.user && (req.user.username === sub.user),
-                isViewable: req.user && (req.user.username === sub.user || ~ req.user.accepted.indexOf(sub.title)),
+                isViewable: req.user && (req.user.username === sub.user || ~ req.user.accepted.indexOf(sub.problem)),
                 problem: prob
             });
         });

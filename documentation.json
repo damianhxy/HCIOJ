@@ -96,12 +96,12 @@ User = {
 
 Submission = {
 	"numid":1,
-	"title":"helloworld",
+	"problem":"helloworld", //Note: was previously named title and thus legacy code may mess up
 	"user":"kohkt",
 	"score":0,
 	"compile":"",
 	"submitted_date":"2016-02-16T10:38:06+00:00",
-	"graded_date":"1970-01-01T00:00:00+00:00",
+	"graded_date":"",
 	"runtime":0,
 	"contest":0,
 	"language":"cpp",
@@ -109,6 +109,7 @@ Submission = {
 	"verdict":"failed",
 	"status":"Sending to server",
 	"progress":"Grading",
+	"restype":0,
 	"type":1,
 	"_id":"BJtF5jS76Sa7rGCG"
 }
@@ -178,6 +179,11 @@ RESULTS RECEIVED
 	"graded_date": "2015-05-26 22:38:24"
 }
 
+HOW TO CHANGE LANGUAGES
+-----------------------
+Change languages object settings.js in both public/js and controllers
+Change languages in forms in problem & submission page (yeah, really stupid and tedious)
+
 SOCKET OPERATIONS
 -----------------
 
@@ -197,3 +203,8 @@ socket.on('dataTypeName',function(messageObj){
 
 dataTypeName is any string
 messageObj can be any data type
+
+DATA TYPE NAMES USED FOR SOCKETS
+--------------------------------
+newSub - new submission
+updateSub - update from grader about submission

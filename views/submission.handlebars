@@ -9,7 +9,7 @@
 	</div>
 </div>
 
-<form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{submission.title}}" id="submitform">
+<form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{submission.problem}}" id="submitform">
 <div class="frame">
 	<div class="bit-2 left">
 		<div class="container">
@@ -21,7 +21,8 @@
 				<table class="table table-striped table-bordered">
 					<tr><td>Verdict</td><td>{{submission.verdict}} ({{submission.score}}%)</td></tr>
 					<tr><td>Language</td><td id="language">{{submission.language}}</td></tr>
-					<tr><td>Time</td><td>{{submission.graded_date}}</td></tr>
+					<tr><td>Submitted Date</td><td>{{submission.submitted_date}}</td></tr>
+					<tr><td>Graded Date</td><td>{{submission.graded_date}}</td></tr>
 					<tr><td>Runtime</td><td>{{submission.runtime}}s</td></tr>
 					<tr><td>Contest</td><td>{{{getContest submission.contest}}}</td></tr>
 				</table>
@@ -88,7 +89,6 @@
 			</div>
 		</div>
 		{{/if}}
-		</form>
 	</div>
 	
 	<div class="bit-2 right">

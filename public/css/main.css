@@ -249,10 +249,11 @@ input[type="submit"], .login .alt-button, .alt-select, #submitbutton, .button {
 
 main {
 	display: inline-block;
-	top: 0;
-	bottom: 0;
-	position: absolute;
+	/*top: 0;*/
+	/*bottom: 0;*/
+	/*position: absolute;*/
 	width: calc(100% - 6em);
+	min-height: 100%;
 	vertical-align: top;
 	padding: 1em;
 	background: #34495E;

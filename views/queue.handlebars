@@ -9,14 +9,17 @@
                 <th>Progress</th>
             </tr>
         </thead>
-        {{#each submissions}}
-        <tr>
-            <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td> <!-- please add a check if it is a contest -->
-            <td><a href="/users/{{this.user}}">{{this.user}}</a></td>
-            <td><a href="/problems/{{this.title}}">{{this.title}}</a></td>
-            <td>{{this.language}}</td>
-            <td><span style='color: gray'>{{this.progress}}</span></td>
-        </tr>
-        {{/each}}
+        <tbody>
+            {{#each submissions}}
+            <tr>
+                <td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td> <!-- please add a check if it is a contest -->
+                <td><a href="/users/{{this.user}}">{{this.user}}</a></td>
+                <td><a href="/problems/{{this.problem}}">{{this.problem}}</a></td>
+                <td>{{this.language}}</td>
+                <td><span style='color: gray'>{{this.progress}}</span></td>
+            </tr>
+            {{/each}}
+        </tbody>
     </table>
 </div>
+<script src="/js/queue.js"></script>
