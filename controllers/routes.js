@@ -39,11 +39,14 @@ router.get("/", function(req, res, next) {
             .then(function(submissions) {
                 session.all()
                 .then(function(users) {
-                    submissions = submissions || []; // [] turns into undefined
+                    submissions = submissions.slice(0, 10) || []; // [] turns into undefined
+                    submissions = submissions;
+                    submissions.sort(function(a,b){
+                        return b.numid-a.numid;
+                    })
                     var userSubmissions = submissions.filter(function(e) {
                         return e.user === req.user.username;
                     });
-                    submissions = submissions.slice(0, 10);
                     submissions.forEach(function(e){
                         e.language = settings.LANGUAGES[e.language];
                         e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
@@ -83,15 +86,15 @@ router.get("/logout", ensureAuthenticated, function(req, res) {
 });
 
 
-// For testing handlebars pages
-router.get("/test", function(req, res){
-    // io.emit();
-    res.render("404", {
-        user: req.user,
-        title: "Hey",
-        subtitle: "an overview"
-    })
-});
+// // For testing handlebars pages
+// router.get("/test", function(req, res){
+//     // io.emit();
+//     res.render("404", {
+//         user: req.user,
+//         title: "Hey",
+//         subtitle: "an overview"
+//     })
+// });
 
 
 router.get("/signin", function(req, res) {

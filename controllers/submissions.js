@@ -13,7 +13,8 @@ router.post("/api", function(req, res) {
     if (req.body.secret !== settings.API_SECRET)
         res.status(401).send("Unauthorised");
     submission.update(sub)
-    .then(function() {
+    .then(function(sub) {
+        io.emit("updateSub", sub);
         res.send("Success");
     })
     .fail(function(err) {
@@ -24,6 +25,12 @@ router.post("/api", function(req, res) {
 router.get("/latest", function(req, res) {
     submission.all()
     .then(function(submissions) {
+		submissions.sort(function(a,b) {
+		    return b.numid - a.numid
+		});
+        submissions.forEach(function(e){
+            e.language = settings.LANGUAGES[e.language];
+        })
         res.render("submissions", {
 	    user: req.user,
             title: "Latest Submissions",
@@ -43,6 +50,12 @@ router.get("/mine", function(req, res) {
         submissions = submissions.filter(function(e) {
             return e.user === req.user.username;
         });
+		submissions.sort(function(a,b) {
+		    return b.numid - a.numid
+		});
+        submissions.forEach(function(e){
+            e.language = settings.LANGUAGES[e.language];
+        })
         res.render("submissions", {
 	    user: req.user,
             title: "My Submissions",
@@ -65,7 +78,7 @@ router.get("/queue", function(req, res) {
         
         // Replace this sort with some sort of sorting mechanism maybe
 		submissions.sort(function(a,b) {
-		    return b.numid-a.numid
+		    return b.numid - a.numid
 		});
         
         // Replace the file extensions with the name of the Language
@@ -109,14 +122,13 @@ router.post("/submit/:problem", ensureAuthenticated, function(req, res) {
                     user: req.user.username, // User name
                     code: req.body.ans, // User code
                     score: 0, // Total Score
-                    compile: "", // Time taken to compile / error message
                     submitted_date: moment().format(), // Submission date
                     graded_date: "", // Grading
                     runtime: 0, // Max Time
                     contest: 0, // Contest
                     language: req.body.language, // Language
                     res: subtasks, // Subtasks
-                    verdict: "failed", // Verdict
+                    verdict: "Grading", // Verdict
                     status: "Sending to server", // Update after compiling and judging
                     progress: "Grading", // Update after all subtasks
                     restype: 0, // 0 means sending to grader, 5 means done grading
@@ -157,7 +169,7 @@ router.get("/:id", function(req, res) {
             sub.verdict = sub.verdict.charAt(0).toUpperCase() + sub.verdict.slice(1); // Capitalize
             sub.language = settings.LANGUAGES[sub.language]; // Change language to be displayed
             sub.compile = atob(sub.compile);
-            sub.graded_date = moment(sub.graded_date).format(settings.TIME_FORMAT);
+            if(sub.graded_date) sub.graded_date = moment(sub.graded_date).format(settings.TIME_FORMAT);
             sub.submitted_date = moment(sub.submitted_date).format(settings.TIME_FORMAT);
             res.render("submission", {
                 user: req.user,

@@ -47,7 +47,10 @@ router.get("/:user", function(req, res) {
             submissions.filter(function(e) {
                 return e.user === req.params.user;
             });
-            submissions.forEach(function(e){
+            submissions.sort(function(a,b) {
+		        return b.numid-a.numid
+            })
+            submissions.forEach(function(e) {
                 e.language = settings.LANGUAGES[e.language];
                 e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
                 e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);

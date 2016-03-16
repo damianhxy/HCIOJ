@@ -25,6 +25,7 @@ Web Server
  - don't display wrong password but rather wrong username OR password (optional security idk)
  - front page only displays 10 subs (due to our crappy truncation)
  - is the only way to get the current user 
+ - parse all the submissions through a middleware? (idk the term)
 
 [Missing Features]
  - contests

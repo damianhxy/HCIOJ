@@ -90,7 +90,7 @@ router.get("/:problem", function(req, res) {
         submission.all()
         .then(function(submissions) {
             submissions = submissions.filter(function(e) {
-                 return e.title === info.title;
+                 return e.problem === info.title;
             });
 			submissions.sort(function(a,b) {
 			    return b.numid-a.numid

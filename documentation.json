@@ -98,15 +98,15 @@ Submission = {
 	"numid":1,
 	"problem":"helloworld", //Note: was previously named title and thus legacy code may mess up
 	"user":"kohkt",
-	"score":0,
-	"compile":"",
+	"totalscore":0,
+	"compilation":"", // was previously named compile
 	"submitted_date":"2016-02-16T10:38:06+00:00",
 	"graded_date":"",
 	"runtime":0,
 	"contest":0,
 	"language":"cpp",
 	"res":[{"num":1,"maxscore":100,"score":0}],
-	"verdict":"failed",
+	"verdict":"Failed",
 	"status":"Sending to server",
 	"progress":"Grading",
 	"restype":0,
@@ -161,11 +161,11 @@ RESULTS RECEIVED
 	"subid": "3",
 	"restype": 5,
 	"status": "Judging completed in 6.2s",
-	"graded_date": "2015-05-26 22:38:24",							// iso 8601 date strings
+	"graded_date": "2015-05-26 22:38:24", // iso 8601 date strings
 	"subtask": {"num": 2, "score": 50 },
 	"tc": {"subtask": 2, "num": 1, "msg": "OK", "score": "100", "exec": "0", "wall": "0.044", "ram":"1.8 MB", "stat": "0"}
 	"maxtime": "0s",
-	"verdict": "Accepted (100%)",
+	"verdict": "accepted",
 	"totaltime": "2.521s",
 	"totalscore": "100"
 }

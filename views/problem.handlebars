@@ -167,20 +167,22 @@
 					<thead>
 						<tr>
 							<th>ID</th>
-							<th>Time</th>
-							<th>Score</th>
+							<th>Submitted Date</th>
+							<th>Language</th>
 							<th>Max Time</th>
+							<th>Score</th>
 							<th>Progress</th>
 
 						</tr>
 					</thead>
-					<tbody style="overflow: auto;">
+					<tbody style="overflow: auto;" id="yourSubmissions">
 						{{#each submissions}}
 						<tr>
 							<td><a href="{{#if ../contest}}/contests/{{../../contest.id}}{{/if}}/submissions/{{this.numid}}">{{this.numid}}</a></td>
-							<td>{{this.time}}</td>
-							<td><span class='label label-{{{scoreColour this.score}}}'>{{this.score}}</span></td>
+							<td>{{this.submitted_date}}</td>
+							<td>{{this.language}}</td>
 							<td>{{this.runtime}}s</td>
+							<td><span class='score-{{{this.score}}}'>{{this.score}}</span></td>
 							<td><span style='color: gray'>{{this.progress}}</span></td>
 						</tr>
 						{{/each}}
@@ -200,18 +202,22 @@
 						<tr>
 							<th>ID</th>
 							<th>User</th>
-							<th>Time</th>
+							<th>Submitted Date</th>
+							<th>Language</th>
+							<th>Max Time</th>
 							<th>Score</th>
 							<th>Progress</th>
 						</tr>
 					</thead>
-					<tbody style="overflow: auto;">
+					<tbody style="overflow: auto;" id="submissions">
 						{{#each submissions}}
 						<tr>
 							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
 							<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
-							<td>{{this.time}}</td>
-							<td><span class='label label-{{{scoreColour this.score}}}'>{{this.score}}</span></td>
+							<td>{{this.submitted_date}}</td>
+							<td>{{this.language}}</td>
+							<td>{{this.runtime}}s</td>
+							<td><span class='score-{{{this.score}}}'>{{this.score}}</span></td>
 							<td><span style='color: gray'>{{this.progress}}</span></td>
 						</tr>
 						{{/each}}
@@ -310,3 +316,4 @@
 		});
 	});
 </script>
+<script src="/js/problem.js"></script>

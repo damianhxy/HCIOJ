@@ -19,11 +19,11 @@
 			</div>
 			<div>
 				<table class="table table-striped table-bordered">
-					<tr><td>Verdict</td><td>{{submission.verdict}} ({{submission.score}}%)</td></tr>
-					<tr><td>Language</td><td id="language">{{submission.language}}</td></tr>
-					<tr><td>Submitted Date</td><td>{{submission.submitted_date}}</td></tr>
-					<tr><td>Graded Date</td><td>{{submission.graded_date}}</td></tr>
-					<tr><td>Runtime</td><td>{{submission.runtime}}s</td></tr>
+					<tr><td>Verdict</td><td><span id="verdict">{{submission.verdict}}</span> (<span id="score">{{submission.score}}</span>%)</td></tr>
+					<tr><td>Language</td><td>{{submission.language}}</td></tr>
+					<tr><td>Submitted Date</td><td id="submitted_date">{{submission.submitted_date}}</td></tr>
+					<tr><td>Graded Date</td><td id="graded_date">{{submission.graded_date}}</td></tr>
+					<tr><td>Runtime</td><td id="runtime">{{submission.runtime}}s</td></tr>
 					<tr><td>Contest</td><td>{{{getContest submission.contest}}}</td></tr>
 				</table>
 			</div>
@@ -34,8 +34,8 @@
 				<h2>Compile Status</h2>
 			</div>
 			<div>
-				<div class="monospace">	
-					{{submission.compile}}
+				<div class="monospace" id="compilation">	
+					{{submission.compilation}}
 				</div>
 			</div>
 		</div>
@@ -49,7 +49,7 @@
 			<div>
 				<div class="compiler">
 					<label>Language</label>
-					<select name="language" class="alt-select">
+					<select name="language" class="alt-select" id="language">
 						<option value="cpp">C++11 (4.9.2)</option>
 						<option value="pas">Pascal (2.6.4)</option>
 						<option value="java">Java (1.7.0)</option>
@@ -205,6 +205,7 @@
 		}
 
 		document.getElementById("language").addEventListener("change", function() {
+			console.log(this.value);
 			extension = this.value;
 			document.querySelector(".compiler pre").textContent = languages[this.value].compiler.replace(new RegExp("replace", 'g'), files[0].name);
 			files.forEach(function(item){
@@ -220,6 +221,7 @@
 	});
 </script>
 {{/if}}
+<script src="/js/submissiondetails.js"></script>
 <!--div class="submission-full row">
 	<div class="submission-hleft col-md-6">
 		<div class="detail submission-table">
