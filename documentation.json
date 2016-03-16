@@ -99,7 +99,7 @@ Submission = {
 	"problem":"helloworld", //Note: was previously named title and thus legacy code may mess up
 	"user":"kohkt",
 	"totalscore":0,
-	"compilation":"", // was previously named compile
+	"compile":"",
 	"submitted_date":"2016-02-16T10:38:06+00:00",
 	"graded_date":"",
 	"runtime":0,
@@ -142,7 +142,7 @@ RESULTS RECEIVED
 	"subid": 3,
 	"restype": 3,
 	"status": "Running on Subtask 1 Test 2",
-	"tc": {"subtask": 1, "num": 1, "msg": "OK", "score": "100", "exec": "0", "wall": "0.044", "ram":"1.8 MB", "stat": "0"}
+	"tc": {"subtask": 1, "num": 1, "msg": "OK", "score": 100, "exec": 0, "wall": 0.044, "ram": 1.8, "stat": 0}
 }
 
 #4: When subtask + test case is done (tc 2, subtask 1)
@@ -151,31 +151,31 @@ RESULTS RECEIVED
 	"subid": 3,
 	"restype": 4,
 	"status": "Running on Subtask 2 Test 1",
-	"tc": {"subtask": 1, "num": 2, "msg": "OK", "score": "100", "exec": "0", "wall": "0.044", "ram":"1.8 MB", "stat": "0"}
+	"tc": {"subtask": 1, "num": 2, "msg": "OK", "score": 100, "exec": 0, "wall": 0.044, "ram":b1.8, "stat": 0}
 	"subtask": {"num": 1, "score": 50 },
 }
 
 #5: When everything is done (i.e. last tc of last subtask is done)
 
 {
-	"subid": "3",
+	"subid": 3,
 	"restype": 5,
 	"status": "Judging completed in 6.2s",
 	"graded_date": "2015-05-26 22:38:24", // iso 8601 date strings
 	"subtask": {"num": 2, "score": 50 },
-	"tc": {"subtask": 2, "num": 1, "msg": "OK", "score": "100", "exec": "0", "wall": "0.044", "ram":"1.8 MB", "stat": "0"}
-	"maxtime": "0s",
+	"tc": {"subtask": 2, "num": 1, "msg": "OK", "score": 100, "exec": 0, "wall": 0.044, "ram": 1.8, "stat": 0} //ram is in MB
+	"maxtime": 0,
 	"verdict": "accepted",
-	"totaltime": "2.521s",
-	"totalscore": "100"
+	"totalscore": 100
 }
 
 #6: Rejected submissions
 
 {
-	"subid": "3",
+	"subid": 3,
 	"restype": 6,
 	"status": "Judging failed",
+	"verdict": "failed",
 	"graded_date": "2015-05-26 22:38:24"
 }
 

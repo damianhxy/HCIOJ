@@ -167,7 +167,7 @@ router.get("/:id", function(req, res) {
         problem.get(sub.problem)
         .then(function(prob) {
             sub.verdict = sub.verdict.charAt(0).toUpperCase() + sub.verdict.slice(1); // Capitalize
-            sub.language = settings.LANGUAGES[sub.language]; // Change language to be displayed
+            // sub.language = settings.LANGUAGES[sub.language]; // Change language to be displayed
             sub.compile = atob(sub.compile);
             if(sub.graded_date) sub.graded_date = moment(sub.graded_date).format(settings.TIME_FORMAT);
             sub.submitted_date = moment(sub.submitted_date).format(settings.TIME_FORMAT);
