@@ -420,3 +420,21 @@ main {
 .fc-unthemed .fc-today {
   	background-color: #415d76;
 }
+
+.bit-100{
+  
+    color: red;
+    width: auto;
+    height: auto;
+    min-width: 100vw;
+    min-height: 100vh;
+/*    background-image: url('img/landing.jpg');
+    background-position: left top;
+    background-repeat: no-repeat;
+*/
+}
+.topkek {
+    /* background-image: url('img/landing.jpg'); */
+    color: red;
+    width: 100%;
+}
