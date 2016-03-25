@@ -8,7 +8,7 @@ socket.on('newSub', function(submission){
 		'<td><a href="/problems/' + submission.problem + '">' + submission.problem + '</td>' +
 		'<td>' + submission.language + '</td>' +
 		'<td><span style="color: gray">' + submission.progress + '</span></td>';
-	document.getElementById("queue").appendChild(x);
+	document.getElementById("queue").insertBefore(x, document.getElementById("queue").firstChild);
 	// $('.table tbody').prepend('<tr style="height: 0px;" >' + 
 	// 							'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
 	// 							'<td>' + submission.user + '</td>' + // add links for the below
@@ -20,5 +20,5 @@ socket.on('newSub', function(submission){
 });
 
 socket.on('updateSub', function(submission){
-	// later add a class to the added element to manipulate values
+	// later add a class to the added element to manipulate value
 });

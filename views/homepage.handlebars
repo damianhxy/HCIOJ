@@ -59,7 +59,7 @@
 					</thead>
 					<tbody style="overflow: auto;" id="yourSubmissions">
 						{{#each userSubmissions}}
-						<tr>
+						<tr id="your_submission-{{this.numid}}">
 							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
 							<td><a href="/problems/{{this.problem}}">{{this.problem}}</a></td>
 							<td>{{this.submitted_date}}</td>
@@ -108,7 +108,7 @@
 					</thead>
 					<tbody style="overflow: auto;" id="submissions">
 						{{#each submissions}}
-						<tr>
+						<tr id="global_submission-{{this.numid}}">
 							<td><a href="/submissions/{{this.numid}}">{{this.numid}}</a></td>
 							<td><a href="/users/{{this.user}}">{{this.user}}</a></td>
 							<td><a href="/problems/{{this.problem}}">{{this.problem}}</a></td>

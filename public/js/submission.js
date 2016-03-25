@@ -8,6 +8,7 @@ socket.on('newSub', function(submission){
 	
 	// to be added: check if submission has contest
 	var x = document.createElement("tr");
+	x.id = "global_submission-" + submission.numid;
 	x.innerHTML = 
 		'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
 		'<td><a href="/users/' + submission.user + '">' + submission.user + '</td>' + // add links for the below
@@ -17,8 +18,11 @@ socket.on('newSub', function(submission){
 		'<td><span class="score-' + submission.score + '">' + submission.score + '</td>' +
 		'<td><span style="color: gray">' + submission.progress + '</span></td>';
 	as.insertBefore(y, ys.firstChild);
+	
+	
 	if(ys && submission.user == username){
 		var y = document.createElement("tr");
+		y.id = "your_submission-" + submission.numid;
 		y.innerHTML =
 			'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
 			'<td><a href="/problems/' + submission.problem + '">' + submission.problem + '</td>' +
