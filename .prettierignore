@@ -1,0 +1,7 @@
+node_modules
+database
+package-lock.json
+public
+landing_page
+*.handlebars
+documentation.json

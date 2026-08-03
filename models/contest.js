@@ -1,31 +1,31 @@
-var Q = require("q");
-var Datastore = require("nedb");
-var contests = new Datastore({filename: './database/contests', autoload: true});
+const Q = require("q");
+const Datastore = require("@seald-io/nedb");
+const contests = new Datastore({ filename: "./database/contests", autoload: true });
 
-exports.add = function(contest) {
-    return Q.promise(function(resolve, reject) {
-        console.log(contest);
-        Q.ninvoke(contests, "insert", contest)
-        .then(function() {
-            resolve("Added contest");
-        })
-        .fail(function() {
-            reject(Error("Failed to add contest"));
-        });
-    });
+exports.add = function (contest) {
+  return Q.promise(function (resolve, reject) {
+    console.log(contest);
+    Q.ninvoke(contests, "insert", contest)
+      .then(function () {
+        resolve("Added contest");
+      })
+      .fail(function () {
+        reject(Error("Failed to add contest"));
+      });
+  });
 };
 
-exports.all = function() {
-    return Q.promise(function(resolve, reject) {
-        Q.ninvoke(contests, "find", {})
-        .then(function(list) {
-            list = list || [];
-            resolve(list);
-        })
-        .fail(function() {
-            reject(Error("Failed to get list of contests"));
-        });
-    });
+exports.all = function () {
+  return Q.promise(function (resolve, reject) {
+    Q.ninvoke(contests, "find", {})
+      .then(function (list) {
+        list = list || [];
+        resolve(list);
+      })
+      .fail(function () {
+        reject(Error("Failed to get list of contests"));
+      });
+  });
 };
 /* // To go under entry model
 exports.checkEntry = function(name, contestID) {
@@ -58,26 +58,38 @@ exports.enter = function(name, contestID) {
     });
 };
 */
-exports.get = function(id) {
-    return Q.promise(function(resolve, reject) {
-        Q.ninvoke(contests, "findOne", { id: id })
-        .then(function(contest) {
-            resolve(contest);
-        })
-        .fail(function() {
-            reject(Error("Failed to get contest"));
-        });
-    });
+exports.get = function (id) {
+  return Q.promise(function (resolve, reject) {
+    Q.ninvoke(contests, "findOne", { id: id })
+      .then(function (contest) {
+        resolve(contest);
+      })
+      .fail(function () {
+        reject(Error("Failed to get contest"));
+      });
+  });
 };
 
-exports.getID = function() {
-    return Q.promise(function(resolve, reject) {
-        Q.ninvoke(contests, "count", {})
-        .then(function(count) {
-            resolve(count+1);
-        })
-        .fail(function() {
-            reject(Error("Failed to get contest count"));
-        });
-    });
+exports.getID = function () {
+  return Q.promise(function (resolve, reject) {
+    Q.ninvoke(contests, "count", {})
+      .then(function (count) {
+        resolve(count + 1);
+      })
+      .fail(function () {
+        reject(Error("Failed to get contest count"));
+      });
+  });
+};
+
+exports.edit = function (id, newContest) {
+  return Q.promise(function (resolve, reject) {
+    Q.ninvoke(contests, "update", { id: id }, { $set: newContest })
+      .then(function () {
+        resolve("Edited contest");
+      })
+      .fail(function () {
+        reject(Error("Failed to edit contest"));
+      });
+  });
 };

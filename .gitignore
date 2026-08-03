@@ -5,3 +5,6 @@ database/
 .project
 .settings/
 .*.swp
+ssl/
+nohup.out
+.env

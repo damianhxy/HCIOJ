@@ -34,7 +34,7 @@
 			</div>
 			<div>
 				<div class="desc">
-					{{{get problem.desc-html}}}
+					<a href="{{problem.desc-html}}" target="_blank" rel="noopener noreferrer">Open problem description</a>
 				</div>
 			</div>
 		</div>
@@ -48,7 +48,7 @@
 			<div>
 				<div>
 					<pre>
-						{{get problem.desc-txt}}
+						<a href="{{problem.desc-txt}}" target="_blank" rel="noopener noreferrer">Open problem description</a>
 					</pre>
 				</div>
 			</div>
@@ -316,4 +316,5 @@
 		});
 	});
 </script>
+<script>var username = {{#if user}}"{{user.username}}"{{else}}""{{/if}};</script>
 <script src="/js/problem.js"></script>

@@ -1,40 +1,41 @@
-var socket = io();
-var as = document.getElementById("submissions");
-var ys = document.getElementById("yourSubmissions");
+const socket = io();
+const as = document.getElementById("submissions");
+const ys = document.getElementById("yourSubmissions");
 
-socket.on('newSub', function(submission){
-	submission.language = languages[submission.language];
-	submission.submitted_date = moment(submission.submitted_date).format("DD MMM YY, HH:MM:ss");
-	
-	// to be added: check if submission has contest
-	var x = document.createElement("tr");
-	x.id = "global_submission-" + submission.numid;
-	x.innerHTML = 
-		'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
-		'<td><a href="/users/' + submission.user + '">' + submission.user + '</td>' + // add links for the below
-		'<td><a href="/problems/' + submission.problem + '">' + submission.problem + '</td>' +
-		'<td>' + submission.submitted_date + '</td>' +
-		'<td>' + submission.language + '</td>' +
-		'<td><span class="score-' + submission.score + '">' + submission.score + '</td>' +
-		'<td><span style="color: gray">' + submission.progress + '</span></td>';
-	as.insertBefore(y, ys.firstChild);
-	
-	
-	if(ys && submission.user == username){
-		var y = document.createElement("tr");
-		y.id = "your_submission-" + submission.numid;
-		y.innerHTML =
-			'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
-			'<td><a href="/problems/' + submission.problem + '">' + submission.problem + '</td>' +
-			'<td>' + submission.submitted_date + '</td>' +
-			'<td>' + submission.runtime + 's</td>' +
-			'<td>' + submission.language + '</td>' +
-			'<td><span class="score-' + submission.score + '">' + submission.score + '</td>' +
-			'<td><span style="color: gray">' + submission.progress + '</span></td>';
-		ys.insertBefore(y, ys.firstChild);
-	}
-});
+function esc(s) {
+    return String(s).replace(/[&<>"']/g, function(c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+}
 
-socket.on('updateSub', function(submission){
-	
+socket.on('newSub', function(submission) {
+    const date = moment(submission.submitted_date).format("DD MMM YY, HH:MM:ss");
+
+    if (as) {
+        const x = document.createElement("tr");
+        x.id = "global_submission-" + submission.numid;
+        x.innerHTML =
+            '<td><a href="/submissions/' + esc(submission.numid) + '">' + esc(submission.numid) + '</a></td>' +
+            '<td><a href="/users/' + esc(submission.user) + '">' + esc(submission.user) + '</a></td>' +
+            '<td><a href="/problems/' + esc(submission.problem) + '">' + esc(submission.problem) + '</a></td>' +
+            '<td>' + esc(date) + '</td>' +
+            '<td>' + esc(submission.language) + '</td>' +
+            '<td><span class="score-' + esc(submission.score) + '">' + esc(submission.score) + '</span></td>' +
+            '<td><span style="color: gray">' + esc(submission.progress) + '</span></td>';
+        as.insertBefore(x, as.firstChild);
+    }
+
+    if (ys && submission.user === username) {
+        const y = document.createElement("tr");
+        y.id = "your_submission-" + submission.numid;
+        y.innerHTML =
+            '<td><a href="/submissions/' + esc(submission.numid) + '">' + esc(submission.numid) + '</a></td>' +
+            '<td><a href="/problems/' + esc(submission.problem) + '">' + esc(submission.problem) + '</a></td>' +
+            '<td>' + esc(date) + '</td>' +
+            '<td>' + esc(submission.runtime) + 's</td>' +
+            '<td>' + esc(submission.language) + '</td>' +
+            '<td><span class="score-' + esc(submission.score) + '">' + esc(submission.score) + '</span></td>' +
+            '<td><span style="color: gray">' + esc(submission.progress) + '</span></td>';
+        ys.insertBefore(y, ys.firstChild);
+    }
 });

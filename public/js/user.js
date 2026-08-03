@@ -1,20 +1,24 @@
-var socket = io();
-var ys = document.getElementById("submissions");
+const socket = io();
+const ys = document.getElementById("userSubmissions");
 
-socket.on('newSub', function(submission){
-	submission.language = languages[submission.language];
-	submission.submitted_date = moment(submission.submitted_date).format("DD MMM YY, HH:MM:ss");
-	
-	if(ys && submission.user == thisusername){
-		var y = document.createElement("tr");
-		y.innerHTML = '<tr style="height: 0px;" >' + 
-			'<td><a href="/submissions/' + submission.numid + '">' + submission.numid + '</td>' + // please add a check if it is a contest
-			'<td><a href="/problems/' + submission.problem + '">' + submission.problem + '</td>' +
-			'<td>' + submission.submitted_date + '</td>' +
-			'<td>' + submission.language + '</td>' +
-			'<td><span class="score-' + submission.score + '">' + submission.score + '</td>' +
-			'<td><span style="color: gray">' + submission.progress + '</span></td>' +
-			'</tr>';
-		ys.insertBefore(y, ys.firstChild);
-	}
+function esc(s) {
+    return String(s).replace(/[&<>"']/g, function(c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+}
+
+socket.on('newSub', function(submission) {
+    const date = moment(submission.submitted_date).format("DD MMM YY, HH:MM:ss");
+
+    if (ys && submission.user === thisusername) {
+        const y = document.createElement("tr");
+        y.innerHTML =
+            '<td><a href="/submissions/' + esc(submission.numid) + '">' + esc(submission.numid) + '</a></td>' +
+            '<td><a href="/problems/' + esc(submission.problem) + '">' + esc(submission.problem) + '</a></td>' +
+            '<td>' + esc(date) + '</td>' +
+            '<td>' + esc(submission.language) + '</td>' +
+            '<td><span class="score-' + esc(submission.score) + '">' + esc(submission.score) + '</span></td>' +
+            '<td><span style="color: gray">' + esc(submission.progress) + '</span></td>';
+        ys.insertBefore(y, ys.firstChild);
+    }
 });

@@ -127,11 +127,12 @@
 <script>
 	$(document).ready(function() {
 		$("#contestcalendar").fullCalendar({
-			{{#if events}}events: {{{events}}} {{/if}},
+			{{#if events}}events: {{{json events}}} {{/if}},
 			aspectRatio: 1,
 			//eventBackgroundColor: "#FA6900",
 			//eventBorderColor: "#FA6900"
 		});
 	});
 </script>
+<script>var username = "{{user.username}}";</script>
 <script src="/js/submission.js"></script>

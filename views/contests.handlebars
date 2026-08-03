@@ -9,7 +9,7 @@
 
   <script>
     $("#contestcalendar").fullCalendar({
-      {{#if events}}events: {{{events}}},{{/if}}
+      {{#if events}}events: {{{json events}}},{{/if}}
       // eventBackgroundColor: "#FA6900",
       // eventBorderColor: "#FA6900"
     });

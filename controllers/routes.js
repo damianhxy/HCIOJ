@@ -1,15 +1,13 @@
-var express = require("express");
-var router = express.Router();
-var ensureAuthenticated = require("../middlewares/auth.js");
-var notification = require("../middlewares/notifications.js");
-var contest = require("../models/contest.js");
-var submission = require("../models/submission.js");
-var user = require("../models/user.js");
-var passport = require("passport");
-var session = require("../models/session.js");
-var settings = require("./settings.js");
-var moment = require("moment");
-var io = global.io;
+const express = require("express");
+const router = express.Router();
+const ensureAuthenticated = require("../middlewares/auth.js");
+const notification = require("../middlewares/notifications.js");
+const contest = require("../models/contest.js");
+const submission = require("../models/submission.js");
+const passport = require("passport");
+const session = require("../models/session.js");
+const settings = require("./settings.js");
+const moment = require("moment");
 
 router.use(notification);
 
@@ -31,60 +29,57 @@ router.use("/contests", require("./contests.js"));
 /* Admin */
 router.use("/admin", require("./admin.js"));
 
-router.get("/", function(req, res, next) {
-    if (req.user)
-		contest.all()
-		.then(function(contests) {
-			submission.all()
-            .then(function(submissions) {
-                session.all()
-                .then(function(users) {
-                    submissions = submissions.slice(0, 10) || []; // [] turns into undefined
-                    submissions = submissions;
-                    submissions.sort(function(a,b){
-                        return b.numid-a.numid;
-                    })
-                    var userSubmissions = submissions.filter(function(e) {
-                        return e.user === req.user.username;
-                    });
-                    submissions.forEach(function(e){
-                        e.language = settings.LANGUAGES[e.language];
-                        e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
-                        e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
-                    })
-                    res.render("homepage", {
-                        user: req.user,
-                        title: "Home",
-                        subtitle: "an overview",
-                        events: JSON.stringify(contests),
-                        submissions: submissions,
-                        userSubmissions: userSubmissions,
-                        onlineUsers: users
-                    });
-                });
+router.get("/", function (req, res, next) {
+  if (req.user)
+    contest
+      .all()
+      .then(function (contests) {
+        submission.all().then(function (submissions) {
+          session.all().then(function (users) {
+            submissions.sort(function (a, b) {
+              return b.numid - a.numid;
             });
-		})
-		.fail(function(err) {
-			next(err);
-		});
-	else
-    	res.render("landing");
+            submissions = submissions.slice(0, 10) || [];
+            const userSubmissions = submissions.filter(function (e) {
+              return e.user === req.user.username;
+            });
+            submissions.forEach(function (e) {
+              e.language = settings.LANGUAGES[e.language];
+              e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
+              e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+            });
+            res.render("homepage", {
+              user: req.user,
+              title: "Home",
+              subtitle: "an overview",
+              events: contests,
+              submissions: submissions,
+              userSubmissions: userSubmissions,
+              onlineUsers: users,
+            });
+          });
+        });
+      })
+      .fail(function (err) {
+        next(err);
+      });
+  else res.render("landing");
 });
 
-router.get("/logout", ensureAuthenticated, function(req, res) {
-    session.remove(req.user.username)
-    .then(function() {
-        console.log("Logged " + req.user.username + " out");
-        req.logout();
-        res.redirect("/");
+router.get("/logout", ensureAuthenticated, function (req, res) {
+  session
+    .remove(req.user.username)
+    .then(function () {
+      console.log("Logged " + req.user.username + " out");
+      req.logout();
+      res.redirect("/");
     })
-    .fail(function() {
-        console.log("Failed to log " + req.user.username + " out");
-        req.session.error = "An error was encountered while processing your request";
-        res.redirect(req.headers.referer || "/");
+    .fail(function () {
+      console.log("Failed to log " + req.user.username + " out");
+      req.session.error = "An error was encountered while processing your request";
+      res.redirect(req.headers.referer || "/");
     });
 });
-
 
 // // For testing handlebars pages
 // router.get("/test", function(req, res){
@@ -96,44 +91,47 @@ router.get("/logout", ensureAuthenticated, function(req, res) {
 //     })
 // });
 
-
-router.get("/signin", function(req, res) {
-    if (req.user) {
-        req.session.warning = "You are already signed in";
-        res.redirect(req.headers.referer || "/");
-    }
-    else res.render("signin", { layout: false });
+router.get("/signin", function (req, res) {
+  if (req.user) {
+    req.session.warning = "You are already signed in";
+    res.redirect(req.headers.referer || "/");
+  } else res.render("signin", { layout: false });
 });
 
-router.post("/signin", passport.authenticate("local-signin", {
+router.post(
+  "/signin",
+  passport.authenticate("local-signin", {
     successRedirect: "/",
-    failureRedirect: "/signin"
-}));
+    failureRedirect: "/signin",
+  }),
+);
 
-router.get("/signup", function(req, res) {
-    if (req.user) {
-        req.session.warning = "You are already signed in";
-        res.redirect(req.headers.referer || "/");
-    }
-    else res.render("signup", { layout: false });
+router.get("/signup", function (req, res) {
+  if (req.user) {
+    req.session.warning = "You are already signed in";
+    res.redirect(req.headers.referer || "/");
+  } else res.render("signup", { layout: false });
 });
 
-router.post("/signup", passport.authenticate("local-signup", {
+router.post(
+  "/signup",
+  passport.authenticate("local-signup", {
     successRedirect: "/",
-    failureRedirect: "/signup"
-}));
+    failureRedirect: "/signup",
+  }),
+);
 
 /* 404 & 500 */
-router.use(function(req, res) {
-    res.status(404).render("404", {
-        user: req.user,
-        title: "Page Not Found"
-    });
+router.use(function (req, res) {
+  res.status(404).render("404", {
+    user: req.user,
+    title: "Page Not Found",
+  });
 });
 
-router.use(function(err, req, res) {
-    console.error(err.stack);
-    res.status(500).send("Internal Server Error");
+router.use(function (err, req, res) {
+  console.error(err.stack);
+  res.status(500).send("Internal Server Error");
 });
 
 module.exports = router;

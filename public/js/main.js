@@ -28,7 +28,7 @@ $("[type='search']").keydown(function(e) {
 });
 
 $("nav.mobile-nav > ul > li > a").click(function() {
-	var dropdown = $(this).parent().find("ul.mobile-nav-dropdown");
+	const dropdown = $(this).parent().find("ul.mobile-nav-dropdown");
 	if (dropdown.css("display") === "block") dropdown.slideUp();
 	else {
 		$("nav.mobile-nav ul.mobile-nav-dropdown").slideUp();

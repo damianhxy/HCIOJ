@@ -1,37 +1,45 @@
 {
-  "name": "HCIOJ",
-  "version": "1.0.0",
+  "name": "hcioj",
+  "version": "2.0.0",
   "description": "HCI Online Judge",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",
-    "url": "https://damianhxy@bitbucket.org/ojdev-nodejs.git"
+    "url": "https://github.com/damianhxy/HCIOJ.git"
   },
   "author": "Damian Ho and Gui Ming Jiang",
   "license": "ISC",
   "dependencies": {
-    "atob": "^1.1.2",
-    "bcryptjs": "^2.1.0",
-    "body-parser": "^1.10.0",
-    "compression": "^1.6.0",
-    "console-stamp": "^0.2.0",
-    "cookie-parser": "^1.3.3",
-    "dateformat": "^1.0.12",
-    "express": "^4.13.3",
-    "express-handlebars": "^2.0.1",
-    "express-session": "^1.13.0",
-    "method-override": "^2.3.0",
-    "moment": "^2.10.6",
-    "morgan": "^1.5.3",
-    "nedb": "^1.1.3",
-    "passport": "^0.3.0",
+    "@seald-io/nedb": "^4.1.2",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "compression": "^1.7.5",
+    "console-stamp": "^3.1.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-handlebars": "^9.0.1",
+    "express-session": "^1.18.1",
+    "method-override": "^3.0.0",
+    "moment": "^2.30.1",
+    "morgan": "^1.10.0",
+    "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "q": "^1.1.2",
-    "socket.io": "^1.3.7",
-    "sync-request": "^2.1.0"
+    "q": "^1.5.1",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.9.6"
   }
 }
