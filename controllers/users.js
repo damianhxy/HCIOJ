@@ -3,7 +3,7 @@ const router = express.Router();
 const user = require("../models/user.js");
 const submission = require("../models/submission.js");
 const settings = require("./settings.js");
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 router.get("/rankings", async function (req, res) {
   try {
@@ -57,8 +57,8 @@ router.get("/:user", async function (req, res) {
     });
     mine.forEach(function (e) {
       e.language = settings.LANGUAGES[e.language];
-      e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
-      e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+      e.graded_date = dayjs(e.graded_date).format(settings.TIME_FORMAT);
+      e.submitted_date = dayjs(e.submitted_date).format(settings.TIME_FORMAT);
     });
     res.render("profile", {
       user: req.user,

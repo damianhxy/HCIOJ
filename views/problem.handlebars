@@ -110,6 +110,7 @@
 	</div>
 	<div class="bit-2 right">
 		<form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{problem.title}}" id="submitform">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 		{{#unless noCompileOptions}}
 		<div class="container">
 			<div class="header">

@@ -7,7 +7,7 @@ const submission = require("../models/submission.js");
 const passport = require("passport");
 const session = require("../models/session.js");
 const settings = require("./settings.js");
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 router.use(notification);
 
@@ -44,8 +44,8 @@ router.get("/", async function (req, res, next) {
       });
       latest.forEach(function (e) {
         e.language = settings.LANGUAGES[e.language];
-        e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
-        e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+        e.graded_date = dayjs(e.graded_date).format(settings.TIME_FORMAT);
+        e.submitted_date = dayjs(e.submitted_date).format(settings.TIME_FORMAT);
       });
       res.render("homepage", {
         user: req.user,

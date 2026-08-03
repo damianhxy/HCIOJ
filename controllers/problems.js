@@ -3,7 +3,7 @@ const router = express.Router();
 const problem = require("../models/problem.js");
 const submission = require("../models/submission.js");
 const settings = require("./settings.js");
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 router.get("/", async function (req, res) {
   try {
@@ -75,8 +75,8 @@ router.get("/:problem", async function (req, res) {
     });
     submissions.forEach(function (e) {
       e.language = settings.LANGUAGES[e.language];
-      e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
-      e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+      e.graded_date = dayjs(e.graded_date).format(settings.TIME_FORMAT);
+      e.submitted_date = dayjs(e.submitted_date).format(settings.TIME_FORMAT);
     });
     const userSubmissions = submissions.filter(function (e) {
       return req.user && e.user === req.user.username;

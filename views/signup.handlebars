@@ -26,6 +26,7 @@
 				<span class="title">Make New Account</span>
 			</div>
 			<form action="/signup" method="post">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 				<input type="text" placeholder="Username (e.g. john)" name="username" required autofocus/>
 				<input type="text" placeholder="Real Name (e.g. John Green)" name="realname" required/>
 				<input type="text" placeholder="School (if Applicable)" name="level" required/>
@@ -45,6 +46,7 @@
 		<div class="login-form">
 			<h3>Register</h3>
 			<form action="/signup" method="post">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 				<input type="text" placeholder="Username" name="username" required/>
 				<input type="text" placeholder="Real Name" name="realname" required/>
 				<input type="text" pattern=".+\/\d+" placeholder="School Batch/Year" name="level" required/>

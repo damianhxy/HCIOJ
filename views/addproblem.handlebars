@@ -2,6 +2,7 @@
 	<h2><i class="fa fa-pencil-square-o"></i>Create Problem</h2>
 	<div>
 		<form action="/addproblem" method="post">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 			<input type="text" placeholder="Problem Title" name="title" class="aptitle" required/>
 			<textarea placeholder="Problem Description" name="desc"></textarea>
 			<textarea placeholder="Problem Input" name="input" class="aphalf"></textarea>

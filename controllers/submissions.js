@@ -5,7 +5,7 @@ const submission = require("../models/submission.js");
 const problem = require("../models/problem.js");
 const settings = require("./settings.js");
 const ensureAuthenticated = require("../middlewares/auth.js");
-const moment = require("moment");
+const dayjs = require("dayjs");
 const io = global.io;
 
 function secretsMatch(a, b) {
@@ -122,7 +122,7 @@ router.post("/submit/:problem", ensureAuthenticated, async function (req, res) {
       user: req.user.username, // User name
       code: req.body.ans, // User code
       score: 0, // Total Score
-      submitted_date: moment().format(), // Submission date
+      submitted_date: dayjs().format(), // Submission date
       graded_date: "", // Grading
       runtime: 0, // Max Time
       contest: 0, // Contest
@@ -141,7 +141,7 @@ router.post("/submit/:problem", ensureAuthenticated, async function (req, res) {
       problem: req.params.problem,
       language: settings.LANGUAGES[req.body.language],
       progress: "Grading",
-      submitted_date: moment().format(),
+      submitted_date: dayjs().format(),
       graded_date: "",
       runtime: 0,
       score: 0,
@@ -160,8 +160,8 @@ router.get("/:id", async function (req, res) {
     const prob = await problem.get(sub.problem);
     sub.verdict = sub.verdict.charAt(0).toUpperCase() + sub.verdict.slice(1); // Capitalize
     sub.compile = sub.compile ? atob(sub.compile) : "";
-    if (sub.graded_date) sub.graded_date = moment(sub.graded_date).format(settings.TIME_FORMAT);
-    sub.submitted_date = moment(sub.submitted_date).format(settings.TIME_FORMAT);
+    if (sub.graded_date) sub.graded_date = dayjs(sub.graded_date).format(settings.TIME_FORMAT);
+    sub.submitted_date = dayjs(sub.submitted_date).format(settings.TIME_FORMAT);
     res.render("submission", {
       user: req.user,
       title: sub.problem,

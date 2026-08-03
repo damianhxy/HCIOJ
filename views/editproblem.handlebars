@@ -17,6 +17,7 @@
 			</div>
 			<div>
 				<form action="{{submit}}" method="post">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 					<input type="text" placeholder="Problem Title" name="title" required/>
 					<input type="text" placeholder="Problem Type (Batch, Output Only, etc.)" name="subtitle" required></input>
 					<input type="text" placeholder="Input From" name="from"></input>

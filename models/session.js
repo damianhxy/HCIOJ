@@ -1,25 +1,34 @@
-const Datastore = require("@seald-io/nedb");
-const sessions = new Datastore({ filename: "./database/sessions", autoload: true });
+"use strict";
 
-exports.add = async function (user) {
-  const session = await sessions.findOneAsync({ username: user });
-  if (session)
-    await sessions.updateAsync({ username: user }, { $set: { sessions: session.sessions + 1 } });
-  else await sessions.insertAsync({ username: user, sessions: 1 });
+const db = require("./db.js");
+
+const stmts = {
+  findOne: db.prepare("SELECT * FROM sessions WHERE username = ?"),
+  insert: db.prepare("INSERT INTO sessions (username, sessions) VALUES (?, 1)"),
+  increment: db.prepare("UPDATE sessions SET sessions = sessions + 1 WHERE username = ?"),
+  decrement: db.prepare("UPDATE sessions SET sessions = sessions - 1 WHERE username = ?"),
+  remove: db.prepare("DELETE FROM sessions WHERE username = ?"),
+  all: db.prepare("SELECT * FROM sessions"),
+  clear: db.prepare("DELETE FROM sessions"),
 };
 
-exports.remove = async function (user) {
-  const session = await sessions.findOneAsync({ username: user });
+exports.add = function (user) {
+  const session = stmts.findOne.get(user);
+  if (session) stmts.increment.run(user);
+  else stmts.insert.run(user);
+};
+
+exports.remove = function (user) {
+  const session = stmts.findOne.get(user);
   if (!session) return;
-  if (session.sessions > 1)
-    await sessions.updateAsync({ username: user }, { $set: { sessions: session.sessions - 1 } });
-  else await sessions.removeAsync({ username: user, sessions: 1 });
+  if (session.sessions > 1) stmts.decrement.run(user);
+  else stmts.remove.run(user);
 };
 
-exports.all = async function () {
-  return sessions.findAsync({});
+exports.all = function () {
+  return stmts.all.all();
 };
 
-exports.clear = async function () {
-  await sessions.removeAsync({});
+exports.clear = function () {
+  stmts.clear.run();
 };

@@ -25,6 +25,7 @@
 					</p>
 				</div>
 				<form action="/contests/{{contest.id}}/join" method="post">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 					<input type="submit" class="button" value="Begin Contest">
 				</form>
 			</div>

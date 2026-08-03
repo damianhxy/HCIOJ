@@ -1,21 +1,71 @@
-const Datastore = require("@seald-io/nedb");
-const submissions = new Datastore({ filename: "./database/submissions", autoload: true });
+"use strict";
+
 const net = require("net");
+const db = require("./db.js");
 const settings = require("../controllers/settings.js");
 const user = require("./user.js");
 const problem = require("./problem.js");
 const entry = require("./entry.js");
 
-exports.add = async function (submission) {
-  return submissions.insertAsync(submission);
+const stmts = {
+  insert: db.prepare(
+    `INSERT INTO submissions (numid, title, problem, user, code, score, compile, submitted_date, graded_date, runtime, contest, language, res, verdict, status, progress, restype, type)
+     VALUES (@numid, @title, @problem, @user, @code, @score, @compile, @submitted_date, @graded_date, @runtime, @contest, @language, @res, @verdict, @status, @progress, @restype, @type)`,
+  ),
+  all: db.prepare("SELECT * FROM submissions ORDER BY numid ASC"),
+  findById: db.prepare("SELECT * FROM submissions WHERE numid = ?"),
+  count: db.prepare("SELECT COUNT(*) AS count FROM submissions"),
+  persist: db.prepare(
+    `UPDATE submissions SET title = @title, problem = @problem, user = @user, code = @code, score = @score,
+     compile = @compile, submitted_date = @submitted_date, graded_date = @graded_date, runtime = @runtime,
+     contest = @contest, language = @language, res = @res, verdict = @verdict, status = @status,
+     progress = @progress, restype = @restype, type = @type WHERE numid = @numid`,
+  ),
 };
 
-exports.all = async function () {
-  const list = (await submissions.findAsync({})) || [];
-  list.sort(function (a, b) {
-    return a.numid - b.numid;
-  });
-  return list;
+function parseJSON(value, fallback) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function toRow(submission) {
+  return {
+    numid: submission.numid,
+    title: submission.title || "",
+    problem: submission.problem || "",
+    user: submission.user,
+    code: submission.code || "",
+    score: submission.score || 0,
+    compile: submission.compile || "",
+    submitted_date: submission.submitted_date || "",
+    graded_date: submission.graded_date || "",
+    runtime: submission.runtime || 0,
+    contest: String(submission.contest === 0 ? "0" : submission.contest || "0"),
+    language: submission.language || "",
+    res: JSON.stringify(submission.res || []),
+    verdict: submission.verdict || "",
+    status: submission.status || "",
+    progress: submission.progress || "",
+    restype: submission.restype || 0,
+    type: submission.type || 1,
+  };
+}
+
+function toSubmission(row) {
+  if (!row) return null;
+  return { ...row, res: parseJSON(row.res, []) };
+}
+
+exports.add = function (submission) {
+  stmts.insert.run(toRow(submission));
+  return submission;
+};
+
+exports.all = function () {
+  return stmts.all.all().map(toSubmission);
 };
 
 exports.dispatch = function (submission) {
@@ -42,18 +92,18 @@ exports.dispatch = function (submission) {
   });
 };
 
-exports.get = async function (id) {
-  return submissions.findOneAsync({ numid: id });
+exports.get = function (id) {
+  return toSubmission(stmts.findById.get(id));
 };
 
-exports.getID = async function () {
-  return submissions.countAsync({});
+exports.getID = function () {
+  return stmts.count.get().count;
 };
 
-exports.update = async function (response) {
-  const submission = await submissions.findOneAsync({ numid: response.subid });
+exports.update = function (response) {
+  const submission = toSubmission(stmts.findById.get(response.subid));
   if (!submission) throw new Error("Submission not found");
-  const isContest = submission.contest !== 0;
+  const isContest = submission.contest !== "0";
   if (response.totalscore) submission.score = response.totalscore; // Total Score
   if (response.maxtime) submission.runtime = response.maxtime; // Max Time
   if (response.graded_date) {
@@ -80,23 +130,20 @@ exports.update = async function (response) {
       }
     });
 
-  if (response.res_type !== 5) {
-    await submissions.updateAsync({ numid: response.subid }, { $set: submission });
-    return;
-  }
+  stmts.persist.run(toRow(submission));
+
+  if (response.res_type !== 5) return;
 
   if (!isContest) {
-    await submissions.updateAsync({ numid: response.subid }, { $set: submission });
-    const difference = await user.update(
+    const difference = user.update(
       response.user,
       response.problem,
       response.totalscore,
       response.verdict,
     );
-    await problem.update(response.problem, difference);
+    problem.update(response.problem, difference);
     return;
   }
 
-  await submissions.updateAsync({ numid: response.subid }, { $set: submission });
-  await entry.update(response.user, submission.contest, response.problem, response.totalscore);
+  entry.update(response.user, submission.contest, response.problem, response.totalscore);
 };

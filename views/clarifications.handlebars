@@ -6,6 +6,7 @@
 				<h2>Add Clarification</h2>
 			</div>
 			<form id="clarification-form" action="{{#if contest}}/contests/{{contest.id}}{{/if}}/clarifications" method="POST">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 			<div id="clarification" class="collapse">
 				<select name="problem">
 					<option value="">General</option>

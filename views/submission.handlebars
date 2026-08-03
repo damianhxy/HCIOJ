@@ -10,6 +10,7 @@
 </div>
 
 <form method="post" action="{{#if contest}}/contests/{{contest.id}}{{else}}/submissions{{/if}}/submit/{{submission.problem}}" id="submitform">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 <div class="frame">
 	<div class="bit-2 left">
 		<div class="container">
@@ -247,6 +248,7 @@
 			</div>
 		</div>
 		<form method="post" action="/submit/{{submission.title}}" id="submitform">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 			{{#if isOwner}}
 			<div class="submit-options detail" id="p-submit-options">
 				<h2 data-toggle="collapse" data-target="#compileoptions">

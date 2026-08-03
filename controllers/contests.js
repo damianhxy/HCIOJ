@@ -5,7 +5,7 @@ const problem = require("../models/problem.js");
 const contest = require("../models/contest.js");
 const clarification = require("../models/clarification.js");
 const submission = require("../models/submission.js");
-const moment = require("moment");
+const dayjs = require("dayjs");
 const settings = require("./settings.js");
 const entry = require("../models/entry.js");
 
@@ -40,7 +40,7 @@ router.get("/:id", ensureAuthenticated, async function (req, res) {
       });
     }
     const prob = await problem.getProblems(cont.problems);
-    cont.end = moment(cont.end).format();
+    cont.end = dayjs(cont.end).format();
     res.render("contest", {
       user: req.user,
       title: cont.title,
@@ -61,8 +61,8 @@ router.post("/:id/join", ensureAuthenticated, async function (req, res) {
     await entry.add({
       username: req.user.username,
       contest: req.params.id,
-      start: moment().format(),
-      end: moment().add(cont.time, "m").format(),
+      start: dayjs().format(),
+      end: dayjs().add(cont.time, "m").format(),
       total: "0",
     });
     res.redirect("/contests/" + cont.id);
@@ -129,8 +129,8 @@ router.post("/:id/submit/:prob", ensureAuthenticated, async function (req, res) 
       code: req.body.code, // User code
       score: 0, // Total Score
       compile: "", // Time taken to compile / error message
-      submitted_date: moment().format(), // Submission
-      graded_date: moment(0).format(), // Grading
+      submitted_date: dayjs().format(), // Submission
+      graded_date: dayjs(0).format(), // Grading
       runtime: 0, // Max Time
       contest: req.params.id, // Contest
       language: req.body.language, // Language

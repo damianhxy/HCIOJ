@@ -2,6 +2,7 @@
 	<h2><i class="fa fa-calendar"></i>Create Contest</h2>
 	<div>
 		<form action="/addcontest" method="post">
+		<input type="hidden" name="_csrf" value="{{csrfToken}}" />
 			<input type="text" placeholder="Contest Title" name="title" class="aptitle" required/>
 			<textarea placeholder="Contest Description" name="desc"></textarea>
 			<input type="text" placeholder="Start Time: YYYY-MM-DD HH:MM(:SS)" name="start" class="" required/>

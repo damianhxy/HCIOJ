@@ -1,22 +1,48 @@
-const Datastore = require("@seald-io/nedb");
-const clarifications = new Datastore({ filename: "./database/clarifications", autoload: true });
+"use strict";
 
-exports.add = async function (clarification) {
-  return clarifications.insertAsync(clarification);
+const db = require("./db.js");
+
+const stmts = {
+  insert: db.prepare(
+    "INSERT INTO clarifications (problem, author, query, answer, contest) VALUES (?, ?, ?, ?, ?)",
+  ),
+  all: db.prepare("SELECT * FROM clarifications"),
+  count: db.prepare("SELECT COUNT(*) AS count FROM clarifications"),
+  findByContest: db.prepare("SELECT * FROM clarifications WHERE contest = ?"),
+  update: db.prepare(
+    "UPDATE clarifications SET problem = ?, author = ?, query = ?, answer = ?, contest = ? WHERE id = ?",
+  ),
 };
 
-exports.all = async function () {
-  return (await clarifications.findAsync({})) || [];
+exports.add = function (clarification) {
+  return stmts.insert.run(
+    clarification.problem || "",
+    clarification.author || "",
+    clarification.query || "",
+    clarification.answer || "",
+    String(clarification.contest || "0"),
+  );
 };
 
-exports.getID = async function () {
-  return clarifications.countAsync({});
+exports.all = function () {
+  return stmts.all.all();
 };
 
-exports.edit = async function (id, newClarification) {
-  return clarifications.updateAsync({ id: id }, { $set: newClarification });
+exports.getID = function () {
+  return stmts.count.get().count;
 };
 
-exports.getClars = async function (contest) {
-  return clarifications.findAsync({ contest: contest });
+exports.edit = function (id, newClarification) {
+  return stmts.update.run(
+    newClarification.problem || "",
+    newClarification.author || "",
+    newClarification.query || "",
+    newClarification.answer || "",
+    String(newClarification.contest || "0"),
+    id,
+  );
+};
+
+exports.getClars = function (contest) {
+  return stmts.findByContest.all(String(contest || "0"));
 };

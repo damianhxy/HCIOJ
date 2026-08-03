@@ -1,4 +1,6 @@
 const bodyParser = require("body-parser");
+const rateLimit = require("express-rate-limit");
+const { csrfSync } = require("csrf-sync");
 const user = require("../models/user.js");
 const session = require("../models/session.js");
 const morgan = require("morgan");
@@ -32,7 +34,7 @@ module.exports = function (app, express) {
   require("console-stamp")(console);
 
   morgan.token("time", function () {
-    return require("moment")().format(settings.LOG_TIME_FORMAT);
+    return require("dayjs")().format(settings.LOG_TIME_FORMAT);
   });
   app.use(
     morgan("[:time] :method :url :status :res[content-length] - :remote-addr - :response-time ms"),
@@ -50,6 +52,38 @@ module.exports = function (app, express) {
   app.use(expresssession);
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Rate limiting on auth routes
+  const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: "Too many authentication attempts, please try again later.",
+  });
+  app.use("/signin", authLimiter);
+  app.use("/signup", authLimiter);
+
+  // CSRF protection
+  const csrfProtection = csrfSync({
+    getTokenFromRequest: function (req) {
+      return (
+        (req.body && req.body._csrf) ||
+        (req.query && req.query._csrf) ||
+        req.headers["x-csrf-token"]
+      );
+    },
+  });
+  app.use(function (req, res, next) {
+    if (req.method === "POST" && req.path === "/submissions/api") {
+      return next();
+    }
+    return csrfProtection.csrfSynchronisedProtection(req, res, next);
+  });
+  app.use(function (req, res, next) {
+    res.locals.csrfToken = csrfProtection.generateToken(req);
+    next();
+  });
 
   // Strategies
   passport.use(
@@ -88,7 +122,7 @@ module.exports = function (app, express) {
 
   // Serialization
   passport.serializeUser(function (user, done) {
-    done(null, user._id);
+    done(null, user.id);
   });
 
   passport.deserializeUser(async function (id, done) {
