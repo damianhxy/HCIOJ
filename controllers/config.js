@@ -54,41 +54,35 @@ module.exports = function (app, express) {
   // Strategies
   passport.use(
     "local-signin",
-    new localStrategy({ passReqToCallback: true }, function (req, username, password, done) {
-      return user
-        .authenticate(username, password)
-        .then(function (user) {
-          console.info("Signed in " + user.username);
-          req.session.success = "Welcome back, " + user.username;
-          session.add(user.username).then(function () {
-            done(null, user);
-          });
-        })
-        .fail(function (err) {
-          console.error(err.stack);
-          req.session.error = err.message;
-          done(null, false);
-        });
+    new localStrategy({ passReqToCallback: true }, async function (req, username, password, done) {
+      try {
+        const found = await user.authenticate(username, password);
+        console.info("Signed in " + found.username);
+        req.session.success = "Welcome back, " + found.username;
+        await session.add(found.username);
+        done(null, found);
+      } catch (err) {
+        console.error(err.stack);
+        req.session.error = err.message;
+        done(null, false);
+      }
     }),
   );
 
   passport.use(
     "local-signup",
-    new localStrategy({ passReqToCallback: true }, function (req, username, password, done) {
-      return user
-        .create(req, username, password)
-        .then(function (user) {
-          console.info("Signed up " + user.username);
-          req.session.success = "Welcome, " + user.username;
-          session.add(user.username).then(function () {
-            done(null, user);
-          });
-        })
-        .fail(function (err) {
-          console.error(err.stack);
-          req.session.error = err.message;
-          done(null, false);
-        });
+    new localStrategy({ passReqToCallback: true }, async function (req, username, password, done) {
+      try {
+        const created = await user.create(req, username, password);
+        console.info("Signed up " + created.username);
+        req.session.success = "Welcome, " + created.username;
+        await session.add(created.username);
+        done(null, created);
+      } catch (err) {
+        console.error(err.stack);
+        req.session.error = err.message;
+        done(null, false);
+      }
     }),
   );
 
@@ -97,15 +91,13 @@ module.exports = function (app, express) {
     done(null, user._id);
   });
 
-  passport.deserializeUser(function (id, done) {
-    user
-      .get(id)
-      .then(function (user) {
-        done(null, user);
-      })
-      .fail(function (err) {
-        done(err, false);
-      });
+  passport.deserializeUser(async function (id, done) {
+    try {
+      const found = await user.get(id);
+      done(null, found);
+    } catch (err) {
+      done(err, false);
+    }
   });
 
   // Settings

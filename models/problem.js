@@ -1,71 +1,25 @@
-const Q = require("q");
 const Datastore = require("@seald-io/nedb");
 const problems = new Datastore({ filename: "./database/problems", autoload: true });
 
-exports.add = function (problemObject) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(problems, "insert", problemObject)
-      .then(function (problem) {
-        resolve(problem);
-      })
-      .fail(function () {
-        reject(Error("Failed to add problem"));
-      });
-  });
+exports.add = async function (problemObject) {
+  return problems.insertAsync(problemObject);
 };
 
-exports.all = function () {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(problems, "find", {})
-      .then(function (list) {
-        resolve(list);
-      })
-      .fail(function () {
-        reject(Error("Failed to get list of problems"));
-      });
-  });
+exports.all = async function () {
+  return problems.findAsync({});
 };
 
-exports.get = function (name) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(problems, "findOne", { title: name })
-      .then(function (problem) {
-        resolve(problem);
-      })
-      .fail(function () {
-        reject(Error("Failed to get problem"));
-      });
-  });
-};
-/* Return a list of problem info, based on the names in the array */
-exports.getProblems = function (array) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(problems, "find", { title: { $in: array } })
-      .then(function (list) {
-        resolve(list);
-      })
-      .fail(function () {
-        reject(Error("Failed to get problems"));
-      });
-  });
+exports.get = async function (name) {
+  return problems.findOneAsync({ title: name });
 };
 
-exports.update = function (name, amt) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(problems, "findOne", { title: name })
-      .then(function (problem) {
-        return Q.ninvoke(
-          problems,
-          "update",
-          { title: name },
-          { $set: { awarded: (problem.awarded || 0) + amt } },
-        );
-      })
-      .then(function () {
-        resolve("Problem updated.");
-      })
-      .fail(function () {
-        reject(Error("Failed to update problem"));
-      });
-  });
+exports.getProblems = async function (array) {
+  return problems.findAsync({ title: { $in: array } });
+};
+
+exports.update = async function (name, amt) {
+  const problem = await problems.findOneAsync({ title: name });
+  if (!problem) throw new Error("Problem not found");
+  await problems.updateAsync({ title: name }, { $set: { awarded: (problem.awarded || 0) + amt } });
+  return "Problem updated.";
 };

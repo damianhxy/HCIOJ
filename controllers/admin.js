@@ -34,207 +34,169 @@ router.get("/problems", function (req, res) {
   });
 });
 
-router.get("/problems/new", function (req, res) {
-  res
-    .render("editproblem", {
+router.get("/problems/new", async function (req, res) {
+  try {
+    res.render("editproblem", {
       user: req.user,
       title: "Editing Problems",
       subtitle: "Admin",
       submit: "/admin/addproblem",
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/admin/problems");
     });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/admin/problems");
+  }
 });
 
-router.get("/problems/:id", function (req, res) {
-  problem
-    .get(req.params.id)
-    .then(function (prob) {
-      res.render("editproblem", {
-        user: req.user,
-        title: "Editing Problems",
-        subtitle: "Admin",
-        problem: prob,
-        submit: "/admin/editproblem",
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/admin/problems");
+router.get("/problems/:id", async function (req, res) {
+  try {
+    const prob = await problem.get(req.params.id);
+    res.render("editproblem", {
+      user: req.user,
+      title: "Editing Problems",
+      subtitle: "Admin",
+      problem: prob,
+      submit: "/admin/editproblem",
     });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/admin/problems");
+  }
 });
 
-router.post("/addproblem", function (req, res) {
-  problem
-    .add({
-      /*id: numid.toString(),
-			title: req.body.title,
-			desc: req.body.desc,
-			start: req.body.start,
-			end: req.body.end,
-			indi: req.body.indi === "on",
-			time: parseInt(req.body.time),
-			problems: req.body.problems.split(","),
-			hidden: req.body.hidden === "on",
-            scoreboard: req.body.scoreboard === "on",
-			url: "/contests/" + numid*/
+router.post("/addproblem", async function (req, res) {
+  try {
+    await problem.add({
       title: req.body.title,
       subtitle: req.body.subtitle,
-    })
-    .then(function () {
-      req.session.success = "Problem Added Successfully";
-      res.redirect("/admin/problems");
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered while processing your request";
-      res.redirect("/admin/problems");
     });
+    req.session.success = "Problem Added Successfully";
+    res.redirect("/admin/problems");
+  } catch {
+    req.session.error = "An error was encountered while processing your request";
+    res.redirect("/admin/problems");
+  }
 });
 
-router.post("/editproblem", function (req, res) {
-  contest
-    .get(req.body.id)
-    .then(function (cont) {
-      if (!("problems" in req.body)) req.body.problems = "";
-      return contest.edit(cont.id, {
-        title: req.body.title,
-        desc: req.body.desc,
-        start: req.body.start,
-        end: req.body.end,
-        indi: req.body.indi === "on",
-        time: parseFloat(req.body.time),
-        problems: req.body.problems.split(","),
-        hidden: req.body.hidden === "on",
-      });
-    })
-    .then(function () {
-      req.session.success = "Contest Edited Successfully";
-      res.redirect("/admin/contests");
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered while processing your request";
-      res.redirect("/admin/contests");
+router.post("/editproblem", async function (req, res) {
+  try {
+    const cont = await contest.get(req.body.id);
+    if (!("problems" in req.body)) req.body.problems = "";
+    await contest.edit(cont.id, {
+      title: req.body.title,
+      desc: req.body.desc,
+      start: req.body.start,
+      end: req.body.end,
+      indi: req.body.indi === "on",
+      time: parseFloat(req.body.time),
+      problems: req.body.problems.split(","),
+      hidden: req.body.hidden === "on",
     });
+    req.session.success = "Contest Edited Successfully";
+    res.redirect("/admin/contests");
+  } catch {
+    req.session.error = "An error was encountered while processing your request";
+    res.redirect("/admin/contests");
+  }
 });
 
 // Edit Contests
 
-router.get("/contests", function (req, res) {
-  problem
-    .all()
-    .then(function (problems) {
-      // this should show a list of contests and links to new or edit contest
-      res.render("editcontest", {
-        user: req.user,
-        title: "Editing Contests",
-        subtitle: "Admin",
-        problems: problems,
-        submit: "/admin/addcontest",
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+router.get("/contests", async function (req, res) {
+  try {
+    const problems = await problem.all();
+    res.render("editcontest", {
+      user: req.user,
+      title: "Editing Contests",
+      subtitle: "Admin",
+      problems: problems,
+      submit: "/admin/addcontest",
     });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
-router.get("/contests/new", function (req, res) {
-  problem
-    .all()
-    .then(function (problems) {
-      res.render("editcontest", {
-        user: req.user,
-        title: "Editing Contests",
-        subtitle: "Admin",
-        problems: problems,
-        submit: "/admin/addcontest",
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+router.get("/contests/new", async function (req, res) {
+  try {
+    const problems = await problem.all();
+    res.render("editcontest", {
+      user: req.user,
+      title: "Editing Contests",
+      subtitle: "Admin",
+      problems: problems,
+      submit: "/admin/addcontest",
     });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
-router.get("/contests/:id", function (req, res) {
-  const scope = {};
-  contest
-    .get(req.params.id)
-    .then(function (cont) {
-      scope.cont = cont;
-      return problem.all();
-    })
-    .then(function (problems) {
-      res.render("editcontest", {
-        user: req.user,
-        title: "Editing Contests",
-        subtitle: "Admin",
-        problems: problems,
-        contest: scope.cont,
-        submit: "/admin/editcontest",
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+router.get("/contests/:id", async function (req, res) {
+  try {
+    const cont = await contest.get(req.params.id);
+    const problems = await problem.all();
+    res.render("editcontest", {
+      user: req.user,
+      title: "Editing Contests",
+      subtitle: "Admin",
+      problems: problems,
+      contest: cont,
+      submit: "/admin/editcontest",
     });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
-router.post("/addcontest", function (req, res) {
-  contest
-    .getID()
-    .then(function (numid) {
-      if (!("problems" in req.body)) req.body.problems = "";
-      return contest.add({
-        id: numid.toString(),
-        title: req.body.title,
-        desc: req.body.desc,
-        start: req.body.start,
-        end: req.body.end,
-        indi: req.body.indi === "on",
-        time: parseInt(req.body.time),
-        problems: req.body.problems.split(","),
-        hidden: req.body.hidden === "on",
-        scoreboard: req.body.scoreboard === "on",
-        url: "/contests/" + numid,
-      });
-    })
-    .then(function () {
-      req.session.success = "Contest Added Successfully";
-      res.redirect("/admin/contests");
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered while processing your request";
-      res.redirect("/admin/contests");
+router.post("/addcontest", async function (req, res) {
+  try {
+    const numid = await contest.getID();
+    if (!("problems" in req.body)) req.body.problems = "";
+    await contest.add({
+      id: numid.toString(),
+      title: req.body.title,
+      desc: req.body.desc,
+      start: req.body.start,
+      end: req.body.end,
+      indi: req.body.indi === "on",
+      time: parseInt(req.body.time),
+      problems: req.body.problems.split(","),
+      hidden: req.body.hidden === "on",
+      scoreboard: req.body.scoreboard === "on",
+      url: "/contests/" + numid,
     });
+    req.session.success = "Contest Added Successfully";
+    res.redirect("/admin/contests");
+  } catch {
+    req.session.error = "An error was encountered while processing your request";
+    res.redirect("/admin/contests");
+  }
 });
 
-router.post("/editcontest", function (req, res) {
-  contest
-    .get(req.body.id)
-    .then(function (cont) {
-      if (!("problems" in req.body)) req.body.problems = "";
-      return contest.edit(cont.id, {
-        title: req.body.title,
-        desc: req.body.desc,
-        start: req.body.start,
-        end: req.body.end,
-        indi: req.body.indi === "on",
-        time: parseFloat(req.body.time),
-        problems: req.body.problems.split(","),
-        hidden: req.body.hidden === "on",
-      });
-    })
-    .then(function () {
-      req.session.success = "Contest Edited Successfully";
-      res.redirect("/admin/contests");
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered while processing your request";
-      res.redirect("/admin/contests");
+router.post("/editcontest", async function (req, res) {
+  try {
+    const cont = await contest.get(req.body.id);
+    if (!("problems" in req.body)) req.body.problems = "";
+    await contest.edit(cont.id, {
+      title: req.body.title,
+      desc: req.body.desc,
+      start: req.body.start,
+      end: req.body.end,
+      indi: req.body.indi === "on",
+      time: parseFloat(req.body.time),
+      problems: req.body.problems.split(","),
+      hidden: req.body.hidden === "on",
     });
+    req.session.success = "Contest Edited Successfully";
+    res.redirect("/admin/contests");
+  } catch {
+    req.session.error = "An error was encountered while processing your request";
+    res.redirect("/admin/contests");
+  }
 });
 
 module.exports = router;

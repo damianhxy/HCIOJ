@@ -5,119 +5,96 @@ const submission = require("../models/submission.js");
 const settings = require("./settings.js");
 const moment = require("moment");
 
-router.get("/", function (req, res) {
-  problem
-    .all()
-    .then(function (problems) {
-      res.render("problems", {
-        user: req.user,
-        title: "Problems",
-        subtitle: "so many",
-        problems: problems,
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+router.get("/", async function (req, res) {
+  try {
+    const problems = await problem.all();
+    res.render("problems", {
+      user: req.user,
+      title: "Problems",
+      subtitle: "so many",
+      problems: problems,
     });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
-/*
-router.get("/add", ensureAdmin, function(req, res) {
-    res.render("addproblem", {
-        user: req.user,
-        title: "Add a problem",
-        subtitle: "for admins only"
+router.get("/latest", async function (req, res) {
+  try {
+    const problems = await problem.all();
+    problems.sort(function (a, b) {
+      if (a.added > b.added) return -1;
+      return 1;
     });
+    res.render("problems", {
+      user: req.user,
+      title: "Problems",
+      subtitle: "sorted by added time",
+      problems: problems,
+    });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
-router.post("/add", ensureAdmin, function(req, res) {
-    res.status(400).send("Not Implemented");
-});
-*/
-
-router.get("/latest", function (req, res) {
-  problem
-    .all()
-    .then(function (problems) {
-      problems.sort(function (a, b) {
-        if (a.added > b.added) return -1;
-        return 1;
-      });
-      res.render("problems", {
-        user: req.user,
-        title: "Problems",
-        subtitle: "sorted by added time",
-        problems: problems,
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+router.get("/search", async function (req, res) {
+  try {
+    const all = await problem.all();
+    const tag = req.query.query.toLowerCase();
+    const problems = all.filter(function (e) {
+      if (~e.title.indexOf(tag) || ~e.subtitle.toLowerCase().indexOf(tag)) return true;
+      if (e.tags)
+        return e.tags.some(function (f) {
+          return ~f.toLowerCase().indexOf(tag);
+        });
+      return false;
     });
+    res.render("problems", {
+      user: req.user,
+      title: "Problems",
+      subtitle: "search results",
+      problems: problems,
+    });
+  } catch {
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
-router.get("/search", function (req, res) {
-  problem
-    .all()
-    .then(function (problems) {
-      const tag = req.query.query.toLowerCase();
-      problems = problems.filter(function (e) {
-        if (~e.title.indexOf(tag) || ~e.subtitle.toLowerCase().indexOf(tag)) return true;
-        if (e.tags)
-          return e.tags.some(function (f) {
-            return ~f.toLowerCase().indexOf(tag);
-          });
-        return false;
-      });
-      res.render("problems", {
-        user: req.user,
-        title: "Problems",
-        subtitle: "search results",
-        problems: problems,
-      });
-    })
-    .fail(function () {
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+router.get("/:problem", async function (req, res) {
+  try {
+    const info = await problem.get(req.params.problem);
+    const all = await submission.all();
+    const submissions = all.filter(function (e) {
+      return e.problem === info.title;
     });
-});
-
-router.get("/:problem", function (req, res) {
-  problem
-    .get(req.params.problem)
-    .then(function (info) {
-      submission.all().then(function (submissions) {
-        submissions = submissions.filter(function (e) {
-          return e.problem === info.title;
-        });
-        submissions.sort(function (a, b) {
-          return b.numid - a.numid;
-        });
-        submissions.forEach(function (e) {
-          e.language = settings.LANGUAGES[e.language];
-          e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
-          e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
-        });
-        const userSubmissions = submissions.filter(function (e) {
-          return req.user && e.user === req.user.username;
-        });
-        res.render("problem", {
-          user: req.user,
-          problem: info,
-          title: info.title,
-          subtitle: info.subtitle,
-          submissions: submissions,
-          userSubmissions: userSubmissions,
-          noCompileOptions: info.subtitle === "Output Only",
-        });
-      });
-    })
-    .fail(function (err) {
-      console.log(err);
-      req.session.error = "An error was encountered";
-      res.redirect(req.headers.referer || "/");
+    submissions.sort(function (a, b) {
+      return b.numid - a.numid;
     });
+    submissions.forEach(function (e) {
+      e.language = settings.LANGUAGES[e.language];
+      e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
+      e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+    });
+    const userSubmissions = submissions.filter(function (e) {
+      return req.user && e.user === req.user.username;
+    });
+    res.render("problem", {
+      user: req.user,
+      problem: info,
+      title: info.title,
+      subtitle: info.subtitle,
+      submissions: submissions,
+      userSubmissions: userSubmissions,
+      noCompileOptions: info.subtitle === "Output Only",
+    });
+  } catch (err) {
+    console.log(err);
+    req.session.error = "An error was encountered";
+    res.redirect(req.headers.referer || "/");
+  }
 });
 
 module.exports = router;

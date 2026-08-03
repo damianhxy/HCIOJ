@@ -1,120 +1,68 @@
 const bcryptjs = require("bcryptjs");
-const Q = require("q");
 const defaultAvatar =
   "https://s-media-cache-ak0.pinimg.com/236x/46/fa/7a/46fa7a12ed84713abfa2356a357650d1.jpg";
 const Datastore = require("@seald-io/nedb");
 const users = new Datastore({ filename: "./database/users", autoload: true });
 
-exports.all = function () {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(users, "find", {})
-      .then(function (list) {
-        resolve(list);
-      })
-      .fail(function () {
-        reject(Error("Failed to get user list"));
-      });
-  });
+exports.all = async function () {
+  return users.findAsync({});
 };
 
-exports.authenticate = function (username, password) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(users, "findOne", { username: username })
-      .then(function (user) {
-        if (!user) return reject(Error("Invalid username or password"));
-        Q.ninvoke(bcryptjs, "compare", password, user.password).then(function (flag) {
-          if (flag) return resolve(user);
-          return reject(Error("Invalid username or password"));
-        });
-      })
-      .fail(function () {
-        reject(Error("Authentication failed"));
-      });
-  });
+exports.authenticate = async function (username, password) {
+  const user = await users.findOneAsync({ username: username });
+  if (!user) throw new Error("Invalid username or password");
+  const flag = await bcryptjs.compare(password, user.password);
+  if (!flag) throw new Error("Invalid username or password");
+  return user;
 };
 
-exports.create = function (req, username, password) {
-  return Q.promise(function (resolve, reject) {
-    username = username.toLowerCase();
-    if (!/^[a-zA-Z0-9_]{3,20}$/.test(username))
-      return reject(
-        Error(
-          "Username must be 3-20 characters and contain only letters, numbers, and underscores",
-        ),
-      );
-    if (password !== req.body.password2) return reject("Passwords Mismatch");
-    Q.ninvoke(users, "count", { username: username })
-      .then(function (count) {
-        if (count) return reject(Error("Username in use: " + username));
-        return Q.ninvoke(bcryptjs, "hash", password, 10);
-      })
-      .then(function (password) {
-        const user = {
-          username: username,
-          realname: req.body.realname,
-          password: password,
-          email: req.body.email,
-          level: req.body.level,
-          admin: false,
-          disabled: false,
-          avatar: defaultAvatar,
-          awarded: {},
-          accepted: [],
-          partial: [],
-          failed: [],
-          score: 0,
-        };
-        return Q.ninvoke(users, "insert", user);
-      })
-      .then(function (user) {
-        resolve(user);
-      })
-      .fail(function (err) {
-        console.error(err);
-        reject(Error("User creation failed"));
-      });
-  });
+exports.create = async function (req, username, password) {
+  username = username.toLowerCase();
+  if (!/^[a-zA-Z0-9_]{3,20}$/.test(username))
+    throw new Error(
+      "Username must be 3-20 characters and contain only letters, numbers, and underscores",
+    );
+  if (password !== req.body.password2) throw new Error("Passwords Mismatch");
+  const count = await users.countAsync({ username: username });
+  if (count) throw new Error("Username in use: " + username);
+  const hash = await bcryptjs.hash(password, 10);
+  const user = {
+    username: username,
+    realname: req.body.realname,
+    password: hash,
+    email: req.body.email,
+    level: req.body.level,
+    admin: false,
+    disabled: false,
+    avatar: defaultAvatar,
+    awarded: {},
+    accepted: [],
+    partial: [],
+    failed: [],
+    score: 0,
+  };
+  return users.insertAsync(user);
 };
 
-exports.get = function (id) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(users, "findOne", { _id: id })
-      .then(function (result) {
-        resolve(result);
-      })
-      .fail(function () {
-        reject(Error("Failed to get user information"));
-      });
-  });
+exports.get = async function (id) {
+  return users.findOneAsync({ _id: id });
 };
 
-exports.update = function (name, problem, score, verdict) {
-  return Q.promise(function (resolve, reject) {
-    Q.ninvoke(users, "findOne", { username: name })
-      .then(function (user) {
-        if (!user) return reject(Error("User not found"));
-        if ((user.awarded[problem] || 0) >= score) return resolve(0);
-        let currentVerdict = null;
-        ["accepted", "partial", "failed"].forEach(function (e) {
-          if (~user[e].indexOf(problem)) currentVerdict = e;
-        });
-        if (currentVerdict !== verdict) {
-          if (currentVerdict) user[currentVerdict].splice(user[currentVerdict].indexOf(problem), 1);
-          user[verdict].push(problem);
-        }
-        const difference = score - (user.awarded[problem] || 0);
-        user.awarded[problem] = score;
-        user.score += difference;
-        Q.ninvoke(users, "update", { username: name }, { $set: user })
-          .then(function () {
-            resolve(difference);
-          })
-          .fail(function () {
-            reject(Error("Failed to update user score"));
-          });
-      })
-      .fail(function () {
-        reject(Error("User update failed"));
-      });
+exports.update = async function (name, problem, score, verdict) {
+  const user = await users.findOneAsync({ username: name });
+  if (!user) throw new Error("User not found");
+  if ((user.awarded[problem] || 0) >= score) return 0;
+  let currentVerdict = null;
+  ["accepted", "partial", "failed"].forEach(function (e) {
+    if (~user[e].indexOf(problem)) currentVerdict = e;
   });
+  if (currentVerdict !== verdict) {
+    if (currentVerdict) user[currentVerdict].splice(user[currentVerdict].indexOf(problem), 1);
+    user[verdict].push(problem);
+  }
+  const difference = score - (user.awarded[problem] || 0);
+  user.awarded[problem] = score;
+  user.score += difference;
+  await users.updateAsync({ username: name }, { $set: user });
+  return difference;
 };

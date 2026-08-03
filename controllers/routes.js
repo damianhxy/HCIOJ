@@ -29,67 +29,53 @@ router.use("/contests", require("./contests.js"));
 /* Admin */
 router.use("/admin", require("./admin.js"));
 
-router.get("/", function (req, res, next) {
-  if (req.user)
-    contest
-      .all()
-      .then(function (contests) {
-        submission.all().then(function (submissions) {
-          session.all().then(function (users) {
-            submissions.sort(function (a, b) {
-              return b.numid - a.numid;
-            });
-            submissions = submissions.slice(0, 10) || [];
-            const userSubmissions = submissions.filter(function (e) {
-              return e.user === req.user.username;
-            });
-            submissions.forEach(function (e) {
-              e.language = settings.LANGUAGES[e.language];
-              e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
-              e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
-            });
-            res.render("homepage", {
-              user: req.user,
-              title: "Home",
-              subtitle: "an overview",
-              events: contests,
-              submissions: submissions,
-              userSubmissions: userSubmissions,
-              onlineUsers: users,
-            });
-          });
-        });
-      })
-      .fail(function (err) {
-        next(err);
+router.get("/", async function (req, res, next) {
+  if (req.user) {
+    try {
+      const contests = await contest.all();
+      const submissions = await submission.all();
+      const users = await session.all();
+      submissions.sort(function (a, b) {
+        return b.numid - a.numid;
       });
-  else res.render("landing");
+      const latest = submissions.slice(0, 10) || [];
+      const userSubmissions = latest.filter(function (e) {
+        return e.user === req.user.username;
+      });
+      latest.forEach(function (e) {
+        e.language = settings.LANGUAGES[e.language];
+        e.graded_date = moment(e.graded_date).format(settings.TIME_FORMAT);
+        e.submitted_date = moment(e.submitted_date).format(settings.TIME_FORMAT);
+      });
+      res.render("homepage", {
+        user: req.user,
+        title: "Home",
+        subtitle: "an overview",
+        events: contests,
+        submissions: latest,
+        userSubmissions: userSubmissions,
+        onlineUsers: users,
+      });
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    res.render("landing");
+  }
 });
 
-router.get("/logout", ensureAuthenticated, function (req, res) {
-  session
-    .remove(req.user.username)
-    .then(function () {
-      console.log("Logged " + req.user.username + " out");
-      req.logout();
-      res.redirect("/");
-    })
-    .fail(function () {
-      console.log("Failed to log " + req.user.username + " out");
-      req.session.error = "An error was encountered while processing your request";
-      res.redirect(req.headers.referer || "/");
-    });
+router.get("/logout", ensureAuthenticated, async function (req, res) {
+  try {
+    await session.remove(req.user.username);
+    console.log("Logged " + req.user.username + " out");
+    req.logout();
+    res.redirect("/");
+  } catch {
+    console.log("Failed to log " + req.user.username + " out");
+    req.session.error = "An error was encountered while processing your request";
+    res.redirect(req.headers.referer || "/");
+  }
 });
-
-// // For testing handlebars pages
-// router.get("/test", function(req, res){
-//     // io.emit();
-//     res.render("404", {
-//         user: req.user,
-//         title: "Hey",
-//         subtitle: "an overview"
-//     })
-// });
 
 router.get("/signin", function (req, res) {
   if (req.user) {

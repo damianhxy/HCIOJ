@@ -10,23 +10,22 @@ const http = require("http");
 require("./controllers/config.js")(app, express);
 app.use(require("./controllers/routes.js"));
 
-// Port
-session
-  .clear()
-  .then(function () {
-    const http_server = http.createServer(app).listen(settings.PORT, settings.IP);
-    console.log(
-      "HTTP Listening on port " +
-        settings.PORT +
-        " @ " +
-        settings.IP +
-        " in " +
-        app.get("env") +
-        " mode.",
-    );
-    app.io.attach(http_server);
-  })
-  .fail(function () {
-    console.log("Failed to clear sessions.");
-    process.exit(1);
-  });
+async function start() {
+  await session.clear();
+  const http_server = http.createServer(app).listen(settings.PORT, settings.IP);
+  console.log(
+    "HTTP Listening on port " +
+      settings.PORT +
+      " @ " +
+      settings.IP +
+      " in " +
+      app.get("env") +
+      " mode.",
+  );
+  app.io.attach(http_server);
+}
+
+start().catch(function () {
+  console.log("Failed to clear sessions.");
+  process.exit(1);
+});
