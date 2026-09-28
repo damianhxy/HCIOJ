@@ -9,6 +9,11 @@ const http = require("http");
 
 require("./controllers/config.js")(app, express);
 app.use(require("./controllers/routes.js"));
+app.use(function (err, req, res, _next) {
+  console.error(err.stack);
+  if (err.code === "EBADCSRFTOKEN") return res.status(403).send("Invalid CSRF token");
+  res.status(500).send("Internal Server Error");
+});
 
 async function start() {
   await session.clear();
