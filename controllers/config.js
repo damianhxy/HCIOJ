@@ -60,6 +60,9 @@ module.exports = function (app, express) {
     standardHeaders: true,
     legacyHeaders: false,
     message: "Too many authentication attempts, please try again later.",
+    skip: function (req) {
+      return req.method !== "POST"; // viewing the forms is not an attempt
+    },
   });
   app.use("/signin", authLimiter);
   app.use("/signup", authLimiter);
