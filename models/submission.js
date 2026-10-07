@@ -125,15 +125,16 @@ exports.update = function (response) {
     // Update Testcase
     submission.res.some(function (e, i) {
       if (e.num === response.tc.subtask) {
-        delete response.tc.subtask;
-        if (e.tcs) return submission.res[i].tcs.push(response.tc);
-        else return (submission.res[i].tcs = [response.tc]);
+        const testCase = { ...response.tc };
+        delete testCase.subtask;
+        if (e.tcs) return submission.res[i].tcs.push(testCase);
+        else return (submission.res[i].tcs = [testCase]);
       }
     });
 
   stmts.persist.run(toRow(submission));
 
-  if (response.restype !== 5) return;
+  if (response.restype !== 5) return response;
 
   // The grader identifies the submission only by subid; score it for the stored owner/problem.
   const problemName = submission.problem || submission.title;
@@ -146,8 +147,9 @@ exports.update = function (response) {
       response.verdict,
     );
     problem.update(problemName, difference);
-    return;
+    return response;
   }
 
   entry.update(submission.user, submission.contest, problemName, response.totalscore);
+  return response;
 };
