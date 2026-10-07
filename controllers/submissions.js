@@ -120,7 +120,7 @@ router.post("/submit/:problem", ensureAuthenticated, async function (req, res) {
       numid: id + 1, // Problem ID
       problem: req.params.problem, // Problem Title
       user: req.user.username, // User name
-      code: req.body.ans, // User code
+      code: typeof req.body.code === "string" ? req.body.code : req.body.ans, // User code ("ans" for problems with files)
       score: 0, // Total Score
       submitted_date: dayjs().format(), // Submission date
       graded_date: "", // Grading
