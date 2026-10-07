@@ -46,8 +46,9 @@ module.exports = function (app, express) {
   app.use(bodyParser.json());
   const expresssession = expressSession({
     secret: settings.SECRET,
-    saveUninitialized: true,
-    resave: true,
+    saveUninitialized: false,
+    resave: false,
+    cookie: { httpOnly: true, sameSite: "lax" },
   });
   app.use(expresssession);
   app.use(passport.initialize());
@@ -81,6 +82,7 @@ module.exports = function (app, express) {
     return csrfProtection.csrfSynchronisedProtection(req, res, next);
   });
   app.use(function (req, res, next) {
+    if (req.method === "POST" && req.path === "/submissions/api") return next();
     res.locals.csrfToken = csrfProtection.generateToken(req);
     next();
   });

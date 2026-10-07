@@ -104,6 +104,7 @@ exports.update = function (response) {
   const submission = toSubmission(stmts.findById.get(response.subid));
   if (!submission) throw new Error("Submission not found");
   const isContest = submission.contest !== "0";
+  if (Number.isInteger(response.restype)) submission.restype = response.restype;
   if (response.totalscore) submission.score = response.totalscore; // Total Score
   if (response.maxtime) submission.runtime = response.maxtime; // Max Time
   if (response.graded_date) {
@@ -124,26 +125,31 @@ exports.update = function (response) {
     // Update Testcase
     submission.res.some(function (e, i) {
       if (e.num === response.tc.subtask) {
-        delete response.tc.subtask;
-        if (e.tcs) return submission.res[i].tcs.push(response.tc);
-        else return (submission.res[i].tcs = [response.tc]);
+        const testCase = { ...response.tc };
+        delete testCase.subtask;
+        if (e.tcs) return submission.res[i].tcs.push(testCase);
+        else return (submission.res[i].tcs = [testCase]);
       }
     });
 
   stmts.persist.run(toRow(submission));
 
-  if (response.res_type !== 5) return;
+  if (response.restype !== 5) return response;
+
+  // The grader identifies the submission only by subid; score it for the stored owner/problem.
+  const problemName = submission.problem || submission.title;
 
   if (!isContest) {
     const difference = user.update(
-      response.user,
-      response.problem,
+      submission.user,
+      problemName,
       response.totalscore,
       response.verdict,
     );
-    problem.update(response.problem, difference);
-    return;
+    problem.update(problemName, difference);
+    return response;
   }
 
-  entry.update(response.user, submission.contest, response.problem, response.totalscore);
+  entry.update(submission.user, submission.contest, problemName, response.totalscore);
+  return response;
 };

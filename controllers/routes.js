@@ -64,17 +64,22 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-router.get("/logout", ensureAuthenticated, async function (req, res) {
-  try {
-    await session.remove(req.user.username);
-    console.log("Logged " + req.user.username + " out");
-    req.logout();
-    res.redirect("/");
-  } catch {
-    console.log("Failed to log " + req.user.username + " out");
-    req.session.error = "An error was encountered while processing your request";
-    res.redirect(req.headers.referer || "/");
-  }
+router.get("/logout", ensureAuthenticated, function (req, res) {
+  const username = req.user.username;
+  req.logout(function (err) {
+    if (err) return res.status(500).send("Failed to log out");
+    try {
+      session.remove(username);
+      req.session.destroy(function (destroyErr) {
+        if (destroyErr) return res.status(500).send("Failed to log out");
+        console.log("Logged " + username + " out");
+        res.clearCookie("connect.sid");
+        res.redirect("/");
+      });
+    } catch {
+      res.status(500).send("Failed to log out");
+    }
+  });
 });
 
 router.get("/signin", function (req, res) {
@@ -113,11 +118,6 @@ router.use(function (req, res) {
     user: req.user,
     title: "Page Not Found",
   });
-});
-
-router.use(function (err, req, res) {
-  console.error(err.stack);
-  res.status(500).send("Internal Server Error");
 });
 
 module.exports = router;

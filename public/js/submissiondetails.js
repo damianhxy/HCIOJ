@@ -20,6 +20,7 @@ function getStat(mask) {
 }
 
 socket.on('updateSub', function(submission){
+    if (!submission || submission.subid !== subid) return; // updates for other submissions
     if(submission.compilation) {
         document.getElementById("compile").textContent = submission.compilation;
     }
@@ -32,10 +33,12 @@ socket.on('updateSub', function(submission){
             '<td>' + esc(submission.tc.ram) + ' MB</td>' +
             '<td>' + getStat(submission.tc.stat) + '</td>' +
             '<td><span style="color: gray">' + esc(submission.progress) + '</span></td>';
-        document.getElementById("subtask-tbody-" + submission.tc.subtask).appendChild(x);
+        const tbody = document.getElementById("subtask-tbody-" + submission.tc.subtask);
+        if (tbody) tbody.appendChild(x);
     }
     if(submission.subtask) {
-        document.getElementById("subtask-score-" + submission.subtask.num).textContent = submission.subtask.score;
+        const subtaskScore = document.querySelector(".subtask-score-" + submission.subtask.num);
+        if (subtaskScore) subtaskScore.textContent = submission.subtask.score;
     }
     if(submission.restype === 5) { // finished submission
         document.getElementById("verdict").textContent = submission.verdict;
