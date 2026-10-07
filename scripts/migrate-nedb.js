@@ -86,7 +86,8 @@ const insert = {
      VALUES (?, ?, ?, ?, ?, ?)`,
   ),
   clarifications: db.prepare(
-    "INSERT INTO clarifications (problem, author, query, answer, contest) VALUES (?, ?, ?, ?, ?)",
+    `INSERT INTO clarifications (problem, author, query, answer, elaboration, answerer, contest)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
   ),
 };
 
@@ -181,6 +182,8 @@ const migrate = db.transaction(function () {
       item.author || "",
       item.query || "",
       item.answer || "",
+      item.elaboration || "",
+      item.answerer || "",
       String(item.contest || "0"),
     );
   });
