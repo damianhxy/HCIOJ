@@ -48,6 +48,7 @@ module.exports = [
         languages: "readonly",
         username: "readonly",
         thisusername: "readonly",
+        subid: "readonly",
         ace: "readonly",
       },
     },
