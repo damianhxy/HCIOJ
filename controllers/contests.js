@@ -163,7 +163,7 @@ router.post(
         numid: num + 1, // Problem ID
         title: req.params.prob, // Problem Title
         user: req.user.username, // User name
-        code: req.body.code, // User code
+        code: typeof req.body.code === "string" ? req.body.code : req.body.ans, // User code ("ans" for problems with files)
         score: 0, // Total Score
         compile: "", // Time taken to compile / error message
         submitted_date: dayjs().format(), // Submission
