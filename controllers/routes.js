@@ -120,9 +120,4 @@ router.use(function (req, res) {
   });
 });
 
-router.use(function (err, req, res) {
-  console.error(err.stack);
-  res.status(500).send("Internal Server Error");
-});
-
 module.exports = router;
