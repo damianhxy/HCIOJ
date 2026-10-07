@@ -45,7 +45,10 @@ exports.all = function () {
 };
 
 exports.authenticate = function (username, password) {
-  const user = toUser(stmts.findByUsername.get(username));
+  // create() stores usernames lowercased; an exact match keeps any legacy mixed-case account.
+  const user = toUser(
+    stmts.findByUsername.get(username) || stmts.findByUsername.get(username.toLowerCase()),
+  );
   if (!user) throw new Error("Invalid username or password");
   const flag = bcryptjs.compareSync(password, user.password);
   if (!flag) throw new Error("Invalid username or password");
