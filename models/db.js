@@ -106,8 +106,22 @@ db.exec(`
     author TEXT NOT NULL DEFAULT '',
     query TEXT NOT NULL DEFAULT '',
     answer TEXT NOT NULL DEFAULT '',
+    elaboration TEXT NOT NULL DEFAULT '',
+    answerer TEXT NOT NULL DEFAULT '',
     contest TEXT NOT NULL DEFAULT '0'
   );
 `);
+
+// Databases created before elaboration/answerer were added lack those columns.
+const clarificationColumns = db
+  .prepare("PRAGMA table_info(clarifications)")
+  .all()
+  .map(function (column) {
+    return column.name;
+  });
+["elaboration", "answerer"].forEach(function (column) {
+  if (!clarificationColumns.includes(column))
+    db.exec("ALTER TABLE clarifications ADD COLUMN " + column + " TEXT NOT NULL DEFAULT ''");
+});
 
 module.exports = db;
