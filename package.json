@@ -28,7 +28,7 @@
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
-    "express-handlebars": "^9.0.1",
+    "express-handlebars": "^9.0.4",
     "express-rate-limit": "^8.6.1",
     "express-session": "^1.18.1",
     "method-override": "^3.0.0",
